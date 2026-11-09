@@ -5,12 +5,12 @@ import PageHero from '../components/PageHero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import CtaDiagnostico from '../components/CtaDiagnostico.astro';
 import barrasOuro from '../assets/brand/barras-ouro.png';
-import { comoOperamos, conceitoMarca, equipe, ecossistema, principio, site } from '../data/site';
+import { comoOperamos, competencias, conceitoMarca, principio, site } from '../data/site';
 ---
 
 <Layout
   title="Sobre"
-  description="A Aurion é um hub de tecnologia e software house multidisciplinar. Conheça nossos valores, equipe e ecossistema."
+  description="A Aurion é um hub de tecnologia e software house multidisciplinar. Conheça nossos valores e áreas de competência."
 >
   <PageHero
     eyebrow="Sobre a Aurion"
@@ -83,36 +83,16 @@ import { comoOperamos, conceitoMarca, equipe, ecossistema, principio, site } fro
   <section class="border-t border-line bg-surface">
     <div class="container-site py-24">
       <SectionHeading
-        eyebrow="Equipe"
+        eyebrow="Competências"
         title="Papéis claros, responsabilidade compartilhada"
-        intro="Uma equipe multidisciplinar que opera de forma horizontal."
+        intro="Uma equipe multidisciplinar que opera de forma horizontal, cobrindo do processo à infraestrutura."
       />
-      <span class="rascunho mt-6 inline-block">confirmar com cada pessoa antes de publicar nomes e fotos</span>
-      <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <ul class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {
-          equipe.map((p, i) => (
+          competencias.map((c, i) => (
             <li data-build style={`--d:${i * 60}ms`} class="card bg-bg">
-              <div class="mb-5 grid size-14 place-items-center rounded-full border border-gold/40 text-lg font-light text-gold" aria-hidden="true">
-                {p.nome.charAt(0)}
-              </div>
-              <p class="font-semibold">{p.nome}</p>
-              <p class="mt-1 text-sm text-muted">{p.papel}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <section class="border-t border-line">
-    <div class="container-site py-24">
-      <SectionHeading eyebrow="Ecossistema" title="Conectados à inovação regional" />
-      <ul class="mt-12 grid gap-6 md:grid-cols-3">
-        {
-          ecossistema.map((e, i) => (
-            <li data-build style={`--d:${i * 100}ms`} class="card">
-              <p class="text-lg font-semibold">{e.nome}</p>
-              <p class="mt-2 text-sm text-muted">{e.detalhe}</p>
+              <p class="font-semibold">{c.titulo}</p>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{c.descricao}</p>
             </li>
           ))
         }

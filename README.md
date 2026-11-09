@@ -20,7 +20,7 @@ npm run build    # gera o site estático em dist/
 | Cores e fontes | `src/styles/global.css` (bloco `@theme`) |
 | Páginas | `src/pages/` |
 
-Regra: o site não cita projetos nem clientes da Aurion.
+Regras: o site não cita projetos nem clientes da Aurion, não expõe membros da equipe (nomes, cargos, fotos ou tamanho do time) e não cita parceiros ou programas.
 
 ## Variáveis de ambiente
 

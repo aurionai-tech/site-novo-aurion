@@ -108,11 +108,14 @@ export const segmentos = [
   },
 ];
 
-// Nomes e cargos só podem ir ao ar com aprovação de cada pessoa.
-export const equipe = [
-];
-
-export const ecossistema = [
+// O site não expõe membros da equipe: só áreas de competência, sem nomes, cargos ou quantidade de pessoas.
+export const competencias = [
+  { titulo: 'Engenharia de software', descricao: 'Sistemas, aplicativos e integrações construídos sob medida.' },
+  { titulo: 'Engenharia e inteligência de dados', descricao: 'Dados organizados, pipelines e indicadores para decidir.' },
+  { titulo: 'Mobile', descricao: 'Aplicativos para equipes em campo e para o cliente final.' },
+  { titulo: 'Segurança da informação', descricao: 'Proteção de dados e acessos desde o desenho da solução.' },
+  { titulo: 'IA, automação e conversação', descricao: 'Agentes, bots e automações sobre processos mapeados.' },
+  { titulo: 'BI e novas tecnologias', descricao: 'Painéis de gestão e exploração de tecnologias como blockchain.' },
 ];
 
 export const submarcas = [

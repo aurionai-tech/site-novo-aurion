@@ -7,7 +7,7 @@ import CtaDiagnostico from '../components/CtaDiagnostico.astro';
 import HeroWordmark from '../components/HeroWordmark.astro';
 import Stats from '../components/Stats.astro';
 import barrasOuro from '../assets/brand/barras-ouro.png';
-import { principio, servicos, ecossistema, site, submarcas } from '../data/site';
+import { principio, servicos, site, submarcas } from '../data/site';
 ---
 
 <Layout>
@@ -107,15 +107,5 @@ import { principio, servicos, ecossistema, site, submarcas } from '../data/site'
       </div>
     </div>
   </section>
-
-  <section class="border-t border-line">
-    <div class="container-site py-16">
-      <p class="eyebrow text-center">Ecossistema</p>
-      <ul class="mt-8 flex flex-wrap items-center justify-center gap-x-16 gap-y-4">
-        {ecossistema.map((e) => <li class="text-lg font-light tracking-wide text-sand" title={e.detalhe}>{e.nome}</li>)}
-      </ul>
-    </div>
-  </section>
-
   <CtaDiagnostico />
 </Layout>
