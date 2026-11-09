@@ -1,8 +1,10 @@
 // Conteúdo central do site. Textos em rascunho: validar com a liderança antes de publicar.
-// Fonte: vault aurion-vault (notas Aurion, Valores, Matriz de Responsabilidades).
+// Fonte: vault aurion-vault (notas Aurion, Valores, Matriz de Responsabilidades)
+// e "Apresentação Conceito de Identidade Aurion" (Agência Ideia Brasil, 2026).
 
 export const site = {
   nome: 'Aurion',
+  assinatura: 'Tecnologia que movimenta valor',
   descricao:
     'Software house multidisciplinar: análise de negócio, engenharia de software, inteligência de dados e automação construídas sobre processos reais.',
   // Preencher quando houver canais oficiais. Vazio = aparece como "a definir".
@@ -113,6 +115,39 @@ export const equipe = [
 
 export const ecossistema = [
 ];
+
+export const submarcas = [
+  {
+    nome: 'Aurion Lab',
+    logo: '/brand/aurion-lab.svg',
+    descricao: 'Pesquisa, inovação e produtos próprios: protótipos, IA e novas soluções.',
+  },
+  {
+    nome: 'Aurion Cloud',
+    logo: '/brand/aurion-cloud.svg',
+    descricao: 'Infraestrutura, hospedagem, servidores e segurança na nuvem.',
+  },
+  {
+    nome: 'Aurion Rebranding',
+    logo: '/brand/aurion-rebranding.svg',
+    descricao: '',
+    emBreve: true,
+  },
+];
+
+export const conceitoMarca = {
+  palavras: ['Valor', 'Conexão', 'Segurança', 'Evolução', 'Continuidade', 'Conhecimento'],
+  simbolo: [
+    'O elemento inclinado representa uma barra de ouro, conectando a marca ao significado de Aurion.',
+    'O elemento vertical representa estrutura, segurança e sustentação concreta — inclusive do elemento de ouro.',
+    'Juntos, formam uma representação abstrata do “A” de Aurion, unindo valor e movimento em uma forma simples e memorável.',
+  ],
+  cores: [
+    { nome: 'Preto', hex: '#0a0a0a', significado: 'Solidez, segurança e autoridade.' },
+    { nome: 'Dourado', hex: '#c6b272', significado: 'Valor, excelência e transformação.' },
+    { nome: 'Branco', hex: '#ffffff', significado: 'Clareza, organização e transparência.' },
+  ],
+};
 
 export const comoOperamos = [
   {

@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import simboloBrilho from '../assets/brand/simbolo-brilho.png';
+
 interface Props {
   eyebrow?: string;
   title: string;
@@ -8,10 +11,18 @@ interface Props {
 const { eyebrow, title, intro } = Astro.props;
 ---
 
-<section class="border-b border-line bg-surface">
-  <div class="container-site py-16 md:py-20">
-    {eyebrow && <p class="text-sm font-semibold uppercase tracking-wider text-accent">{eyebrow}</p>}
-    <h1 class="mt-2 max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">{title}</h1>
-    {intro && <p class="mt-5 max-w-2xl text-lg text-muted">{intro}</p>}
+<section class="relative overflow-hidden border-b border-line">
+  <Image
+    src={simboloBrilho}
+    alt=""
+    widths={[800, 1400]}
+    sizes="100vw"
+    class="pointer-events-none absolute inset-0 h-full w-full object-cover object-right opacity-60"
+  />
+  <div class="absolute inset-0 bg-linear-to-r from-bg via-bg/90 to-bg/30"></div>
+  <div class="relative container-site py-20 md:py-28">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1 class="mt-4 max-w-3xl text-4xl font-light tracking-tight md:text-5xl">{title}</h1>
+    {intro && <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted">{intro}</p>}
   </div>
 </section>

@@ -29,29 +29,32 @@ const situacoes = [
   <PageHero eyebrow="Como trabalhamos" title={principio.frase} intro={principio.explicacao} />
 
   <section>
-    <div class="container-site py-20">
+    <div class="container-site py-24">
       <SectionHeading
         title="Seis etapas, sempre nessa ordem"
         intro="Cada etapa termina com algo concreto nas suas mãos. Nada de caixa-preta."
       />
-      <div class="mt-12">
+      <div class="mt-14">
         <MethodSteps detailed />
       </div>
     </div>
   </section>
 
   <section class="border-t border-line bg-surface">
-    <div class="container-site py-20">
+    <div class="container-site py-24">
       <SectionHeading
         title="Quando dizemos “ainda não”"
         intro="Automatizar um processo desorganizado só acelera o problema. Por isso, às vezes o primeiro passo é organizar."
       />
-      <div class="mt-12 overflow-hidden rounded-2xl border border-line bg-white">
+      <div class="mt-14 overflow-hidden rounded-xl border border-line bg-bg">
         {
           situacoes.map((s, i) => (
-            <div class:list={['grid gap-2 p-6 md:grid-cols-2 md:gap-8', i > 0 && 'border-t border-line']}>
+            <div class:list={['grid gap-2 p-8 md:grid-cols-2 md:gap-10', i > 0 && 'border-t border-line']}>
               <p class="font-semibold">{s.situacao}</p>
-              <p class="text-muted">{s.resposta}</p>
+              <p class="text-muted">
+                <span class="mr-2 text-gold">→</span>
+                {s.resposta}
+              </p>
             </div>
           ))
         }

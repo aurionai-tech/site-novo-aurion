@@ -4,28 +4,31 @@ import { nav, site } from '../data/site';
 const ano = new Date().getFullYear();
 ---
 
-<footer class="border-t border-line bg-surface">
-  <div class="container-site grid gap-10 py-12 md:grid-cols-3">
+<footer class="border-t border-line bg-bg">
+  <div class="container-site grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
     <div>
-      <p class="text-lg font-bold">{site.nome}</p>
-      <p class="mt-2 max-w-xs text-sm text-muted">Primeiro o processo. Depois a tecnologia.</p>
+      <img src="/brand/logo-dourado-branco-recortado.svg" alt="Aurion — Tecnologia que movimenta valor" width="192" height="99" class="h-auto w-48" />
     </div>
 
-    <nav aria-label="Rodapé" class="grid gap-2 text-sm">
-      {nav.map((item) => <a href={item.href} class="text-muted hover:text-ink">{item.label}</a>)}
-      <a href="/seguranca" class="text-muted hover:text-ink">Segurança e LGPD</a>
-      <a href="/privacidade" class="text-muted hover:text-ink">Política de privacidade</a>
+    <nav aria-label="Rodapé" class="grid content-start gap-3 text-sm">
+      <p class="eyebrow mb-1">Navegação</p>
+      {nav.map((item) => <a href={item.href} class="text-muted hover:text-gold">{item.label}</a>)}
+      <a href="/seguranca" class="text-muted hover:text-gold">Segurança e LGPD</a>
+      <a href="/privacidade" class="text-muted hover:text-gold">Política de privacidade</a>
     </nav>
 
-    <div class="grid content-start gap-2 text-sm">
-      <p class="font-semibold">Contato</p>
-      {site.email ? <a href={`mailto:${site.email}`} class="text-muted hover:text-ink">{site.email}</a> : <span class="rascunho w-fit">e-mail a definir</span>}
-      {site.whatsapp ? <a href={`https://wa.me/${site.whatsapp}`} class="text-muted hover:text-ink">WhatsApp</a> : <span class="rascunho w-fit">WhatsApp a definir</span>}
-      {site.linkedin && <a href={site.linkedin} class="text-muted hover:text-ink">LinkedIn</a>}
+    <div class="grid content-start gap-3 text-sm">
+      <p class="eyebrow mb-1">Contato</p>
+      {site.email ? <a href={`mailto:${site.email}`} class="text-muted hover:text-gold">{site.email}</a> : <span class="rascunho w-fit">e-mail a definir</span>}
+      {site.whatsapp ? <a href={`https://wa.me/${site.whatsapp}`} class="text-muted hover:text-gold">WhatsApp</a> : <span class="rascunho w-fit">WhatsApp a definir</span>}
+      {site.linkedin && <a href={site.linkedin} class="text-muted hover:text-gold">LinkedIn</a>}
     </div>
   </div>
 
   <div class="border-t border-line">
-    <p class="container-site py-5 text-xs text-muted">© {ano} {site.nome}. Todos os direitos reservados.</p>
+    <div class="container-site flex flex-col gap-2 py-6 text-xs text-muted md:flex-row md:justify-between">
+      <p>© {ano} {site.nome}. Todos os direitos reservados.</p>
+      <p class="tracking-[0.3em] uppercase">{site.assinatura}</p>
+    </div>
   </div>
 </footer>

@@ -6,8 +6,8 @@ import { segmentos, site } from '../data/site';
 const formEndpoint = import.meta.env.PUBLIC_FORM_ENDPOINT;
 
 const inputClass =
-  'mt-2 w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent-soft';
-const labelClass = 'block text-sm font-medium';
+  'mt-2 w-full rounded-md border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition placeholder:text-muted/60 focus:border-gold focus:ring-2 focus:ring-gold/20';
+const labelClass = 'block text-sm font-medium text-sand';
 ---
 
 <Layout
@@ -21,18 +21,18 @@ const labelClass = 'block text-sm font-medium';
   />
 
   <section>
-    <div class="container-site grid gap-12 py-20 lg:grid-cols-[2fr_1fr]">
+    <div class="container-site grid gap-12 py-24 lg:grid-cols-[2fr_1fr]">
       <form action={formEndpoint ?? '#'} method="POST" class="grid gap-6">
         {
           !formEndpoint && (
-            <p class="rounded-lg bg-amber-50 p-4 text-sm text-amber-800">
+            <p class="rounded-lg border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-300">
               Formulário ainda não conectado. Defina <code>PUBLIC_FORM_ENDPOINT</code> no arquivo <code>.env</code>.
             </p>
           )
         }
 
         <fieldset class="grid gap-6 sm:grid-cols-2">
-          <legend class="mb-4 text-lg font-semibold">Sobre você</legend>
+          <legend class="eyebrow mb-6">Sobre você</legend>
           <label class={labelClass}>
             Nome
             <input name="nome" required autocomplete="name" class={inputClass} />
@@ -60,7 +60,7 @@ const labelClass = 'block text-sm font-medium';
         </fieldset>
 
         <fieldset class="grid gap-6">
-          <legend class="mb-4 text-lg font-semibold">Sobre o processo</legend>
+          <legend class="eyebrow mb-6">Sobre o processo</legend>
           <label class={labelClass}>
             Como o processo funciona hoje?
             <textarea
@@ -89,28 +89,28 @@ const labelClass = 'block text-sm font-medium';
         </fieldset>
 
         <label class="flex items-start gap-3 text-sm text-muted">
-          <input type="checkbox" name="consentimento" required class="mt-1 size-4 accent-accent" />
+          <input type="checkbox" name="consentimento" required class="mt-1 size-4 accent-gold" />
           <span>
             Concordo com o uso destes dados para que a Aurion entre em contato sobre o diagnóstico, conforme a
-            <a href="/privacidade" class="font-medium text-ink underline">política de privacidade</a>.
+            <a href="/privacidade" class="font-medium text-gold underline">política de privacidade</a>.
           </span>
         </label>
 
         <button type="submit" class="btn-primary w-fit">Enviar para diagnóstico</button>
       </form>
 
-      <aside class="h-fit rounded-2xl border border-line bg-surface p-6">
-        <h2 class="font-semibold">O que acontece depois</h2>
+      <aside class="card h-fit p-8">
+        <h2 class="eyebrow">O que acontece depois</h2>
         <ol class="mt-4 grid gap-3 text-sm text-muted">
           <li>1. Lemos com atenção o que você descreveu.</li>
           <li>2. Marcamos uma conversa para entender o processo em detalhe.</li>
           <li>3. Você recebe uma visão clara do problema e dos próximos passos.</li>
         </ol>
 
-        <h2 class="mt-8 font-semibold">Prefere outro canal?</h2>
+        <h2 class="eyebrow mt-10">Prefere outro canal?</h2>
         <div class="mt-3 grid gap-2 text-sm">
-          {site.email ? <a href={`mailto:${site.email}`} class="text-accent hover:underline">{site.email}</a> : <span class="rascunho w-fit">e-mail a definir</span>}
-          {site.whatsapp ? <a href={`https://wa.me/${site.whatsapp}`} class="text-accent hover:underline">WhatsApp</a> : <span class="rascunho w-fit">WhatsApp a definir</span>}
+          {site.email ? <a href={`mailto:${site.email}`} class="text-gold hover:underline">{site.email}</a> : <span class="rascunho w-fit">e-mail a definir</span>}
+          {site.whatsapp ? <a href={`https://wa.me/${site.whatsapp}`} class="text-gold hover:underline">WhatsApp</a> : <span class="rascunho w-fit">WhatsApp a definir</span>}
         </div>
       </aside>
     </div>

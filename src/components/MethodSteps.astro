@@ -8,16 +8,16 @@ interface Props {
 const { detailed = false } = Astro.props;
 ---
 
-<ol class:list={['grid gap-6', detailed ? 'md:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
+<ol class:list={['grid gap-px overflow-hidden rounded-xl border border-line bg-line', detailed ? 'md:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
   {
     metodo.map((etapa, i) => (
-      <li class="rounded-2xl border border-line bg-white p-6">
-        <span class="text-sm font-semibold text-accent">{String(i + 1).padStart(2, '0')}</span>
-        <h3 class="mt-2 text-lg font-semibold">{etapa.titulo}</h3>
-        <p class="mt-2 text-sm text-muted">{etapa.descricao}</p>
+      <li class="bg-surface p-8 transition hover:bg-surface-2">
+        <span class="text-sm font-light text-gold">{String(i + 1).padStart(2, '0')}</span>
+        <h3 class="mt-3 text-lg font-semibold">{etapa.titulo}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{etapa.descricao}</p>
         {detailed && (
-          <p class="mt-4 border-t border-line pt-4 text-sm">
-            <span class="font-semibold">Você recebe:</span> {etapa.entrega}
+          <p class="mt-5 border-t border-line pt-5 text-sm">
+            <span class="font-semibold text-gold">Você recebe:</span> <span class="text-sand">{etapa.entrega}</span>
           </p>
         )}
       </li>

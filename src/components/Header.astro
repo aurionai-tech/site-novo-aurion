@@ -1,22 +1,25 @@
 ---
-import { nav, site } from '../data/site';
+import Logo from './Logo.astro';
+import { nav } from '../data/site';
 
 const current = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) => current === href || current.startsWith(`${href}/`);
 ---
 
-<header class="sticky top-0 z-50 border-b border-line bg-white/90 backdrop-blur">
-  <div class="container-site flex h-16 items-center justify-between gap-6">
-    <a href="/" class="text-lg font-bold tracking-tight">{site.nome}</a>
+<header class="sticky top-0 z-50 border-b border-line/70 bg-bg/85 backdrop-blur">
+  <div class="container-site flex h-18 items-center justify-between gap-6">
+    <a href="/" class="text-fg" aria-label="Aurion — página inicial">
+      <Logo class="h-5 w-auto md:h-6" />
+    </a>
 
-    <nav class="hidden items-center gap-7 md:flex" aria-label="Principal">
+    <nav class="hidden items-center gap-8 lg:flex" aria-label="Principal">
       {
         nav.map((item) => (
           <a
             href={item.href}
             class:list={[
-              'text-sm transition hover:text-ink',
-              isActive(item.href) ? 'font-semibold text-ink' : 'text-muted',
+              'text-xs font-medium tracking-[0.12em] uppercase transition hover:text-gold',
+              isActive(item.href) ? 'text-gold' : 'text-muted',
             ]}
             aria-current={isActive(item.href) ? 'page' : undefined}
           >
@@ -26,23 +29,21 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
       }
     </nav>
 
-    <a href="/contato" class="btn-primary hidden md:inline-flex">Agendar diagnóstico</a>
+    <a href="/contato" class="btn-primary hidden lg:inline-flex">Agendar diagnóstico</a>
 
-    <details class="group relative md:hidden">
-      <summary class="cursor-pointer list-none rounded-md border border-line px-3 py-1.5 text-sm font-medium">
+    <details class="relative lg:hidden">
+      <summary class="cursor-pointer list-none rounded-md border border-line px-3 py-1.5 text-xs font-semibold tracking-[0.12em] uppercase">
         Menu
       </summary>
-      <div class="absolute right-0 mt-2 w-56 rounded-xl border border-line bg-white p-2 shadow-lg">
+      <div class="absolute right-0 mt-2 w-60 rounded-xl border border-line bg-surface p-2 shadow-2xl">
         {
           nav.map((item) => (
-            <a href={item.href} class="block rounded-lg px-3 py-2 text-sm hover:bg-surface">
+            <a href={item.href} class="block rounded-lg px-3 py-2 text-sm hover:bg-surface-2 hover:text-gold">
               {item.label}
             </a>
           ))
         }
-        <a href="/contato" class="mt-1 block rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white">
-          Agendar diagnóstico
-        </a>
+        <a href="/contato" class="btn-primary mt-2 w-full">Agendar diagnóstico</a>
       </div>
     </details>
   </div>
