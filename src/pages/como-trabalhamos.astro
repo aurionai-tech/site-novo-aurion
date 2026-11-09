@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import MethodSteps from '../components/MethodSteps.astro';
+import CtaDiagnostico from '../components/CtaDiagnostico.astro';
+import { principio } from '../data/site';
+
+const situacoes = [
+  {
+    situacao: 'O pedido é “automatizar” algo que hoje é caótico',
+    resposta: 'Paramos e mapeamos o processo antes de propor qualquer solução.',
+  },
+  {
+    situacao: 'Cada pessoa faz do seu jeito, sem fluxo definido',
+    resposta: 'Organizamos o fluxo com a sua equipe. A automação vem depois.',
+  },
+  {
+    situacao: 'O processo está mapeado e validado',
+    resposta: 'Aí sim: IA, integrações, agentes e pipelines de dados.',
+  },
+];
+---
+
+<Layout
+  title="Como trabalhamos"
+  description="O método da Aurion: diagnóstico, mapeamento e fluxo acordado antes de software, dados e automação."
+>
+  <PageHero eyebrow="Como trabalhamos" title={principio.frase} intro={principio.explicacao} />
+
+  <section>
+    <div class="container-site py-20">
+      <SectionHeading
+        title="Seis etapas, sempre nessa ordem"
+        intro="Cada etapa termina com algo concreto nas suas mãos. Nada de caixa-preta."
+      />
+      <div class="mt-12">
+        <MethodSteps detailed />
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-surface">
+    <div class="container-site py-20">
+      <SectionHeading
+        title="Quando dizemos “ainda não”"
+        intro="Automatizar um processo desorganizado só acelera o problema. Por isso, às vezes o primeiro passo é organizar."
+      />
+      <div class="mt-12 overflow-hidden rounded-2xl border border-line bg-white">
+        {
+          situacoes.map((s, i) => (
+            <div class:list={['grid gap-2 p-6 md:grid-cols-2 md:gap-8', i > 0 && 'border-t border-line']}>
+              <p class="font-semibold">{s.situacao}</p>
+              <p class="text-muted">{s.resposta}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaDiagnostico />
+</Layout>

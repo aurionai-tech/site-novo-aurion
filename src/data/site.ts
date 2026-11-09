@@ -1,0 +1,134 @@
+// Conteúdo central do site. Textos em rascunho: validar com a liderança antes de publicar.
+// Fonte: vault aurion-vault (notas Aurion, Valores, Matriz de Responsabilidades).
+
+export const site = {
+  nome: 'Aurion',
+  descricao:
+    'Software house multidisciplinar: análise de negócio, engenharia de software, inteligência de dados e automação construídas sobre processos reais.',
+  // Preencher quando houver canais oficiais. Vazio = aparece como "a definir".
+  email: '',
+  whatsapp: '',
+  linkedin: '',
+};
+
+export const nav = [
+  { href: '/como-trabalhamos', label: 'Como trabalhamos' },
+  { href: '/servicos', label: 'Serviços' },
+  { href: '/segmentos', label: 'Segmentos' },
+  { href: '/cases', label: 'Cases' },
+  { href: '/sobre', label: 'Sobre' },
+];
+
+export const principio = {
+  frase: 'Não tem como automatizar o que não é processo.',
+  explicacao:
+    'Automação — seja IA, integração, bot ou script — só funciona sobre um fluxo mapeado, repetível e acordado. Sem isso, o que se entrega é retrabalho, não escala.',
+};
+
+export const metodo = [
+  {
+    titulo: 'Diagnóstico',
+    descricao: 'Entendemos o negócio, os objetivos e onde está o problema real — antes de falar em tecnologia.',
+    entrega: 'Visão clara do problema e das prioridades',
+  },
+  {
+    titulo: 'Mapeamento',
+    descricao: 'Documentamos o processo atual com entrevistas, acesso aos sistemas e diagramas.',
+    entrega: 'Processo atual documentado',
+  },
+  {
+    titulo: 'Fluxo acordado',
+    descricao: 'Organizamos o processo com a sua equipe: entradas, saídas, responsáveis e exceções definidos.',
+    entrega: 'Fluxo validado por quem opera',
+  },
+  {
+    titulo: 'Implementação',
+    descricao: 'Construímos o software sob medida em cima do fluxo validado, com entregas rastreáveis.',
+    entrega: 'Sistema funcionando no processo real',
+  },
+  {
+    titulo: 'Automação e dados',
+    descricao: 'Com o processo estável, aplicamos IA, integrações e indicadores onde geram ganho de verdade.',
+    entrega: 'Automação confiável e dados para decidir',
+  },
+  {
+    titulo: 'Acompanhamento',
+    descricao: 'Mantemos e evoluímos a solução junto com a operação do cliente.',
+    entrega: 'Evolução contínua e documentada',
+  },
+];
+
+export const servicos = [
+  {
+    titulo: 'Análise de negócio e transformação digital',
+    descricao:
+      'A porta de entrada. Diagnóstico e mapeamento de processos para transformar a operação real — não uma lista de desejos.',
+    itens: ['Diagnóstico de processos', 'Levantamento de requisitos', 'Desenho de fluxos'],
+  },
+  {
+    titulo: 'Engenharia de software',
+    descricao: 'Sistemas, aplicativos e e-commerce construídos sob medida para o processo do cliente.',
+    itens: ['Sistemas web', 'Aplicativos mobile', 'E-commerce', 'Integrações'],
+  },
+  {
+    titulo: 'Inteligência de dados',
+    descricao: 'Dados organizados para acompanhar a operação e apoiar decisões.',
+    itens: ['Indicadores e dashboards', 'BI', 'Pipelines de dados'],
+  },
+  {
+    titulo: 'IA, automação e chatbots',
+    descricao: 'Agentes, bots e automações aplicados sobre processos já mapeados — consequência, não atalho.',
+    itens: ['Chatbots e atendimento', 'Agentes de IA', 'Automação de rotinas'],
+  },
+  {
+    titulo: 'Infraestrutura e TI',
+    descricao: 'Base técnica para a operação rodar com segurança.',
+    itens: ['Redes', 'Servidores e backup', 'Segurança da informação'],
+  },
+];
+
+export const segmentos = [
+  {
+    titulo: 'Contabilidade',
+    descricao: 'Rotinas intensas em processo e documentos, com muito espaço para organização e automação.',
+  },
+  {
+    titulo: 'Agronegócio',
+    descricao: 'Operações de campo, logística e dados que precisam chegar a quem decide.',
+  },
+  {
+    titulo: 'Mobile',
+    descricao: 'Aplicativos para equipes em campo e para o cliente final.',
+  },
+  {
+    titulo: 'Indústria e alimentos',
+    descricao: 'Produção, distribuição e qualidade pós-entrega. (Confirmar se entra como segmento.)',
+    rascunho: true,
+  },
+];
+
+// Nomes e cargos só podem ir ao ar com aprovação de cada pessoa.
+export const equipe = [
+];
+
+export const ecossistema = [
+];
+
+export const comoOperamos = [
+  {
+    titulo: 'Premium e alta performance',
+    descricao: 'Entrega consistente e senso de dono em cada projeto.',
+  },
+  {
+    titulo: 'Horizontal e descentralizada',
+    descricao: 'Uma equipe com papéis claros, que opera sem depender de uma única pessoa.',
+  },
+  {
+    titulo: 'Processos auditáveis',
+    descricao: 'Tarefas, responsabilidades e decisões rastreáveis do início ao fim.',
+  },
+  {
+    titulo: 'Conhecimento documentado',
+    descricao: 'Fluxos e decisões ficam registrados — não só na cabeça de quem atendeu.',
+  },
+];

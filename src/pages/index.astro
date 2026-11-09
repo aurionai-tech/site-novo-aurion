@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import MethodSteps from '../components/MethodSteps.astro';
+import CaseCard from '../components/CaseCard.astro';
+import CtaDiagnostico from '../components/CtaDiagnostico.astro';
+import { principio, servicos, ecossistema } from '../data/site';
+import { getPublishedCases } from '../lib/cases';
+
+const cases = (await getPublishedCases()).filter((c) => c.data.destaque).slice(0, 3);
+---
+
+<Layout>
+  <section class="border-b border-line">
+    <div class="container-site py-20 md:py-28">
+      <p class="text-sm font-semibold uppercase tracking-wider text-accent">Software house · Dados · Automação</p>
+      <h1 class="mt-4 max-w-4xl text-5xl font-bold tracking-tight md:text-6xl">
+        Primeiro o processo.<br />Depois a tecnologia.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-muted">
+        A Aurion mapeia como a sua operação funciona de verdade e só então constrói software, dados e automação em cima
+        dela. Sem atalho, sem retrabalho.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a href="/contato" class="btn-primary">Agendar diagnóstico</a>
+        <a href="/como-trabalhamos" class="btn-secondary">Ver como trabalhamos</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface">
+    <div class="container-site grid gap-8 py-20 md:grid-cols-2 md:items-center">
+      <blockquote class="text-3xl font-bold leading-tight tracking-tight md:text-4xl">“{principio.frase}”</blockquote>
+      <p class="text-lg text-muted">{principio.explicacao}</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container-site py-20">
+      <SectionHeading
+        eyebrow="Como trabalhamos"
+        title="Do diagnóstico à automação, nessa ordem"
+        intro="Cada etapa tem entrega clara. A tecnologia entra quando o processo está pronto para recebê-la."
+      />
+      <div class="mt-12">
+        <MethodSteps />
+      </div>
+      <a href="/como-trabalhamos" class="mt-10 inline-block text-sm font-semibold text-accent hover:underline">
+        Conheça o método em detalhe →
+      </a>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-surface">
+    <div class="container-site py-20">
+      <SectionHeading eyebrow="Serviços" title="O que entregamos" />
+      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {
+          servicos.map((s) => (
+            <article class="rounded-2xl border border-line bg-white p-6">
+              <h3 class="text-lg font-semibold">{s.titulo}</h3>
+              <p class="mt-2 text-sm text-muted">{s.descricao}</p>
+            </article>
+          ))
+        }
+      </div>
+      <a href="/servicos" class="mt-10 inline-block text-sm font-semibold text-accent hover:underline">Ver todos os serviços →</a>
+    </div>
+  </section>
+
+  {
+    cases.length > 0 && (
+      <section>
+        <div class="container-site py-20">
+          <SectionHeading eyebrow="Cases" title="Processo mapeado, resultado real" />
+          <div class="mt-12 grid gap-6 md:grid-cols-3">
+            {cases.map((entry) => (
+              <CaseCard entry={entry} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="border-t border-line">
+    <div class="container-site py-14">
+      <p class="text-center text-sm font-semibold uppercase tracking-wider text-muted">Ecossistema</p>
+      <ul class="mt-6 flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
+        {ecossistema.map((e) => <li class="text-lg font-semibold text-ink-soft" title={e.detalhe}>{e.nome}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaDiagnostico />
+</Layout>

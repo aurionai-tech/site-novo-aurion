@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaDiagnostico from '../components/CtaDiagnostico.astro';
+import { servicos } from '../data/site';
+---
+
+<Layout
+  title="Serviços"
+  description="Análise de negócio, engenharia de software, inteligência de dados, IA e automação, infraestrutura e TI."
+>
+  <PageHero
+    eyebrow="Serviços"
+    title="Tecnologia como consequência de uma operação organizada"
+    intro="Vendemos análise de negócio e engenharia — não atalho sem diagnóstico. Todo projeto começa pelo entendimento do processo."
+  />
+
+  <section>
+    <div class="container-site grid gap-6 py-20">
+      {
+        servicos.map((s, i) => (
+          <article class="grid gap-6 rounded-2xl border border-line p-8 md:grid-cols-[auto_1fr_1fr] md:gap-10">
+            <span class="text-sm font-semibold text-accent">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h2 class="text-2xl font-bold tracking-tight">{s.titulo}</h2>
+              <p class="mt-3 text-muted">{s.descricao}</p>
+            </div>
+            <ul class="grid content-start gap-2 text-sm">
+              {s.itens.map((item) => (
+                <li class="flex gap-2">
+                  <span class="text-accent">—</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaDiagnostico />
+</Layout>

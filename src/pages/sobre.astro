@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CtaDiagnostico from '../components/CtaDiagnostico.astro';
+import { comoOperamos, equipe, ecossistema, principio } from '../data/site';
+---
+
+<Layout
+  title="Sobre"
+  description="A Aurion é um hub de tecnologia e software house multidisciplinar. Conheça nossos valores, equipe e ecossistema."
+>
+  <PageHero
+    eyebrow="Sobre a Aurion"
+    title="Um hub de tecnologia que começa pelo negócio"
+    intro="Somos uma software house multidisciplinar: engenharia de software, inteligência de dados e transformação digital, sempre sobre processos reais."
+  />
+
+  <section>
+    <div class="container-site py-20">
+      <span class="rascunho">história da Aurion a escrever</span>
+      <p class="mt-4 max-w-2xl text-lg text-muted">
+        [Rascunho] Como e por que a Aurion surgiu, e o que nos move.
+      </p>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-surface">
+    <div class="container-site py-20">
+      <SectionHeading eyebrow="Valores" title={principio.frase} intro={principio.explicacao} />
+      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {
+          comoOperamos.map((v) => (
+            <article class="rounded-2xl border border-line bg-white p-6">
+              <h3 class="font-semibold">{v.titulo}</h3>
+              <p class="mt-2 text-sm text-muted">{v.descricao}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container-site py-20">
+      <SectionHeading
+        eyebrow="Equipe"
+        title="Papéis claros, responsabilidade compartilhada"
+        intro="Uma equipe multidisciplinar que opera de forma horizontal."
+      />
+      <span class="rascunho mt-6 inline-block">confirmar com cada pessoa antes de publicar nomes e fotos</span>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          equipe.map((p) => (
+            <li class="rounded-2xl border border-line p-6">
+              <div class="mb-4 aspect-square w-16 rounded-full bg-surface" aria-hidden="true" />
+              <p class="font-semibold">{p.nome}</p>
+              <p class="mt-1 text-sm text-muted">{p.papel}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-surface">
+    <div class="container-site py-20">
+      <SectionHeading eyebrow="Ecossistema" title="Conectados à inovação regional" />
+      <ul class="mt-10 grid gap-6 md:grid-cols-3">
+        {
+          ecossistema.map((e) => (
+            <li class="rounded-2xl border border-line bg-white p-6">
+              <p class="text-lg font-semibold">{e.nome}</p>
+              <p class="mt-1 text-sm text-muted">{e.detalhe}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaDiagnostico />
+</Layout>

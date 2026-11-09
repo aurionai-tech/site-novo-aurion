@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const secoes = [
+  'Quem é o controlador dos dados (razão social, CNPJ, contato do encarregado)',
+  'Quais dados coletamos (formulário de diagnóstico, métricas de acesso)',
+  'Para que usamos os dados e com qual base legal',
+  'Com quem compartilhamos (ex.: serviço de formulário, hospedagem)',
+  'Por quanto tempo guardamos',
+  'Direitos do titular e como exercê-los',
+  'Cookies e ferramentas de métricas',
+];
+---
+
+<Layout title="Política de privacidade" description="Política de privacidade do site da Aurion.">
+  <PageHero eyebrow="Privacidade" title="Política de privacidade" />
+
+  <section>
+    <div class="container-site max-w-3xl py-20">
+      <p class="rounded-lg bg-amber-50 p-4 text-sm text-amber-800">
+        Rascunho. Esta política precisa ser escrita e revisada (jurídico e segurança da informação) antes do lançamento.
+      </p>
+      <h2 class="mt-10 text-xl font-semibold">Seções a cobrir</h2>
+      <ul class="mt-4 grid list-disc gap-2 pl-5 text-muted">
+        {secoes.map((s) => <li>{s}</li>)}
+      </ul>
+    </div>
+  </section>
+</Layout>

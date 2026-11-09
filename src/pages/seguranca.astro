@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaDiagnostico from '../components/CtaDiagnostico.astro';
+
+const compromissos = [
+  {
+    titulo: 'Segurança desde o início',
+    texto: 'Segurança da informação tem um área dedicada na equipe e faz parte do projeto desde o diagnóstico.',
+  },
+  {
+    titulo: 'LGPD levada a sério',
+    texto: 'Tratamos dados pessoais dos seus clientes e colaboradores com base legal, finalidade clara e o mínimo necessário.',
+  },
+  {
+    titulo: 'Seus dados, sob controle',
+    texto: 'Decisões sobre onde os dados ficam e quem acessa são tomadas com você e documentadas.',
+  },
+];
+---
+
+<Layout title="Segurança e LGPD" description="Como a Aurion trata segurança da informação e proteção de dados.">
+  <PageHero
+    eyebrow="Segurança e LGPD"
+    title="Proteger os dados faz parte do processo"
+    intro="Automação e dados só geram valor se forem confiáveis e seguros."
+  />
+
+  <section>
+    <div class="container-site py-20">
+      <span class="rascunho">texto a revisar com a área de segurança</span>
+      <div class="mt-6 grid gap-6 md:grid-cols-3">
+        {
+          compromissos.map((c) => (
+            <article class="rounded-2xl border border-line p-6">
+              <h2 class="text-lg font-semibold">{c.titulo}</h2>
+              <p class="mt-2 text-sm text-muted">{c.texto}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaDiagnostico />
+</Layout>

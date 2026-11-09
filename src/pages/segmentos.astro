@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaDiagnostico from '../components/CtaDiagnostico.astro';
+import { segmentos } from '../data/site';
+---
+
+<Layout title="Segmentos" description="Segmentos em que a Aurion atua: contabilidade, agronegócio, mobile e mais.">
+  <PageHero
+    eyebrow="Segmentos"
+    title="Experiência em operações reais"
+    intro="Cada segmento tem seus próprios processos. Conhecer o contexto encurta o diagnóstico."
+  />
+
+  <section>
+    <div class="container-site grid gap-6 py-20 md:grid-cols-2">
+      {
+        segmentos.map((s) => (
+          <article class="rounded-2xl border border-line p-8">
+            <h2 class="text-2xl font-bold tracking-tight">{s.titulo}</h2>
+            <p class="mt-3 text-muted">{s.descricao}</p>
+            {s.rascunho && <span class="rascunho mt-4 inline-block">rascunho</span>}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaDiagnostico />
+</Layout>

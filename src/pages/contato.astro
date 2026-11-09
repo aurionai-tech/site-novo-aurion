@@ -1,0 +1,118 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { segmentos, site } from '../data/site';
+
+const formEndpoint = import.meta.env.PUBLIC_FORM_ENDPOINT;
+
+const inputClass =
+  'mt-2 w-full rounded-lg border border-line bg-white px-4 py-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent-soft';
+const labelClass = 'block text-sm font-medium';
+---
+
+<Layout
+  title="Agendar diagnóstico"
+  description="Conte como a sua operação funciona hoje. A primeira conversa com a Aurion é um diagnóstico."
+>
+  <PageHero
+    eyebrow="Agendar diagnóstico"
+    title="Comece contando como funciona hoje"
+    intro="Não precisa ter a solução pronta. Quanto melhor entendermos o processo atual, mais útil será a primeira conversa."
+  />
+
+  <section>
+    <div class="container-site grid gap-12 py-20 lg:grid-cols-[2fr_1fr]">
+      <form action={formEndpoint ?? '#'} method="POST" class="grid gap-6">
+        {
+          !formEndpoint && (
+            <p class="rounded-lg bg-amber-50 p-4 text-sm text-amber-800">
+              Formulário ainda não conectado. Defina <code>PUBLIC_FORM_ENDPOINT</code> no arquivo <code>.env</code>.
+            </p>
+          )
+        }
+
+        <fieldset class="grid gap-6 sm:grid-cols-2">
+          <legend class="mb-4 text-lg font-semibold">Sobre você</legend>
+          <label class={labelClass}>
+            Nome
+            <input name="nome" required autocomplete="name" class={inputClass} />
+          </label>
+          <label class={labelClass}>
+            Empresa
+            <input name="empresa" required autocomplete="organization" class={inputClass} />
+          </label>
+          <label class={labelClass}>
+            E-mail
+            <input name="email" type="email" required autocomplete="email" class={inputClass} />
+          </label>
+          <label class={labelClass}>
+            Telefone / WhatsApp
+            <input name="telefone" type="tel" autocomplete="tel" class={inputClass} />
+          </label>
+          <label class:list={[labelClass, 'sm:col-span-2']}>
+            Segmento
+            <select name="segmento" class={inputClass}>
+              <option value="">Selecione</option>
+              {segmentos.map((s) => <option>{s.titulo}</option>)}
+              <option>Outro</option>
+            </select>
+          </label>
+        </fieldset>
+
+        <fieldset class="grid gap-6">
+          <legend class="mb-4 text-lg font-semibold">Sobre o processo</legend>
+          <label class={labelClass}>
+            Como o processo funciona hoje?
+            <textarea
+              name="processo_atual"
+              rows="4"
+              required
+              placeholder="Descreva o passo a passo, mesmo que seja informal."
+              class={inputClass}></textarea>
+          </label>
+          <label class={labelClass}>
+            Quem é o responsável por esse processo?
+            <input name="responsavel" placeholder="Cargo ou área" class={inputClass} />
+          </label>
+          <label class={labelClass}>
+            Onde está a maior dor?
+            <textarea
+              name="dor"
+              rows="3"
+              placeholder="Tempo perdido, erros, retrabalho, falta de informação..."
+              class={inputClass}></textarea>
+          </label>
+          <label class={labelClass}>
+            Quais sistemas ou ferramentas vocês usam hoje?
+            <input name="sistemas" placeholder="ERP, planilhas, WhatsApp..." class={inputClass} />
+          </label>
+        </fieldset>
+
+        <label class="flex items-start gap-3 text-sm text-muted">
+          <input type="checkbox" name="consentimento" required class="mt-1 size-4 accent-accent" />
+          <span>
+            Concordo com o uso destes dados para que a Aurion entre em contato sobre o diagnóstico, conforme a
+            <a href="/privacidade" class="font-medium text-ink underline">política de privacidade</a>.
+          </span>
+        </label>
+
+        <button type="submit" class="btn-primary w-fit">Enviar para diagnóstico</button>
+      </form>
+
+      <aside class="h-fit rounded-2xl border border-line bg-surface p-6">
+        <h2 class="font-semibold">O que acontece depois</h2>
+        <ol class="mt-4 grid gap-3 text-sm text-muted">
+          <li>1. Lemos com atenção o que você descreveu.</li>
+          <li>2. Marcamos uma conversa para entender o processo em detalhe.</li>
+          <li>3. Você recebe uma visão clara do problema e dos próximos passos.</li>
+        </ol>
+
+        <h2 class="mt-8 font-semibold">Prefere outro canal?</h2>
+        <div class="mt-3 grid gap-2 text-sm">
+          {site.email ? <a href={`mailto:${site.email}`} class="text-accent hover:underline">{site.email}</a> : <span class="rascunho w-fit">e-mail a definir</span>}
+          {site.whatsapp ? <a href={`https://wa.me/${site.whatsapp}`} class="text-accent hover:underline">WhatsApp</a> : <span class="rascunho w-fit">WhatsApp a definir</span>}
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>

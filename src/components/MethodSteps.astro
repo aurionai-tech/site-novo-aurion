@@ -1,0 +1,26 @@
+---
+import { metodo } from '../data/site';
+
+interface Props {
+  detailed?: boolean;
+}
+
+const { detailed = false } = Astro.props;
+---
+
+<ol class:list={['grid gap-6', detailed ? 'md:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
+  {
+    metodo.map((etapa, i) => (
+      <li class="rounded-2xl border border-line bg-white p-6">
+        <span class="text-sm font-semibold text-accent">{String(i + 1).padStart(2, '0')}</span>
+        <h3 class="mt-2 text-lg font-semibold">{etapa.titulo}</h3>
+        <p class="mt-2 text-sm text-muted">{etapa.descricao}</p>
+        {detailed && (
+          <p class="mt-4 border-t border-line pt-4 text-sm">
+            <span class="font-semibold">Você recebe:</span> {etapa.entrega}
+          </p>
+        )}
+      </li>
+    ))
+  }
+</ol>

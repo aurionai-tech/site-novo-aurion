@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'cases'>;
+}
+
+const { entry } = Astro.props;
+const { titulo, cliente, segmento, resumo, autorizado } = entry.data;
+---
+
+<a
+  href={`/cases/${entry.id}`}
+  class="group flex flex-col rounded-2xl border border-line bg-white p-6 transition hover:border-ink"
+>
+  <p class="text-xs font-semibold uppercase tracking-wider text-accent">{segmento}</p>
+  <h3 class="mt-2 text-lg font-semibold group-hover:underline">{titulo}</h3>
+  <p class="mt-1 text-sm text-muted">{cliente}</p>
+  <p class="mt-4 flex-1 text-sm text-muted">{resumo}</p>
+  {!autorizado && <span class="rascunho mt-4 w-fit">aguardando autorização do cliente</span>}
+</a>
