@@ -1,0 +1,44 @@
+---
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const links = [
+  { href: '/', label: 'Início' },
+  { href: '/como-trabalhamos', label: 'Método' },
+  { href: '/servicos', label: 'Serviços' },
+  { href: '/segmentos', label: 'Segmentos', hideOnMobile: true },
+  { href: '/sobre', label: 'Sobre' },
+];
+---
+
+<nav
+  id="dock"
+  aria-label="Atalhos"
+  class="fixed bottom-5 left-1/2 z-40 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 translate-y-24 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 opacity-0 shadow-2xl shadow-black/60 backdrop-blur transition duration-500 data-[visible]:translate-y-0 data-[visible]:opacity-100"
+>
+  {
+    links.map((l) => (
+      <a
+        href={l.href}
+        class:list={[
+          'rounded-lg px-2.5 py-2 text-[11px] font-medium tracking-[0.12em] whitespace-nowrap uppercase transition sm:px-3.5',
+          current === l.href ? 'bg-surface-2 text-gold' : 'text-muted hover:text-fg',
+          l.hideOnMobile && 'hidden sm:block',
+        ]}
+        aria-current={current === l.href ? 'page' : undefined}
+      >
+        {l.label}
+      </a>
+    ))
+  }
+  <span class="mx-1 h-6 w-px bg-line" aria-hidden="true"></span>
+  <a href="/contato" class="btn-primary px-3 py-2 text-[11px] whitespace-nowrap sm:px-4">Diagnóstico</a>
+</nav>
+
+<script>
+  const dock = document.getElementById('dock');
+  if (dock) {
+    const update = () => dock.toggleAttribute('data-visible', window.scrollY > 240);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+</script>

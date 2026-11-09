@@ -26,6 +26,11 @@ export const principio = {
     'Automação — seja IA, integração, bot ou script — só funciona sobre um fluxo mapeado, repetível e acordado. Sem isso, o que se entrega é retrabalho, não escala.',
 };
 
+export const fases = {
+  processo: 'Primeiro o processo',
+  tecnologia: 'Depois a tecnologia',
+};
+
 export const metodo = [
   {
     titulo: 'Diagnóstico',

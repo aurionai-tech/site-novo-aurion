@@ -1,26 +1,136 @@
 ---
-import { metodo } from '../data/site';
+import { fases, metodo } from '../data/site';
 
 interface Props {
   detailed?: boolean;
 }
 
 const { detailed = false } = Astro.props;
+const fase = (i: number) => (i < 3 ? fases.processo : fases.tecnologia);
 ---
 
-<ol class:list={['grid gap-px overflow-hidden rounded-xl border border-line bg-line', detailed ? 'md:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
-  {
-    metodo.map((etapa, i) => (
-      <li class="bg-surface p-8 transition hover:bg-surface-2">
-        <span class="text-sm font-light text-gold">{String(i + 1).padStart(2, '0')}</span>
-        <h3 class="mt-3 text-lg font-semibold">{etapa.titulo}</h3>
-        <p class="mt-2 text-sm leading-relaxed text-muted">{etapa.descricao}</p>
-        {detailed && (
-          <p class="mt-5 border-t border-line pt-5 text-sm">
-            <span class="font-semibold text-gold">Você recebe:</span> <span class="text-sand">{etapa.entrega}</span>
-          </p>
-        )}
-      </li>
-    ))
+{
+  detailed ? (
+    <ol class="relative">
+      {metodo.map((etapa, i) => (
+        <>
+          {(i === 0 || i === 3) && (
+            <li class="flex items-center gap-4 pb-10" aria-hidden="true">
+              <span class="h-px flex-1 border-t border-dashed border-gold/40" />
+              <span class="text-xs font-medium tracking-[0.3em] text-gold uppercase">
+                Fase {i === 0 ? 1 : 2} · {fase(i)}
+              </span>
+              <span class="h-px flex-1 border-t border-dashed border-gold/40" />
+            </li>
+          )}
+          <li class="relative grid grid-cols-[auto_1fr] gap-x-6 pb-12 md:grid-cols-[auto_1fr_1fr] md:gap-x-10">
+            {i < metodo.length - 1 && (
+              <span class="absolute top-14 bottom-0 left-7 border-l border-dashed border-gold/50" aria-hidden="true" />
+            )}
+            <span class="relative grid size-14 place-items-center rounded-lg border border-gold/60 bg-bg text-lg font-light text-gold">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div data-build style={`--d:${i * 60}ms`} class="pt-2">
+              <h3 class="text-xl font-semibold">{etapa.titulo}</h3>
+              <p class="mt-2 leading-relaxed text-muted">{etapa.descricao}</p>
+            </div>
+            <div
+              data-build
+              style={`--d:${i * 60 + 120}ms`}
+              class="card col-start-2 mt-5 border-dashed p-5 md:col-start-3 md:mt-0"
+            >
+              <p class="text-xs font-medium tracking-[0.2em] text-gold uppercase">Você recebe</p>
+              <p class="mt-2 text-sand">{etapa.entrega}</p>
+            </div>
+          </li>
+        </>
+      ))}
+    </ol>
+  ) : (
+    <div>
+      <ol class="grid gap-y-12 md:grid-cols-3 md:gap-x-12 xl:grid-cols-6 xl:gap-x-8">
+        {metodo.map((etapa, i) => (
+          <li class="relative">
+            <div data-build style={`--d:${i * 90}ms`} class="card h-full p-5 hover:border-gold/50">
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-light text-gold">{String(i + 1).padStart(2, '0')}</span>
+                <span class="text-[10px] tracking-[0.2em] text-muted uppercase">{i < 3 ? 'Processo' : 'Tecnologia'}</span>
+              </div>
+              <h3 class="mt-4 font-semibold">{etapa.titulo}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{etapa.descricao}</p>
+            </div>
+            {i < metodo.length - 1 && (
+              <span
+                class:list={['flow-connector', i === 2 && 'flow-connector--row-end']}
+                aria-hidden="true"
+              />
+            )}
+          </li>
+        ))}
+      </ol>
+
+      <div class="mt-6 hidden grid-cols-2 gap-8 xl:grid" aria-hidden="true">
+        {[fases.processo, fases.tecnologia].map((label) => (
+          <div class="relative h-6 border-x border-b border-dashed border-gold/50">
+            <span class="absolute top-full left-1/2 -translate-x-1/2 bg-bg px-3 pt-2 text-xs tracking-[0.3em] whitespace-nowrap text-gold uppercase">
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .flow-connector {
+    position: absolute;
+    left: 1.5rem;
+    top: 100%;
+    height: 3rem;
+    border-left: 1px dashed rgb(198 178 114 / 0.6);
   }
-</ol>
+
+  .flow-connector::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -4px;
+    border: 4px solid transparent;
+    border-top-color: var(--color-gold);
+    border-bottom-width: 0;
+  }
+
+  @media (width >= 48rem) {
+    .flow-connector {
+      left: 100%;
+      top: 2.1rem;
+      width: 3rem;
+      height: 0;
+      border-left: 0;
+      border-top: 1px dashed rgb(198 178 114 / 0.6);
+    }
+
+    .flow-connector::after {
+      bottom: auto;
+      left: auto;
+      right: 0;
+      top: -4.5px;
+      border: 4px solid transparent;
+      border-left-color: var(--color-gold);
+      border-right-width: 0;
+    }
+  }
+
+  @media (width >= 48rem) and (width < 80rem) {
+    .flow-connector--row-end {
+      display: none;
+    }
+  }
+
+  @media (width >= 80rem) {
+    .flow-connector {
+      width: 2rem;
+    }
+  }
+</style>

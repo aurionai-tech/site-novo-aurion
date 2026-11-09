@@ -10,17 +10,17 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative overflow-hidden border-t border-line bg-surface">
+<section class="relative overflow-hidden border-t border-line">
+  <div class="bg-blueprint pointer-events-none absolute inset-0" aria-hidden="true"></div>
   <div
-    class="pointer-events-none absolute -top-40 right-0 h-96 w-96 rounded-full bg-gold/15 blur-3xl"
+    class="pointer-events-none absolute top-1/2 left-1/2 h-112 w-112 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/10 blur-3xl"
     aria-hidden="true"
   >
   </div>
-  <div class="relative container-site flex flex-col items-start gap-8 py-20 md:flex-row md:items-center md:justify-between">
-    <div class="max-w-xl">
-      <h2 class="text-3xl font-light tracking-tight md:text-4xl">{title}</h2>
-      <p class="mt-4 leading-relaxed text-muted">{text}</p>
-    </div>
-    <a href="/contato" class="btn-primary shrink-0">Agendar diagnóstico</a>
+  <div data-build class="relative container-site flex max-w-3xl flex-col items-center py-28 text-center md:py-36">
+    <p class="eyebrow">Próximo passo</p>
+    <h2 class="mt-6 text-4xl leading-tight font-light tracking-tight md:text-6xl">{title}</h2>
+    <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">{text}</p>
+    <a href="/contato" class="btn-primary mt-12">Agendar diagnóstico</a>
   </div>
 </section>

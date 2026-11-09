@@ -9,7 +9,7 @@ interface Props {
 const { eyebrow, title, intro, center = false } = Astro.props;
 ---
 
-<div class:list={['max-w-2xl', center && 'mx-auto text-center']}>
+<div data-build class:list={['max-w-2xl', center && 'mx-auto text-center']}>
   {eyebrow && <p class="eyebrow">{eyebrow}</p>}
   <h2 class="mt-4 text-3xl font-light tracking-tight md:text-4xl">{title}</h2>
   {intro && <p class="mt-5 text-lg leading-relaxed text-muted">{intro}</p>}

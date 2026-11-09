@@ -1,0 +1,32 @@
+---
+import { equipe, metodo, submarcas } from '../data/site';
+
+const itens = [
+  { valor: String(metodo.length), rotulo: 'Etapas de método, do diagnóstico ao acompanhamento' },
+  { valor: String(equipe.length), rotulo: 'Especialidades na equipe' },
+  { valor: String(submarcas.length), rotulo: 'Frentes de atuação' },
+  { valor: '0', rotulo: 'Automações sem processo mapeado' },
+];
+---
+
+<section class="border-b border-line">
+  <dl class="container-site grid grid-cols-2 md:grid-cols-4">
+    {
+      itens.map((item, i) => (
+        <div
+          data-build
+          style={`--d:${i * 100}ms`}
+          class:list={[
+            'flex flex-col-reverse justify-end gap-3 border-dashed border-line px-2 py-10 md:px-8',
+            i % 2 === 1 && 'border-l pl-6',
+            i >= 2 && 'border-t md:border-t-0',
+            i === 2 && 'md:border-l md:pl-8',
+          ]}
+        >
+          <dt class="text-xs leading-relaxed tracking-[0.15em] text-muted uppercase">{item.rotulo}</dt>
+          <dd class="text-5xl font-light text-gold md:text-6xl">{item.valor}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>

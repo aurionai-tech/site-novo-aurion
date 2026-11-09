@@ -57,8 +57,8 @@ import { comoOperamos, conceitoMarca, equipe, ecossistema, principio, site } fro
       <SectionHeading eyebrow="Valores" title={principio.frase} intro={principio.explicacao} />
       <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {
-          comoOperamos.map((v) => (
-            <article class="card">
+          comoOperamos.map((v, i) => (
+            <article data-build style={`--d:${i * 80}ms`} class="card">
               <h3 class="font-semibold">{v.titulo}</h3>
               <p class="mt-3 text-sm leading-relaxed text-muted">{v.descricao}</p>
             </article>
@@ -90,8 +90,8 @@ import { comoOperamos, conceitoMarca, equipe, ecossistema, principio, site } fro
       <span class="rascunho mt-6 inline-block">confirmar com cada pessoa antes de publicar nomes e fotos</span>
       <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {
-          equipe.map((p) => (
-            <li class="card bg-bg">
+          equipe.map((p, i) => (
+            <li data-build style={`--d:${i * 60}ms`} class="card bg-bg">
               <div class="mb-5 grid size-14 place-items-center rounded-full border border-gold/40 text-lg font-light text-gold" aria-hidden="true">
                 {p.nome.charAt(0)}
               </div>
@@ -109,8 +109,8 @@ import { comoOperamos, conceitoMarca, equipe, ecossistema, principio, site } fro
       <SectionHeading eyebrow="Ecossistema" title="Conectados à inovação regional" />
       <ul class="mt-12 grid gap-6 md:grid-cols-3">
         {
-          ecossistema.map((e) => (
-            <li class="card">
+          ecossistema.map((e, i) => (
+            <li data-build style={`--d:${i * 100}ms`} class="card">
               <p class="text-lg font-semibold">{e.nome}</p>
               <p class="mt-2 text-sm text-muted">{e.detalhe}</p>
             </li>

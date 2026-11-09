@@ -20,7 +20,7 @@ import { servicos, submarcas } from '../data/site';
     <div class="container-site grid gap-6 py-24">
       {
         servicos.map((s, i) => (
-          <article class="card grid gap-6 p-8 hover:border-gold/50 md:grid-cols-[auto_1fr_1fr] md:gap-12">
+          <article data-build class="card grid gap-6 p-8 hover:border-gold/50 md:grid-cols-[auto_1fr_1fr] md:gap-12">
             <span class="text-2xl font-light text-gold">{String(i + 1).padStart(2, '0')}</span>
             <div>
               <h2 class="text-2xl font-light tracking-tight">{s.titulo}</h2>
@@ -45,8 +45,8 @@ import { servicos, submarcas } from '../data/site';
       <SectionHeading eyebrow="Frentes Aurion" title="Frentes especializadas" />
       <div class="mt-14 grid gap-6 md:grid-cols-3">
         {
-          submarcas.map((m) => (
-            <article class="card flex flex-col items-center bg-bg text-center">
+          submarcas.map((m, i) => (
+            <article data-build style={`--d:${i * 100}ms`} class="card flex flex-col items-center bg-bg text-center">
               <img src={m.logo} alt={m.nome} width="192" height="99" class="h-auto w-44" loading="lazy" />
               {m.emBreve ? (
                 <p class="mt-6 text-xs tracking-[0.2em] text-muted uppercase">Em breve</p>

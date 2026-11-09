@@ -4,6 +4,8 @@ import Layout from '../layouts/Layout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import MethodSteps from '../components/MethodSteps.astro';
 import CtaDiagnostico from '../components/CtaDiagnostico.astro';
+import HeroWordmark from '../components/HeroWordmark.astro';
+import Stats from '../components/Stats.astro';
 import barrasOuro from '../assets/brand/barras-ouro.png';
 import { principio, servicos, ecossistema, site, submarcas } from '../data/site';
 ---
@@ -17,13 +19,15 @@ import { principio, servicos, ecossistema, site, submarcas } from '../data/site'
       sizes="100vw"
       loading="eager"
       fetchpriority="high"
-      class="pointer-events-none absolute inset-0 h-full w-full object-cover object-[70%_50%] opacity-70 md:object-[center_50%]"
+      class="pointer-events-none absolute inset-0 h-full w-full object-cover object-[70%_50%] opacity-50 md:object-[center_60%]"
     />
     <div class="absolute inset-0 bg-linear-to-r from-bg via-bg/85 to-bg/10"></div>
     <div class="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-bg to-transparent"></div>
+    <div class="bg-blueprint pointer-events-none absolute inset-0" aria-hidden="true"></div>
 
-    <div class="relative container-site py-24 md:py-36">
-      <p class="eyebrow">{site.assinatura}</p>
+    <div class="relative container-site pt-14 pb-24 md:pt-20 md:pb-32">
+      <HeroWordmark class="h-auto w-full" />
+      <p class="eyebrow mt-12 md:mt-16">{site.assinatura}</p>
       <h1 class="mt-6 max-w-3xl text-5xl leading-[1.05] font-light tracking-tight md:text-7xl">
         Primeiro o processo.<br /><span class="font-semibold text-gold">Depois a tecnologia.</span>
       </h1>
@@ -38,8 +42,10 @@ import { principio, servicos, ecossistema, site, submarcas } from '../data/site'
     </div>
   </section>
 
+  <Stats />
+
   <section>
-    <div class="container-site grid gap-10 py-24 md:grid-cols-[1.2fr_1fr] md:items-center">
+    <div data-build class="container-site grid gap-10 py-24 md:grid-cols-[1.2fr_1fr] md:items-center">
       <blockquote class="border-l-2 border-gold pl-8 text-3xl leading-tight font-light tracking-tight md:text-4xl">
         “{principio.frase}”
       </blockquote>
@@ -68,8 +74,8 @@ import { principio, servicos, ecossistema, site, submarcas } from '../data/site'
       <SectionHeading eyebrow="Serviços" title="O que entregamos" />
       <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {
-          servicos.map((s) => (
-            <article class="card bg-bg hover:border-gold/50">
+          servicos.map((s, i) => (
+            <article data-build style={`--d:${i * 80}ms`} class="card bg-bg hover:border-gold/50">
               <h3 class="text-lg font-semibold">{s.titulo}</h3>
               <p class="mt-3 text-sm leading-relaxed text-muted">{s.descricao}</p>
             </article>
@@ -87,8 +93,8 @@ import { principio, servicos, ecossistema, site, submarcas } from '../data/site'
       <SectionHeading eyebrow="Frentes Aurion" title="Uma marca, frentes especializadas" />
       <div class="mt-14 grid gap-6 md:grid-cols-3">
         {
-          submarcas.map((m) => (
-            <article class="card flex flex-col items-center text-center">
+          submarcas.map((m, i) => (
+            <article data-build style={`--d:${i * 100}ms`} class="card flex flex-col items-center text-center">
               <img src={m.logo} alt={m.nome} width="192" height="99" class="h-auto w-44" loading="lazy" />
               {m.emBreve ? (
                 <p class="mt-6 text-xs tracking-[0.2em] text-muted uppercase">Em breve</p>

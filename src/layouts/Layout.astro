@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Dock from '../components/Dock.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -40,6 +41,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body class="flex min-h-screen flex-col">
     <Header />
@@ -47,5 +49,28 @@ const ogImage = new URL('/og-image.png', Astro.site);
       <slot />
     </main>
     <Footer />
+    <Dock />
+
+    <script>
+      const blocks = document.querySelectorAll<HTMLElement>('[data-build]');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduce || !('IntersectionObserver' in window)) {
+        blocks.forEach((el) => el.classList.add('is-built'));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-built');
+                observer.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px' },
+        );
+        blocks.forEach((el) => observer.observe(el));
+      }
+    </script>
   </body>
 </html>
