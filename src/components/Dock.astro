@@ -1,44 +1,61 @@
 ---
 const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => current === href || current.startsWith(`${href}/`);
 
 const links = [
-  { href: '/', label: 'Início' },
   { href: '/como-trabalhamos', label: 'Método' },
   { href: '/servicos', label: 'Serviços' },
-  { href: '/segmentos', label: 'Segmentos', hideOnMobile: true },
+  { href: '/segmentos', label: 'Segmentos' },
   { href: '/sobre', label: 'Sobre' },
+];
+
+const linkClass = (href: string) => [
+  'rounded-lg px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] whitespace-nowrap uppercase transition',
+  isActive(href) ? 'bg-surface-2 text-gold' : 'text-muted hover:text-fg',
 ];
 ---
 
 <nav
-  id="dock"
-  aria-label="Atalhos"
-  class="fixed bottom-5 left-1/2 z-40 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 translate-y-24 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 opacity-0 shadow-2xl shadow-black/60 backdrop-blur transition duration-500 data-[visible]:translate-y-0 data-[visible]:opacity-100"
+  aria-label="Principal"
+  class="fixed bottom-5 left-1/2 z-50 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 shadow-2xl shadow-black/60 backdrop-blur"
 >
+  <a
+    href="/"
+    aria-label="Aurion — página inicial"
+    aria-current={current === '/' ? 'page' : undefined}
+    class:list={['grid size-9 place-items-center rounded-lg transition', current === '/' ? 'bg-surface-2' : 'hover:bg-surface-2']}
+  >
+    <svg viewBox="455 112 235 225" class="h-5 w-auto fill-gold" aria-hidden="true">
+      <path d="M513.11,327.67l-40.75-.11c-3.66,0-7.1-3.42-7.1-7.16v-191.82c0-3.66,3.49-7.11,7.12-7.12l41.66-.04c4.39,0,7.35,3.95,7.35,8.1v190.97c-.57,4.33-3.84,7.19-8.28,7.18Z" />
+      <path d="M676.12,288.53l-20.31,38.04c-.45.84-1.41,1.29-2.14,1.39-.85.12-2.14-.13-2.64-.97l-12.86-21.51-17.56-29.48-43.85-73.85-36.41-62.47-8.22-14.2c-.48-.82-.14-2.16.29-2.81.46-.7,1.34-1.29,2.42-1.29l52.64-.02c2.77,0,4.31,1.23,5.67,3.49l55.56,92.9,18.84,31.74,14.01,23.67c.74,1.25.91,3.27.25,4.52l-5.7,10.86Z" />
+    </svg>
+  </a>
+
+  <span class="mx-1 h-6 w-px bg-line" aria-hidden="true"></span>
+
   {
     links.map((l) => (
-      <a
-        href={l.href}
-        class:list={[
-          'rounded-lg px-2.5 py-2 text-[11px] font-medium tracking-[0.12em] whitespace-nowrap uppercase transition sm:px-3.5',
-          current === l.href ? 'bg-surface-2 text-gold' : 'text-muted hover:text-fg',
-          l.hideOnMobile && 'hidden sm:block',
-        ]}
-        aria-current={current === l.href ? 'page' : undefined}
-      >
+      <a href={l.href} class:list={[linkClass(l.href), 'hidden sm:block']} aria-current={isActive(l.href) ? 'page' : undefined}>
         {l.label}
       </a>
     ))
   }
-  <span class="mx-1 h-6 w-px bg-line" aria-hidden="true"></span>
-  <a href="/contato" class="btn-primary px-3 py-2 text-[11px] whitespace-nowrap sm:px-4">Diagnóstico</a>
-</nav>
 
-<script>
-  const dock = document.getElementById('dock');
-  if (dock) {
-    const update = () => dock.toggleAttribute('data-visible', window.scrollY > 240);
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-  }
-</script>
+  <details class="relative sm:hidden">
+    <summary class="cursor-pointer list-none rounded-lg px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] text-muted uppercase hover:text-fg">
+      Menu
+    </summary>
+    <div class="absolute bottom-full left-1/2 mb-4 w-56 -translate-x-1/2 rounded-xl border border-line bg-surface p-2 shadow-2xl shadow-black/60">
+      {
+        links.map((l) => (
+          <a href={l.href} class:list={[linkClass(l.href), 'block text-xs']} aria-current={isActive(l.href) ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
+    </div>
+  </details>
+
+  <span class="mx-1 h-6 w-px bg-line" aria-hidden="true"></span>
+  <a href="/contato" class="btn-primary px-4 py-2 text-[11px] whitespace-nowrap">Diagnóstico</a>
+</nav>
