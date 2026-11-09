@@ -17,7 +17,6 @@ export const nav = [
   { href: '/como-trabalhamos', label: 'Como trabalhamos' },
   { href: '/servicos', label: 'Serviços' },
   { href: '/segmentos', label: 'Segmentos' },
-  { href: '/cases', label: 'Cases' },
   { href: '/sobre', label: 'Sobre' },
 ];
 
@@ -101,11 +100,6 @@ export const segmentos = [
   {
     titulo: 'Mobile',
     descricao: 'Aplicativos para equipes em campo e para o cliente final.',
-  },
-  {
-    titulo: 'Indústria e alimentos',
-    descricao: 'Produção, distribuição e qualidade pós-entrega. (Confirmar se entra como segmento.)',
-    rascunho: true,
   },
 ];
 

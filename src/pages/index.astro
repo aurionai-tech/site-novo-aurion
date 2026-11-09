@@ -3,13 +3,9 @@ import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import MethodSteps from '../components/MethodSteps.astro';
-import CaseCard from '../components/CaseCard.astro';
 import CtaDiagnostico from '../components/CtaDiagnostico.astro';
 import barrasOuro from '../assets/brand/barras-ouro.png';
 import { principio, servicos, ecossistema, site, submarcas } from '../data/site';
-import { getPublishedCases } from '../lib/cases';
-
-const cases = (await getPublishedCases()).filter((c) => c.data.destaque).slice(0, 3);
 ---
 
 <Layout>
@@ -105,21 +101,6 @@ const cases = (await getPublishedCases()).filter((c) => c.data.destaque).slice(0
       </div>
     </div>
   </section>
-
-  {
-    cases.length > 0 && (
-      <section class="border-t border-line bg-surface">
-        <div class="container-site py-24">
-          <SectionHeading eyebrow="Cases" title="Processo mapeado, resultado real" />
-          <div class="mt-14 grid gap-6 md:grid-cols-3">
-            {cases.map((entry) => (
-              <CaseCard entry={entry} />
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
 
   <section class="border-t border-line">
     <div class="container-site py-16">
