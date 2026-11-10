@@ -26,6 +26,8 @@ Regras: o site não cita projetos nem clientes da Aurion, não expõe membros da
 
 Copie `.env.example` para `.env` e preencha. Na Vercel, cadastre as mesmas variáveis no painel do projeto.
 
+Enquanto `SITE_INDEXABLE` não for `true`, todas as páginas saem com `noindex` e os buscadores não indexam o site. No lançamento, cadastre `SITE_INDEXABLE=true` na Vercel e faça um novo deploy.
+
 ## Formulário de diagnóstico
 
 O formulário de `/contato` faz `POST /api/contact` com JSON. O endpoint (`src/pages/api/contact.ts`) roda como função da Vercel em produção e no próprio `astro dev` em desenvolvimento.

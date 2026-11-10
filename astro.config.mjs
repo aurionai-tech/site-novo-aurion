@@ -14,6 +14,8 @@ export default defineConfig({
 
   env: {
     schema: {
+      // Enquanto false, todas as páginas saem com noindex. Ligar só no lançamento.
+      SITE_INDEXABLE: envField.boolean({ context: 'server', access: 'public', default: false }),
       MICROSOFT_TENANT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
       MICROSOFT_CLIENT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
       MICROSOFT_CLIENT_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),

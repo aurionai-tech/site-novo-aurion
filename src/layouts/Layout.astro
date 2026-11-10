@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Footer from '../components/Footer.astro';
 import Dock from '../components/Dock.astro';
 import { site } from '../data/site';
+import { SITE_INDEXABLE } from 'astro:env/server';
 
 interface Props {
   title?: string;
@@ -29,6 +30,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {!SITE_INDEXABLE && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
