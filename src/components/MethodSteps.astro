@@ -47,37 +47,30 @@ const fase = (i: number) => (i < 3 ? fases.processo : fases.tecnologia);
       ))}
     </ol>
   ) : (
-    <div>
-      <ol class="grid gap-y-12 md:grid-cols-3 md:gap-x-12 xl:grid-cols-6 xl:gap-x-8">
-        {metodo.map((etapa, i) => (
-          <li class="relative">
-            <div data-build style={`--d:${i * 90}ms`} class="card h-full p-5 hover:border-gold/50">
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-light text-gold">{String(i + 1).padStart(2, '0')}</span>
-                <span class="text-[10px] tracking-[0.2em] text-muted uppercase">{i < 3 ? 'Processo' : 'Tecnologia'}</span>
-              </div>
-              <h3 class="mt-4 font-semibold">{etapa.titulo}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-muted">{etapa.descricao}</p>
-            </div>
-            {i < metodo.length - 1 && (
-              <span
-                class:list={['flow-connector', i === 2 && 'flow-connector--row-end']}
-                aria-hidden="true"
-              />
-            )}
-          </li>
-        ))}
-      </ol>
-
-      <div class="mt-6 hidden grid-cols-2 gap-8 xl:grid" aria-hidden="true">
-        {[fases.processo, fases.tecnologia].map((label) => (
-          <div class="relative h-6 border-x border-b border-dashed border-gold/50">
-            <span class="absolute top-full left-1/2 -translate-x-1/2 bg-bg px-3 pt-2 text-xs tracking-[0.3em] whitespace-nowrap text-gold uppercase">
-              {label}
+    <div class="grid gap-14">
+      {[0, 3].map((inicio) => (
+        <div>
+          <p class="flex items-center gap-4 pb-8" aria-hidden="true">
+            <span class="h-px flex-1 border-t border-dashed border-gold/40" />
+            <span class="text-xs font-medium tracking-[0.3em] text-gold uppercase">
+              Fase {inicio === 0 ? 1 : 2} · {fase(inicio)}
             </span>
-          </div>
-        ))}
-      </div>
+            <span class="h-px flex-1 border-t border-dashed border-gold/40" />
+          </p>
+          <ol start={inicio + 1} class="grid gap-y-12 md:grid-cols-3 md:gap-x-12">
+            {metodo.slice(inicio, inicio + 3).map((etapa, j) => (
+              <li class="relative">
+                <div data-build style={`--d:${j * 90}ms`} class="card h-full p-6 hover:border-gold/50">
+                  <span class="text-sm font-light text-gold">{String(inicio + j + 1).padStart(2, '0')}</span>
+                  <h3 class="mt-4 font-semibold">{etapa.titulo}</h3>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{etapa.descricao}</p>
+                </div>
+                {j < 2 && <span class="flow-connector" aria-hidden="true" />}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
     </div>
   )
 }
@@ -122,15 +115,4 @@ const fase = (i: number) => (i < 3 ? fases.processo : fases.tecnologia);
     }
   }
 
-  @media (width >= 48rem) and (width < 80rem) {
-    .flow-connector--row-end {
-      display: none;
-    }
-  }
-
-  @media (width >= 80rem) {
-    .flow-connector {
-      width: 2rem;
-    }
-  }
 </style>
