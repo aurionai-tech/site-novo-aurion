@@ -41,7 +41,7 @@ const linkClass = (href: string) => [
     ))
   }
 
-  <details class="relative sm:hidden">
+  <details data-dock-menu class="relative sm:hidden">
     <summary class="cursor-pointer list-none rounded-lg px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] text-muted uppercase hover:text-fg">
       Menu
     </summary>
@@ -59,3 +59,18 @@ const linkClass = (href: string) => [
   <span class="mx-1 h-6 w-px bg-line" aria-hidden="true"></span>
   <a href="/contato" class="btn-primary px-4 py-2 text-[11px] whitespace-nowrap">Diagnóstico</a>
 </nav>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('[data-dock-menu]');
+
+  document.addEventListener('click', (event) => {
+    if (menu?.open && !menu.contains(event.target as Node)) menu.open = false;
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menu?.open) {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    }
+  });
+</script>

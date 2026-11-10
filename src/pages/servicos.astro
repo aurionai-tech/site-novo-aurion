@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import CtaDiagnostico from '../components/CtaDiagnostico.astro';
-import { servicos, submarcas } from '../data/site';
+import { servicos, submarcasPublicas } from '../data/site';
 ---
 
 <Layout
@@ -43,16 +43,12 @@ import { servicos, submarcas } from '../data/site';
   <section class="border-t border-line bg-surface">
     <div class="container-site py-24">
       <SectionHeading eyebrow="Frentes Aurion" title="Frentes especializadas" />
-      <div class="mt-14 grid gap-6 md:grid-cols-3">
+      <div class="mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
         {
-          submarcas.map((m, i) => (
+          submarcasPublicas.map((m, i) => (
             <article data-build style={`--d:${i * 100}ms`} class="card flex flex-col items-center bg-bg text-center">
               <img src={m.logo} alt={m.nome} width="192" height="99" class="h-auto w-44" loading="lazy" />
-              {m.emBreve ? (
-                <p class="mt-6 text-xs tracking-[0.2em] text-muted uppercase">Em breve</p>
-              ) : (
-                <p class="mt-6 text-sm leading-relaxed text-muted">{m.descricao}</p>
-              )}
+              <p class="mt-6 text-sm leading-relaxed text-muted">{m.descricao}</p>
             </article>
           ))
         }

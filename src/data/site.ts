@@ -108,14 +108,15 @@ export const segmentos = [
   },
 ];
 
-// O site não expõe membros da equipe: só áreas de competência, sem nomes, cargos ou quantidade de pessoas.
+// O site não expõe a equipe: nada de nomes, cargos, quantidade de pessoas ou uma lista que espelhe papéis individuais.
 export const competencias = [
-  { titulo: 'Engenharia de software', descricao: 'Sistemas, aplicativos e integrações construídos sob medida.' },
-  { titulo: 'Engenharia e inteligência de dados', descricao: 'Dados organizados, pipelines e indicadores para decidir.' },
-  { titulo: 'Mobile', descricao: 'Aplicativos para equipes em campo e para o cliente final.' },
-  { titulo: 'Segurança da informação', descricao: 'Proteção de dados e acessos desde o desenho da solução.' },
-  { titulo: 'IA, automação e conversação', descricao: 'Agentes, bots e automações sobre processos mapeados.' },
-  { titulo: 'BI e novas tecnologias', descricao: 'Painéis de gestão e exploração de tecnologias como blockchain.' },
+  { titulo: 'Processos e negócio', descricao: 'Diagnóstico, mapeamento e desenho de fluxos antes de qualquer linha de código.' },
+  { titulo: 'Software e mobile', descricao: 'Sistemas web, aplicativos e integrações construídos sob medida.' },
+  {
+    titulo: 'Dados, IA e novas tecnologias',
+    descricao: 'Pipelines, indicadores, agentes e automações, além da exploração de tecnologias como blockchain.',
+  },
+  { titulo: 'Infraestrutura e segurança', descricao: 'Base técnica estável e proteção de dados e acessos desde o desenho.' },
 ];
 
 export const submarcas = [
@@ -137,17 +138,15 @@ export const submarcas = [
   },
 ];
 
+// Frentes marcadas como emBreve ficam fora do site até serem lançadas.
+export const submarcasPublicas = submarcas.filter((m) => !m.emBreve);
+
 export const conceitoMarca = {
   palavras: ['Valor', 'Conexão', 'Segurança', 'Evolução', 'Continuidade', 'Conhecimento'],
   simbolo: [
     'O elemento inclinado representa uma barra de ouro, conectando a marca ao significado de Aurion.',
     'O elemento vertical representa estrutura, segurança e sustentação concreta — inclusive do elemento de ouro.',
     'Juntos, formam uma representação abstrata do “A” de Aurion, unindo valor e movimento em uma forma simples e memorável.',
-  ],
-  cores: [
-    { nome: 'Preto', hex: '#0a0a0a', significado: 'Solidez, segurança e autoridade.' },
-    { nome: 'Dourado', hex: '#c6b272', significado: 'Valor, excelência e transformação.' },
-    { nome: 'Branco', hex: '#ffffff', significado: 'Clareza, organização e transparência.' },
   ],
 };
 
@@ -157,8 +156,8 @@ export const comoOperamos = [
     descricao: 'Entrega consistente e senso de dono em cada projeto.',
   },
   {
-    titulo: 'Horizontal e descentralizada',
-    descricao: 'Uma equipe com papéis claros, que opera sem depender de uma única pessoa.',
+    titulo: 'Continuidade',
+    descricao: 'Seu projeto não fica refém de ninguém: responsabilidades distribuídas e passagem de bastão documentada.',
   },
   {
     titulo: 'Processos auditáveis',
