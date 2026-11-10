@@ -3,8 +3,6 @@ import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import { segmentos, site } from '../data/site';
 
-const formEndpoint = import.meta.env.PUBLIC_FORM_ENDPOINT;
-
 const inputClass =
   'mt-2 w-full rounded-md border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition placeholder:text-muted/60 focus:border-gold focus:ring-2 focus:ring-gold/20';
 const labelClass = 'block text-sm font-medium text-sand';
@@ -22,14 +20,27 @@ const labelClass = 'block text-sm font-medium text-sand';
 
   <section>
     <div class="container-site grid gap-12 py-24 lg:grid-cols-[2fr_1fr]">
-      <form action={formEndpoint ?? '#'} method="POST" class="grid gap-6">
-        {
-          !formEndpoint && (
-            <p class="rounded-lg border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-300">
-              Formulário ainda não conectado. Defina <code>PUBLIC_FORM_ENDPOINT</code> no arquivo <code>.env</code>.
-            </p>
-          )
-        }
+      <div
+        id="form-sucesso"
+        hidden
+        tabindex="-1"
+        class="card h-fit border-gold/50 p-8 outline-none"
+      >
+        <p class="eyebrow">Recebido</p>
+        <h2 class="mt-4 text-2xl font-light tracking-tight">Obrigado. Vamos ler com atenção.</h2>
+        <p class="mt-4 text-sm leading-relaxed text-muted">
+          Entraremos em contato pelo e-mail informado para marcar a conversa de diagnóstico.
+        </p>
+        <a href="/" class="btn-secondary mt-8 w-fit">Voltar ao início</a>
+      </div>
+
+      <form id="form-diagnostico" action="/api/contact" method="POST" class="grid gap-6">
+        <div class="absolute -left-[9999px]" aria-hidden="true">
+          <label>
+            Não preencha este campo
+            <input type="text" name="_hp" tabindex="-1" autocomplete="off" />
+          </label>
+        </div>
 
         <fieldset class="grid gap-6 sm:grid-cols-2">
           <legend class="eyebrow mb-6">Sobre você</legend>
@@ -96,7 +107,12 @@ const labelClass = 'block text-sm font-medium text-sand';
           </span>
         </label>
 
-        <button type="submit" class="btn-primary w-fit">Enviar para diagnóstico</button>
+        <div class="flex flex-wrap items-center gap-4">
+          <button type="submit" class="btn-primary w-fit disabled:cursor-not-allowed disabled:opacity-50">
+            Enviar para diagnóstico
+          </button>
+          <p id="form-status" role="status" aria-live="polite" class="text-sm text-muted"></p>
+        </div>
       </form>
 
       <aside class="card h-fit p-8">
@@ -115,4 +131,64 @@ const labelClass = 'block text-sm font-medium text-sand';
       </aside>
     </div>
   </section>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>('#form-diagnostico');
+    const status = document.querySelector<HTMLElement>('#form-status');
+    const sucesso = document.querySelector<HTMLElement>('#form-sucesso');
+
+    const mostrarErro = (mensagem: string) => {
+      if (!status) return;
+      status.className = 'text-sm text-red-400';
+      status.textContent = mensagem;
+    };
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!status || !sucesso) return;
+
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      const data = new FormData(form);
+      const texto = (name: string) => String(data.get(name) ?? '');
+
+      button?.setAttribute('disabled', '');
+      status.className = 'text-sm text-muted';
+      status.textContent = 'Enviando…';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            nome: texto('nome'),
+            empresa: texto('empresa'),
+            email: texto('email'),
+            telefone: texto('telefone'),
+            segmento: texto('segmento'),
+            processo: texto('processo_atual'),
+            responsavel: texto('responsavel'),
+            dor: texto('dor'),
+            sistemas: texto('sistemas'),
+            lgpd: data.get('consentimento') === 'on',
+            _hp: texto('_hp'),
+          }),
+        });
+        const result = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+
+        if (!response.ok || !result?.ok) {
+          mostrarErro(result?.error ?? 'Não foi possível enviar agora. Tente de novo em instantes.');
+          button?.removeAttribute('disabled');
+          return;
+        }
+
+        form.hidden = true;
+        sucesso.hidden = false;
+        sucesso.focus();
+        sucesso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch {
+        mostrarErro('Sem conexão com o servidor. Verifique a internet e tente de novo.');
+        button?.removeAttribute('disabled');
+      }
+    });
+  </script>
 </Layout>

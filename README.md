@@ -24,4 +24,12 @@ Regras: o site não cita projetos nem clientes da Aurion, não expõe membros da
 
 ## Variáveis de ambiente
 
-Copie `.env.example` para `.env` e preencha `SITE_URL` e `PUBLIC_FORM_ENDPOINT`.
+Copie `.env.example` para `.env` e preencha. Na Vercel, cadastre as mesmas variáveis no painel do projeto.
+
+## Formulário de diagnóstico
+
+O formulário de `/contato` faz `POST /api/contact` com JSON. O endpoint (`src/pages/api/contact.ts`) roda como função da Vercel em produção e no próprio `astro dev` em desenvolvimento.
+
+As regras ficam em `src/lib/contact-mail.ts`: recusa origem não autorizada (403), limita a 5 pedidos por IP a cada 15 minutos (429), ignora em silêncio envios com o honeypot `_hp` preenchido e exige nome, e-mail válido, descrição do processo e consentimento LGPD (400).
+
+O envio fica em `src/lib/microsoft-graph-mail.ts`, pela Microsoft Graph (`sendMail`), com autenticação de aplicativo no Entra ID (`client_credentials`, permissão de aplicação `Mail.Send` com consentimento de administrador). O e-mail do visitante vai em Reply-To e a cópia fica em Itens enviados. Sem `MICROSOFT_TENANT_ID`, `MICROSOFT_CLIENT_ID` e `MICROSOFT_CLIENT_SECRET`, a API responde 503; falha da Graph vira 502.
