@@ -19,6 +19,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Altura do dock fixo: foco, âncoras e scrollIntoView param acima dele. */
+    scroll-padding-bottom: 6rem;
     color-scheme: dark;
   }
 
