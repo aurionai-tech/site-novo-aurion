@@ -45,6 +45,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body class="flex min-h-screen flex-col">
+    <div data-scroll-progress class="scroll-progress" aria-hidden="true"></div>
     <main class="flex-1">
       <slot />
     </main>
@@ -54,16 +55,19 @@ const ogImage = new URL('/og-image.png', Astro.site);
     <script>
       const blocks = document.querySelectorAll<HTMLElement>('[data-build]');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
       if (reduce || !('IntersectionObserver' in window)) {
-        blocks.forEach((el) => el.classList.add('is-built'));
+        blocks.forEach((el) => el.classList.add('is-built', 'is-settled'));
       } else {
         const observer = new IntersectionObserver(
           (entries) => {
             for (const entry of entries) {
               if (entry.isIntersecting) {
-                entry.target.classList.add('is-built');
-                observer.unobserve(entry.target);
+                const el = entry.target;
+                el.classList.add('is-built');
+                setTimeout(() => el.classList.add('is-settled'), 1500);
+                observer.unobserve(el);
               }
             }
           },
@@ -71,6 +75,55 @@ const ogImage = new URL('/og-image.png', Astro.site);
         );
         blocks.forEach((el) => observer.observe(el));
       }
+
+      if (finePointer) {
+        document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+          const tilt = !reduce && card.hasAttribute('data-tilt');
+
+          card.addEventListener('pointermove', (event) => {
+            const rect = card.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            card.style.setProperty('--mx', `${x}px`);
+            card.style.setProperty('--my', `${y}px`);
+            if (tilt) {
+              card.style.setProperty('--rx', `${(0.5 - y / rect.height) * 8}deg`);
+              card.style.setProperty('--ry', `${(x / rect.width - 0.5) * 8}deg`);
+            }
+          });
+
+          if (tilt) {
+            card.addEventListener('pointerleave', () => {
+              card.style.setProperty('--rx', '0deg');
+              card.style.setProperty('--ry', '0deg');
+            });
+          }
+        });
+      }
+
+      const hero = document.querySelector<HTMLElement>('[data-parallax]');
+      if (hero && finePointer && !reduce) {
+        const layers = hero.querySelectorAll<HTMLElement>('[data-depth]');
+        hero.addEventListener('pointermove', (event) => {
+          const rect = hero.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width - 0.5;
+          const y = (event.clientY - rect.top) / rect.height - 0.5;
+          layers.forEach((layer) => {
+            const depth = Number(layer.dataset.depth);
+            layer.style.translate = `${-x * depth}px ${-y * depth}px`;
+          });
+        });
+        hero.addEventListener('pointerleave', () => layers.forEach((layer) => (layer.style.translate = '')));
+      }
+
+      const progress = document.querySelector<HTMLElement>('[data-scroll-progress]');
+      const updateProgress = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progress?.style.setProperty('--p', String(max > 0 ? window.scrollY / max : 0));
+      };
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+      updateProgress();
     </script>
   </body>
 </html>

@@ -1,0 +1,14 @@
+---
+// Prévia que desliza por baixo do .card no hover. Repete parte do pop-up, então fica oculta para leitores de tela.
+interface Props {
+  target: string;
+}
+
+const { target } = Astro.props;
+---
+
+<div class="card-peek" data-modal-open={target} aria-hidden="true">
+  <div class="border-t border-dashed border-gold/40 pt-4">
+    <slot />
+  </div>
+</div>

@@ -124,16 +124,19 @@ export const submarcas = [
     nome: 'Aurion Lab',
     logo: '/brand/aurion-lab.svg',
     descricao: 'Pesquisa, inovação e produtos próprios: protótipos, IA e novas soluções.',
+    itens: ['Pesquisa e inovação', 'Protótipos', 'IA aplicada', 'Produtos próprios'],
   },
   {
     nome: 'Aurion Cloud',
     logo: '/brand/aurion-cloud.svg',
     descricao: 'Infraestrutura, hospedagem, servidores e segurança na nuvem.',
+    itens: ['Infraestrutura', 'Hospedagem', 'Servidores', 'Segurança na nuvem'],
   },
   {
     nome: 'Aurion Rebranding',
     logo: '/brand/aurion-rebranding.svg',
     descricao: '',
+    itens: [],
     emBreve: true,
   },
 ];

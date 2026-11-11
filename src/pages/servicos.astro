@@ -3,7 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import CtaDiagnostico from '../components/CtaDiagnostico.astro';
-import { servicos, submarcasPublicas } from '../data/site';
+import Frentes from '../components/Frentes.astro';
+import { servicos } from '../data/site';
 ---
 
 <Layout
@@ -42,17 +43,8 @@ import { servicos, submarcasPublicas } from '../data/site';
 
   <section class="border-t border-line bg-surface">
     <div class="container-site py-24">
-      <SectionHeading eyebrow="Frentes Aurion" title="Frentes especializadas" />
-      <div class="mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
-        {
-          submarcasPublicas.map((m, i) => (
-            <article data-build style={`--d:${i * 100}ms`} class="card flex flex-col items-center bg-bg text-center">
-              <img src={m.logo} alt={m.nome} width="192" height="99" class="h-auto w-44" loading="lazy" />
-              <p class="mt-6 text-sm leading-relaxed text-muted">{m.descricao}</p>
-            </article>
-          ))
-        }
-      </div>
+      <SectionHeading eyebrow="Frentes Aurion" title="Frentes especializadas" center />
+      <Frentes cardClass="bg-bg" />
     </div>
   </section>
 

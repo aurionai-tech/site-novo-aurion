@@ -49,13 +49,21 @@ const situacoes = [
       <div class="mt-14 overflow-hidden rounded-xl border border-line bg-bg">
         {
           situacoes.map((s, i) => (
-            <div class:list={['grid gap-2 p-8 md:grid-cols-2 md:gap-10', i > 0 && 'border-t border-line']}>
-              <p class="font-semibold">{s.situacao}</p>
-              <p class="text-muted">
+            <details name="situacoes" open={i === 0} class:list={['accordion group', i > 0 && 'border-t border-line']}>
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 px-8 py-6 font-semibold transition hover:text-gold [&::-webkit-details-marker]:hidden">
+                {s.situacao}
+                <span
+                  class="grid size-8 shrink-0 place-items-center rounded-full border border-line text-gold transition duration-300 group-open:rotate-45 group-open:border-gold"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <p class="px-8 pb-6 text-muted">
                 <span class="mr-2 text-gold">→</span>
                 {s.resposta}
               </p>
-            </div>
+            </details>
           ))
         }
       </div>

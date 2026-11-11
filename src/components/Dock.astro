@@ -17,38 +17,60 @@ const linkClass = (href: string) => [
 
 <nav
   aria-label="Principal"
-  class="fixed bottom-5 left-1/2 z-50 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 shadow-2xl shadow-black/60 backdrop-blur"
+  class="dock fixed bottom-5 left-1/2 z-50 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 shadow-2xl shadow-black/60 backdrop-blur transition-[border-color,box-shadow] duration-500 hover:border-gold/30 hover:shadow-gold/10"
 >
   <a
     href="/"
     aria-label="Aurion — página inicial"
     aria-current={current === '/' ? 'page' : undefined}
-    class:list={['grid size-9 place-items-center rounded-lg transition', current === '/' ? 'bg-surface-2' : 'hover:bg-surface-2']}
+    class:list={[
+      'group grid size-9 place-items-center rounded-lg transition',
+      current === '/' ? 'bg-surface-2' : 'hover:bg-surface-2',
+    ]}
   >
-    <svg viewBox="455 112 235 225" class="h-5 w-auto fill-gold" aria-hidden="true">
-      <path d="M513.11,327.67l-40.75-.11c-3.66,0-7.1-3.42-7.1-7.16v-191.82c0-3.66,3.49-7.11,7.12-7.12l41.66-.04c4.39,0,7.35,3.95,7.35,8.1v190.97c-.57,4.33-3.84,7.19-8.28,7.18Z" />
-      <path d="M676.12,288.53l-20.31,38.04c-.45.84-1.41,1.29-2.14,1.39-.85.12-2.14-.13-2.64-.97l-12.86-21.51-17.56-29.48-43.85-73.85-36.41-62.47-8.22-14.2c-.48-.82-.14-2.16.29-2.81.46-.7,1.34-1.29,2.42-1.29l52.64-.02c2.77,0,4.31,1.23,5.67,3.49l55.56,92.9,18.84,31.74,14.01,23.67c.74,1.25.91,3.27.25,4.52l-5.7,10.86Z" />
+    <svg
+      viewBox="455 112 235 225"
+      class="h-5 w-auto overflow-visible fill-gold transition duration-300 group-hover:drop-shadow-[0_0_6px_rgb(198_178_114/0.7)]"
+      aria-hidden="true"
+    >
+      <path
+        class="transition-transform duration-300 ease-out group-hover:translate-y-[-14px]"
+        d="M513.11,327.67l-40.75-.11c-3.66,0-7.1-3.42-7.1-7.16v-191.82c0-3.66,3.49-7.11,7.12-7.12l41.66-.04c4.39,0,7.35,3.95,7.35,8.1v190.97c-.57,4.33-3.84,7.19-8.28,7.18Z"
+      ></path>
+      <path
+        class="origin-bottom transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] [transform-box:fill-box] group-hover:rotate-[10deg]"
+        d="M676.12,288.53l-20.31,38.04c-.45.84-1.41,1.29-2.14,1.39-.85.12-2.14-.13-2.64-.97l-12.86-21.51-17.56-29.48-43.85-73.85-36.41-62.47-8.22-14.2c-.48-.82-.14-2.16.29-2.81.46-.7,1.34-1.29,2.42-1.29l52.64-.02c2.77,0,4.31,1.23,5.67,3.49l55.56,92.9,18.84,31.74,14.01,23.67c.74,1.25.91,3.27.25,4.52l-5.7,10.86Z"
+      ></path>
     </svg>
   </a>
 
   <span class="mx-1 h-6 w-px bg-line" aria-hidden="true"></span>
 
-  {
-    links.map((l) => (
-      <a href={l.href} class:list={[linkClass(l.href), 'hidden sm:block']} aria-current={isActive(l.href) ? 'page' : undefined}>
-        {l.label}
-      </a>
-    ))
-  }
+  <div data-dock-links class="relative hidden items-center gap-1 sm:flex">
+    <span data-dock-indicator class="dock-indicator" aria-hidden="true"></span>
+    {
+      links.map((l) => (
+        <a href={l.href} class:list={[linkClass(l.href), 'relative']} aria-current={isActive(l.href) ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))
+    }
+  </div>
 
   <details data-dock-menu class="relative sm:hidden">
-    <summary class="cursor-pointer list-none rounded-lg px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] text-muted uppercase hover:text-fg">
+    <summary class="flex cursor-pointer list-none items-center gap-2 rounded-lg px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] text-muted uppercase transition hover:text-fg [[open]>&]:text-gold">
       Menu
+      <span class="dock-menu-icon" aria-hidden="true"></span>
     </summary>
-    <div class="absolute bottom-full left-1/2 mb-4 w-56 -translate-x-1/2 rounded-xl border border-line bg-surface p-2 shadow-2xl shadow-black/60">
+    <div class="dock-menu-panel absolute bottom-full left-1/2 mb-4 w-56 -translate-x-1/2 rounded-xl border border-line bg-surface p-2 shadow-2xl shadow-black/60">
       {
-        links.map((l) => (
-          <a href={l.href} class:list={[linkClass(l.href), 'block text-xs']} aria-current={isActive(l.href) ? 'page' : undefined}>
+        links.map((l, i) => (
+          <a
+            href={l.href}
+            style={`--i:${i}`}
+            class:list={[linkClass(l.href), 'dock-menu-item block text-xs']}
+            aria-current={isActive(l.href) ? 'page' : undefined}
+          >
             {l.label}
           </a>
         ))
@@ -57,8 +79,142 @@ const linkClass = (href: string) => [
   </details>
 
   <span class="mx-1 h-6 w-px bg-line" aria-hidden="true"></span>
-  <a href="/contato" class="btn-primary px-4 py-2 text-[11px] whitespace-nowrap">Diagnóstico</a>
+  <a href="/contato" data-magnetic class="btn-primary btn-shine px-4 py-2 text-[11px] whitespace-nowrap">Diagnóstico</a>
 </nav>
+
+<style>
+  .dock {
+    animation: dock-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s backwards;
+  }
+
+  @keyframes dock-in {
+    from {
+      opacity: 0;
+      transform: translateY(150%);
+    }
+  }
+
+  .dock-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--w, 0);
+    translate: var(--x, 0) 0;
+    border-radius: 0.5rem;
+    background-color: var(--color-surface-2);
+    opacity: var(--o, 0);
+    pointer-events: none;
+  }
+
+  .dock-indicator::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    width: 1rem;
+    height: 2px;
+    translate: -50% 0;
+    border-radius: 999px;
+    background-color: var(--color-gold);
+    box-shadow: 0 0 8px var(--color-gold);
+  }
+
+  [data-dock-links][data-ready] .dock-indicator {
+    transition:
+      translate 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+      width 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+      opacity 0.25s ease;
+  }
+
+  [data-dock-links][data-ready] a {
+    background-color: transparent;
+  }
+
+  .dock-menu-icon {
+    position: relative;
+    width: 10px;
+    height: 10px;
+  }
+
+  .dock-menu-icon::before,
+  .dock-menu-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1.5px;
+    background-color: currentColor;
+    transition: rotate 0.3s ease;
+  }
+
+  .dock-menu-icon::after {
+    rotate: 90deg;
+  }
+
+  [open] > summary .dock-menu-icon::before {
+    rotate: 45deg;
+  }
+
+  [open] > summary .dock-menu-icon::after {
+    rotate: 135deg;
+  }
+
+  [open] > .dock-menu-panel {
+    animation: dock-menu-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [open] .dock-menu-item {
+    animation: dock-menu-item-in 0.35s ease backwards;
+    animation-delay: calc(80ms + var(--i) * 50ms);
+  }
+
+  @keyframes dock-menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.95);
+    }
+  }
+
+  @keyframes dock-menu-item-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+    translate: -110% 0;
+    pointer-events: none;
+  }
+
+  .btn-shine:hover::after {
+    translate: 110% 0;
+    transition: translate 0.7s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dock,
+    [open] > .dock-menu-panel,
+    [open] .dock-menu-item {
+      animation: none;
+    }
+
+    [data-dock-links][data-ready] .dock-indicator {
+      transition: none;
+    }
+  }
+</style>
 
 <script>
   const menu = document.querySelector<HTMLDetailsElement>('[data-dock-menu]');
@@ -73,4 +229,47 @@ const linkClass = (href: string) => [
       menu.querySelector('summary')?.focus();
     }
   });
+
+  const group = document.querySelector<HTMLElement>('[data-dock-links]');
+  const indicator = group?.querySelector<HTMLElement>('[data-dock-indicator]');
+
+  if (group && indicator) {
+    const active = group.querySelector<HTMLElement>('a[aria-current="page"]');
+
+    const moveTo = (link: HTMLElement | null) => {
+      indicator.style.setProperty('--o', link ? '1' : '0');
+      if (!link) return;
+      indicator.style.setProperty('--x', `${link.offsetLeft}px`);
+      indicator.style.setProperty('--w', `${link.offsetWidth}px`);
+    };
+
+    moveTo(active);
+    requestAnimationFrame(() => group.setAttribute('data-ready', ''));
+    document.fonts?.ready.then(() => moveTo(active));
+    window.addEventListener('resize', () => moveTo(active));
+
+    group.querySelectorAll<HTMLElement>('a').forEach((link) => {
+      link.addEventListener('pointerenter', () => moveTo(link));
+      link.addEventListener('focus', () => moveTo(link));
+    });
+    group.addEventListener('pointerleave', () => moveTo(active));
+    group.addEventListener('focusout', (event) => {
+      if (!group.contains(event.relatedTarget as Node)) moveTo(active);
+    });
+  }
+
+  const magnetic = document.querySelector<HTMLElement>('[data-magnetic]');
+  const canMagnet =
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (magnetic && canMagnet) {
+    magnetic.addEventListener('pointermove', (event) => {
+      const rect = magnetic.getBoundingClientRect();
+      const x = (event.clientX - rect.left - rect.width / 2) * 0.25;
+      const y = (event.clientY - rect.top - rect.height / 2) * 0.35;
+      magnetic.style.translate = `${x}px ${y}px`;
+    });
+    magnetic.addEventListener('pointerleave', () => (magnetic.style.translate = ''));
+  }
 </script>
