@@ -17,11 +17,11 @@ const linkClass = (href: string) => [
 
 <nav
   aria-label="Principal"
-  class="dock fixed bottom-5 left-1/2 z-50 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 shadow-2xl shadow-black/60 backdrop-blur transition-[border-color,box-shadow] duration-500 hover:border-gold/30 hover:shadow-gold/10"
+  class="dock fixed bottom-5 left-1/2 z-50 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 shadow-2xl shadow-black/60 backdrop-blur transition-[border-color,box-shadow,transform,opacity] duration-500 hover:border-gold/30 hover:shadow-gold/10"
 >
   <a
     href="/"
-    aria-label="Aurion — página inicial"
+    aria-label="Página inicial da Aurion"
     aria-current={current === '/' ? 'page' : undefined}
     class:list={[
       'group grid size-9 place-items-center rounded-lg transition',
@@ -92,6 +92,13 @@ const linkClass = (href: string) => [
       opacity: 0;
       transform: translateY(150%);
     }
+  }
+
+  /* Some enquanto a pessoa rola para baixo lendo; volta ao rolar para cima ou ao receber foco. */
+  .dock-oculto:not(:focus-within) {
+    transform: translateY(calc(100% + 2rem));
+    opacity: 0;
+    pointer-events: none;
   }
 
   .dock-indicator {
@@ -217,7 +224,45 @@ const linkClass = (href: string) => [
 </style>
 
 <script>
+  const dock = document.querySelector<HTMLElement>('.dock');
   const menu = document.querySelector<HTMLDetailsElement>('[data-dock-menu]');
+
+  if (dock) {
+    const mostrar = (visivel: boolean) => dock.classList.toggle('dock-oculto', !visivel);
+    let ultimoY = window.scrollY;
+    let acumulado = 0;
+    let ponteiroNaBorda = false;
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        const y = window.scrollY;
+        const delta = y - ultimoY;
+        ultimoY = y;
+        acumulado = Math.sign(delta) === Math.sign(acumulado) ? acumulado + delta : delta;
+
+        const noFim = y + window.innerHeight >= document.documentElement.scrollHeight - 80;
+        if (y < 120 || noFim || menu?.open || ponteiroNaBorda) mostrar(true);
+        else if (acumulado > 40) mostrar(false);
+        else if (acumulado < -40) mostrar(true);
+      },
+      { passive: true },
+    );
+
+    if (window.matchMedia('(hover: hover)').matches) {
+      window.addEventListener(
+        'pointermove',
+        (event) => {
+          ponteiroNaBorda = event.clientY > window.innerHeight - 96;
+          if (ponteiroNaBorda) mostrar(true);
+        },
+        { passive: true },
+      );
+      document.documentElement.addEventListener('pointerleave', () => {
+        ponteiroNaBorda = false;
+      });
+    }
+  }
 
   document.addEventListener('click', (event) => {
     if (menu?.open && !menu.contains(event.target as Node)) menu.open = false;

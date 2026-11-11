@@ -1,0 +1,35 @@
+---
+import { submarcasPublicas } from '../../data/site';
+---
+
+<section class="border-t border-line bg-surface">
+  <div class="container-site grid gap-14 py-28 md:py-36 lg:grid-cols-[1fr_2fr] lg:gap-20">
+    <div data-reveal>
+      <p class="eyebrow">Frentes Aurion</p>
+      <h2 class="mt-5 text-4xl leading-tight font-light tracking-tight md:text-5xl">
+        Uma marca, frentes <span class="font-semibold text-gold">especializadas</span>
+      </h2>
+    </div>
+    <div data-reveal class="grid gap-6 sm:grid-cols-2">
+      {
+        submarcasPublicas.map((m) => (
+          <article data-tilt class="card flex flex-col bg-bg p-8 md:p-10">
+            <img src={m.logo} alt={m.nome} width="192" height="99" class="h-auto w-44" loading="lazy" />
+            <p class="mt-8 leading-relaxed text-muted">{m.descricao}</p>
+            <ul class="mt-6 flex flex-wrap gap-2">
+              {m.itens.map((item) => (
+                <li class="rounded-full border border-line px-3 py-1 text-xs text-sand">{item}</li>
+              ))}
+            </ul>
+            <a
+              href="/contato"
+              class="mt-auto pt-10 text-xs font-semibold tracking-[0.15em] text-gold uppercase hover:text-gold-light"
+            >
+              Falar com a Aurion →
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

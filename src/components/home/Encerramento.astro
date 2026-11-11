@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+import HeroWordmark from '../HeroWordmark.astro';
+import barrasOuro from '../../assets/brand/barras-ouro.png';
+---
+
+<section data-encerramento class="relative overflow-hidden border-t border-line">
+  <div class="relative container-site flex flex-col items-center pt-32 text-center md:pt-44">
+    <p data-reveal class="eyebrow">Próximo passo</p>
+    <h2 data-reveal class="mt-8 text-[clamp(2.4rem,6vw,5.5rem)] leading-[1.02] font-light tracking-tight">
+      Vamos começar<br />pelo <span class="font-semibold text-gold">processo</span>?
+    </h2>
+    <p data-reveal class="mt-8 max-w-xl text-lg leading-relaxed text-muted">
+      Conte como a sua operação funciona hoje. A primeira conversa serve para entender o seu cenário antes de qualquer
+      proposta.
+    </p>
+    <a data-reveal href="/contato" class="btn-primary mt-12">Agendar diagnóstico</a>
+  </div>
+
+  <div class="encerramento-foto relative mt-10 md:-mt-10">
+    <Image
+      data-encerramento-foto
+      src={barrasOuro}
+      alt="Símbolo da Aurion representado por uma barra de concreto e uma barra de ouro inclinada"
+      widths={[800, 1400, 2000]}
+      sizes="100vw"
+      class="mx-auto aspect-video w-full max-w-7xl object-cover"
+    />
+  </div>
+
+  <div data-draw-on-view class="container-site pt-4 pb-20">
+    <HeroWordmark class="h-auto w-full" />
+  </div>
+</section>
+
+<style>
+  .encerramento-foto {
+    mask-image: radial-gradient(ellipse 50% 50% at center, black 45%, transparent 100%);
+  }
+</style>
+
+<script>
+  import { gsap, reduceMotion } from '../../scripts/motion';
+
+  const section = document.querySelector<HTMLElement>('[data-encerramento]');
+  const foto = section?.querySelector<HTMLElement>('[data-encerramento-foto]');
+  const wordmark = section?.querySelector<HTMLElement>('[data-draw-on-view]');
+
+  if (foto && !reduceMotion) {
+    gsap.fromTo(
+      foto,
+      { scale: 1.18, opacity: 0.4 },
+      { scale: 1, opacity: 1, ease: 'none', scrollTrigger: { trigger: foto, start: 'top bottom', end: 'center center', scrub: true } },
+    );
+  }
+
+  if (wordmark) {
+    new IntersectionObserver(
+      ([entry], observer) => {
+        if (!entry.isIntersecting) return;
+        wordmark.classList.add('is-visible');
+        observer.disconnect();
+      },
+      { threshold: 0.4 },
+    ).observe(wordmark);
+  }
+</script>

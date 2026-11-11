@@ -1,0 +1,150 @@
+---
+import { fases, metodo } from '../../data/site';
+
+const grupos = [
+  { numero: '01', titulo: fases.processo, etapas: metodo.slice(0, 3), inicio: 0 },
+  { numero: '02', titulo: fases.tecnologia, etapas: metodo.slice(3), inicio: 3 },
+];
+---
+
+<section data-metodo class="relative overflow-hidden border-t border-line bg-surface">
+  <!-- No desktop a seção fica presa na tela, então tudo escala com a altura dela para não cortar conteúdo. -->
+  <div class="flex flex-col justify-center py-28 lg:min-h-svh lg:py-[clamp(1.25rem,6svh,5rem)]">
+    <div class="container-site flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+      <div class="max-w-4xl">
+        <p class="eyebrow">Como trabalhamos</p>
+        <h2
+          class="mt-5 text-4xl leading-tight font-light tracking-tight md:text-6xl lg:mt-[clamp(0.75rem,2.5svh,1.25rem)] lg:text-[clamp(2rem,7svh,3.75rem)]"
+        >
+          Do diagnóstico à automação, <span class="font-semibold text-gold">nessa ordem</span>.
+        </h2>
+      </div>
+      <a
+        href="/como-trabalhamos"
+        class="text-xs font-semibold tracking-[0.15em] text-gold uppercase hover:text-gold-light"
+      >
+        Conheça o método em detalhe →
+      </a>
+    </div>
+
+    <div data-metodo-janela class="mt-16 lg:mt-[clamp(1.25rem,6svh,4rem)] lg:overflow-x-auto">
+      <div
+        data-metodo-trilho
+        class="flex flex-col gap-14 px-6 lg:w-max lg:flex-row lg:gap-0 lg:pr-[12vw] lg:pl-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]"
+      >
+        {
+          grupos.map((g) => (
+            <>
+              <div class="flex flex-col justify-end lg:w-80 lg:pr-12 lg:pb-1">
+                <span class="text-xs font-medium tracking-[0.3em] text-gold uppercase">Fase {g.numero}</span>
+                <p class="mt-4 text-3xl leading-tight font-light tracking-tight lg:text-4xl">{g.titulo}</p>
+              </div>
+              {g.etapas.map((etapa, j) => (
+                <article
+                  data-etapa
+                  class="etapa flex flex-col border-t border-line pt-8 lg:w-104 lg:border-t-0 lg:border-l lg:px-10 lg:pt-0"
+                >
+                  <span class="etapa-numero text-[6rem] leading-[0.8] font-light tracking-tight lg:text-[clamp(3.5rem,15svh,8rem)]">
+                    {String(g.inicio + j + 1).padStart(2, '0')}
+                  </span>
+                  <h3 class="mt-8 text-2xl font-semibold lg:mt-[clamp(0.75rem,3.5svh,2rem)] lg:text-[clamp(1.25rem,3.4svh,1.5rem)]">
+                    {etapa.titulo}
+                  </h3>
+                  <p class="mt-3 leading-relaxed text-muted">{etapa.descricao}</p>
+                  <div class="mt-8 border-t border-dashed border-gold/30 pt-4 lg:mt-[clamp(0.75rem,3.5svh,2rem)] lg:pt-[clamp(0.5rem,1.8svh,1rem)]">
+                    <p class="text-[11px] font-medium tracking-[0.2em] text-gold uppercase">Você recebe</p>
+                    <p class="mt-1.5 text-sand">{etapa.entrega}</p>
+                  </div>
+                </article>
+              ))}
+            </>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="container-site mt-16 hidden lg:mt-[clamp(1.25rem,6svh,4rem)] lg:block">
+      <div class="relative h-px bg-line">
+        <span data-metodo-barra class="absolute inset-0 origin-left bg-gold" style="scale: 0 1"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .etapa-numero {
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(198 178 114 / 0.55);
+    transition:
+      color 0.7s ease,
+      -webkit-text-stroke-color 0.7s ease;
+  }
+
+  .etapa > :not(.etapa-numero) {
+    transition: opacity 0.7s ease;
+  }
+
+  [data-metodo][data-pronto] .etapa:not(.is-active) > :not(.etapa-numero) {
+    opacity: 0.4;
+  }
+
+  .etapa.is-active .etapa-numero {
+    color: var(--color-gold);
+    -webkit-text-stroke-color: var(--color-gold);
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, reduceMotion } from '../../scripts/motion';
+
+  const section = document.querySelector<HTMLElement>('[data-metodo]');
+  const janela = section?.querySelector<HTMLElement>('[data-metodo-janela]');
+  const trilho = section?.querySelector<HTMLElement>('[data-metodo-trilho]');
+  const barra = section?.querySelector<HTMLElement>('[data-metodo-barra]');
+  const etapas = section ? [...section.querySelectorAll<HTMLElement>('[data-etapa]')] : [];
+
+  if (section && janela && trilho) {
+    if (reduceMotion) {
+      etapas.forEach((el) => el.classList.add('is-active'));
+    } else {
+      section.setAttribute('data-pronto', '');
+      const mm = gsap.matchMedia();
+
+      mm.add('(min-width: 64rem)', () => {
+        janela.style.overflowX = 'visible';
+        const distancia = () => trilho.scrollWidth - window.innerWidth;
+        const tween = gsap.to(trilho, {
+          x: () => -distancia(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: () => `+=${distancia()}`,
+            pin: true,
+            scrub: 0.8,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => barra?.style.setProperty('scale', `${self.progress} 1`),
+          },
+        });
+        etapas.forEach((el) =>
+          ScrollTrigger.create({
+            trigger: el,
+            containerAnimation: tween,
+            start: 'left 70%',
+            end: 'right 30%',
+            toggleClass: 'is-active',
+          }),
+        );
+        return () => {
+          janela.style.overflowX = '';
+        };
+      });
+
+      mm.add('(max-width: 63.99rem)', () => {
+        etapas.forEach((el) =>
+          ScrollTrigger.create({ trigger: el, start: 'top 75%', end: 'bottom 25%', toggleClass: 'is-active' }),
+        );
+      });
+    }
+  }
+</script>

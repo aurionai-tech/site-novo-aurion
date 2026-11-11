@@ -1,0 +1,75 @@
+---
+import { servicos } from '../../data/site';
+---
+
+<section class="border-t border-line">
+  <div class="container-site py-28 md:py-36">
+    <div class="flex flex-wrap items-end justify-between gap-8">
+      <div>
+        <p class="eyebrow">Serviços</p>
+        <h2 class="mt-5 text-4xl leading-tight font-light tracking-tight md:text-6xl">
+          O que <span class="font-semibold text-gold">entregamos</span>
+        </h2>
+      </div>
+      <a href="/servicos" class="text-xs font-semibold tracking-[0.15em] text-gold uppercase hover:text-gold-light">
+        Ver todos os serviços →
+      </a>
+    </div>
+
+    <ul class="mt-16 border-t border-line">
+      {
+        servicos.map((s, i) => (
+          <li data-reveal class="servico group relative border-b border-line">
+            <div class="relative grid gap-5 py-10 md:grid-cols-[4rem_1.2fr_1fr] md:gap-10 md:py-12">
+              <span class="pt-2 text-sm font-medium tracking-[0.2em] text-gold">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="text-3xl leading-tight font-light tracking-tight transition duration-500 group-hover:translate-x-2 group-hover:text-gold-light md:text-4xl">
+                {s.titulo}
+              </h3>
+              <div>
+                <p class="leading-relaxed text-muted">{s.descricao}</p>
+                <ul class="mt-5 flex flex-wrap gap-2">
+                  {s.itens.map((item) => (
+                    <li class="rounded-full border border-line px-3 py-1 text-xs text-sand transition duration-500 group-hover:border-gold/40">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <span class="servico-linha" aria-hidden="true" />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .servico::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(198 178 114 / 0.07), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+
+  .servico:hover::before {
+    opacity: 1;
+  }
+
+  .servico-linha {
+    position: absolute;
+    inset: auto 0 -1px;
+    height: 1px;
+    background: var(--color-gold);
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .servico:hover .servico-linha {
+    scale: 1 1;
+  }
+</style>
