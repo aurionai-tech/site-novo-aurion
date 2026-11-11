@@ -1,0 +1,43 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  eyebrow?: string;
+}
+
+const { id, title, eyebrow } = Astro.props;
+---
+
+<dialog id={id} aria-labelledby={`${id}-title`} class="modal">
+  <div class="relative p-8 md:p-10">
+    <button
+      type="button"
+      data-modal-close
+      aria-label="Fechar"
+      class="absolute top-4 right-4 grid size-9 place-items-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-fg"
+    >
+      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
+    {eyebrow && <p class="eyebrow pr-10">{eyebrow}</p>}
+    <h2 id={`${id}-title`} class="mt-4 pr-10 text-2xl font-light tracking-tight md:text-3xl">{title}</h2>
+    <slot />
+  </div>
+</dialog>
+
+<script>
+  document.addEventListener('click', (event) => {
+    const target = event.target as Element;
+
+    const opener = target.closest<HTMLElement>('[data-modal-open]');
+    if (opener) {
+      document.querySelector<HTMLDialogElement>(`dialog#${opener.dataset.modalOpen}`)?.showModal();
+      return;
+    }
+
+    // O clique no fundo escurecido chega com o próprio <dialog> como alvo.
+    if (target instanceof HTMLDialogElement) target.close();
+    else if (target.closest('[data-modal-close]')) target.closest('dialog')?.close();
+  });
+</script>

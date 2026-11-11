@@ -1,0 +1,14 @@
+---
+// O ::after do botão cobre o card inteiro (que precisa ser .card), então qualquer clique no card abre o pop-up.
+interface Props {
+  target: string;
+  name: string;
+}
+
+const { target, name } = Astro.props;
+---
+
+<button type="button" data-modal-open={target} aria-haspopup="dialog" class="card-open">
+  Ver detalhes<span class="sr-only"> de {name}</span>
+  <span class="card-open-icon" aria-hidden="true">+</span>
+</button>

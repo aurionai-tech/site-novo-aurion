@@ -19,6 +19,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    interpolate-size: allow-keywords;
     /* Altura do dock fixo: foco, âncoras e scrollIntoView param acima dele. */
     scroll-padding-bottom: 6rem;
     color-scheme: dark;
@@ -30,6 +31,10 @@
 
   ::selection {
     @apply bg-gold text-bg;
+  }
+
+  html:has(dialog[open]) {
+    overflow: hidden;
   }
 }
 
@@ -51,19 +56,172 @@
   }
 
   .card {
-    @apply rounded-xl border border-line bg-surface p-6 transition;
+    @apply relative isolate rounded-xl border border-line bg-surface p-6 transition;
+  }
+
+  /* Brilho dourado que segue o cursor; --mx/--my vêm do script do Layout. */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgb(198 178 114 / 0.13), transparent 65%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card:has(.card-open) {
+    @apply flex cursor-pointer flex-col;
+  }
+
+  .card:has(.card-open):hover {
+    border-color: rgb(198 178 114 / 0.5);
+    translate: 0 -4px;
+  }
+
+  .card:has(.card-open:focus-visible) {
+    @apply outline-2 outline-offset-2 outline-gold;
+  }
+
+  .card-open {
+    @apply mt-auto inline-flex items-center gap-3 pt-6 text-xs font-semibold tracking-[0.15em] text-gold uppercase outline-none;
+  }
+
+  .card-open::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .card-open-icon {
+    @apply grid size-6 place-items-center rounded-full border border-gold/40 text-sm leading-none transition duration-300;
+  }
+
+  .card:hover .card-open-icon {
+    @apply rotate-90 border-gold bg-gold text-bg;
+  }
+
+  /* Gaveta que nasce da base do card: sobrepõe o canto inferior dele para parecer uma única peça. */
+  .card-peek {
+    display: none;
+  }
+
+  @media (hover: hover) {
+    .card-peek {
+      position: absolute;
+      top: calc(100% - 0.75rem);
+      left: -1px;
+      right: -1px;
+      z-index: 2;
+      display: block;
+      padding: 0 1.5rem 1.5rem;
+      border: 1px solid;
+      border-top: 0;
+      border-color: inherit;
+      border-radius: 0 0 0.75rem 0.75rem;
+      background-color: inherit;
+      box-shadow: 0 28px 40px -16px rgb(0 0 0 / 0.8);
+      cursor: pointer;
+      clip-path: inset(0 -60px 100% -60px);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        clip-path 0.3s ease,
+        opacity 0.2s ease,
+        visibility 0s linear 0.3s;
+    }
+
+    .card:has(> .card-peek):is(:hover, :has(.card-open:focus-visible)) {
+      z-index: 20;
+    }
+
+    .card:hover > .card-peek,
+    .card:has(.card-open:focus-visible) > .card-peek {
+      clip-path: inset(0 -60px -80px -60px);
+      opacity: 1;
+      visibility: visible;
+      transition:
+        clip-path 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.15s,
+        opacity 0.25s ease 0.15s,
+        visibility 0s linear 0.15s;
+    }
+  }
+
+  .modal {
+    @apply m-auto max-h-[calc(100dvh-2rem)] w-[min(38rem,calc(100vw-2rem))] max-w-none overflow-y-auto rounded-2xl border border-line bg-surface p-0 text-fg shadow-2xl shadow-black/70;
+    opacity: 0;
+    translate: 0 16px;
+    scale: 0.97;
+    transition:
+      opacity 0.3s ease,
+      translate 0.3s ease,
+      scale 0.3s ease,
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete;
+  }
+
+  .modal[open] {
+    opacity: 1;
+    translate: 0;
+    scale: 1;
+  }
+
+  @starting-style {
+    .modal[open] {
+      opacity: 0;
+      translate: 0 16px;
+      scale: 0.97;
+    }
+  }
+
+  .modal::backdrop {
+    background-color: rgb(0 0 0 / 0);
+    backdrop-filter: blur(0);
+    transition:
+      background-color 0.3s ease,
+      backdrop-filter 0.3s ease,
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete;
+  }
+
+  .modal[open]::backdrop {
+    background-color: rgb(0 0 0 / 0.7);
+    backdrop-filter: blur(6px);
+  }
+
+  @starting-style {
+    .modal[open]::backdrop {
+      background-color: rgb(0 0 0 / 0);
+      backdrop-filter: blur(0);
+    }
+  }
+
+  .accordion::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.35s ease,
+      content-visibility 0.35s allow-discrete;
+  }
+
+  .accordion[open]::details-content {
+    block-size: auto;
+  }
+
+  .scroll-progress {
+    @apply pointer-events-none fixed inset-x-0 top-0 z-60 h-0.5 origin-left bg-linear-to-r from-gold/40 to-gold;
+    scale: var(--p, 0) 1;
   }
 
   .rascunho {
     @apply rounded bg-amber-400/15 px-1.5 py-0.5 text-xs font-medium text-amber-300;
-  }
-
-  .bg-blueprint {
-    background-image:
-      linear-gradient(to right, rgb(198 178 114 / 0.07) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(198 178 114 / 0.07) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse at center, black 25%, transparent 75%);
   }
 }
 
@@ -97,8 +255,19 @@ html.js [data-build] {
   transition:
     outline-color 0.6s ease,
     border-color 0.6s ease,
-    background-color 0.6s ease;
+    background-color 0.6s ease,
+    translate 0.3s ease,
+    transform 0.3s ease-out;
   transition-delay: var(--d, 0ms);
+}
+
+/* Depois de construído, o atraso escalonado não deve atrasar o hover. */
+html.js [data-build].is-settled {
+  transition-delay: 0ms;
+}
+
+[data-tilt] {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
 }
 
 html.js [data-build]:not(.card) {
@@ -116,7 +285,7 @@ html.js .card[data-build]:not(.is-built) {
   background-color: transparent;
 }
 
-html.js [data-build] > * {
+html.js [data-build] > :not(.card-peek) {
   transition:
     opacity 0.7s ease,
     transform 0.7s ease;
@@ -148,5 +317,17 @@ html.js [data-build]:not(.is-built) > * {
   html.js [data-build]:not(.is-built) > * {
     opacity: 1;
     transform: none;
+  }
+
+  .card:has(.card-open):hover {
+    translate: none;
+  }
+
+  .modal,
+  .modal::backdrop,
+  .accordion::details-content,
+  .card .card-peek,
+  .card:hover > .card-peek {
+    transition: none;
   }
 }

@@ -37,7 +37,9 @@ import { comoOperamos, competencias, conceitoMarca, principio, site } from '../d
         <ul class="mt-10 flex flex-wrap gap-2">
           {
             conceitoMarca.palavras.map((p) => (
-              <li class="rounded-md border border-line px-3 py-1.5 text-xs tracking-[0.15em] text-sand uppercase">{p}</li>
+              <li class="cursor-default rounded-md border border-line px-3 py-1.5 text-xs tracking-[0.15em] text-sand uppercase transition hover:-translate-y-0.5 hover:border-gold hover:text-gold">
+                {p}
+              </li>
             ))
           }
         </ul>

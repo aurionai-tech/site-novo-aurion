@@ -1,0 +1,39 @@
+---
+import Modal from './Modal.astro';
+import ModalTrigger from './ModalTrigger.astro';
+import { submarcasPublicas } from '../data/site';
+
+interface Props {
+  cardClass?: string;
+}
+
+const { cardClass } = Astro.props;
+const idDe = (nome: string) => nome.toLowerCase().replace(/\s+/g, '-');
+---
+
+<div class="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
+  {
+    submarcasPublicas.map((m, i) => (
+      <article data-build data-tilt style={`--d:${i * 100}ms`} class:list={['card items-center text-center', cardClass]}>
+        <img src={m.logo} alt={m.nome} width="192" height="99" class="h-auto w-44" loading="lazy" />
+        <p class="mt-6 text-sm leading-relaxed text-muted">{m.descricao}</p>
+        <ModalTrigger target={idDe(m.nome)} name={m.nome} />
+      </article>
+    ))
+  }
+</div>
+
+{
+  submarcasPublicas.map((m) => (
+    <Modal id={idDe(m.nome)} eyebrow="Frente Aurion" title={m.nome}>
+      <img src={m.logo} alt="" width="192" height="99" class="mt-8 h-auto w-40" loading="lazy" />
+      <p class="mt-6 leading-relaxed text-muted">{m.descricao}</p>
+      <ul class="mt-6 flex flex-wrap gap-2">
+        {m.itens.map((item) => (
+          <li class="rounded-md border border-line px-3 py-1.5 text-xs tracking-[0.15em] text-sand uppercase">{item}</li>
+        ))}
+      </ul>
+      <a href="/contato" class="btn-primary mt-8">Falar com a Aurion</a>
+    </Modal>
+  ))
+}

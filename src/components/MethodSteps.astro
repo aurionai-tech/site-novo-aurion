@@ -1,4 +1,7 @@
 ---
+import CardPeek from './CardPeek.astro';
+import Modal from './Modal.astro';
+import ModalTrigger from './ModalTrigger.astro';
 import { fases, metodo } from '../data/site';
 
 interface Props {
@@ -58,16 +61,32 @@ const fase = (i: number) => (i < 3 ? fases.processo : fases.tecnologia);
             <span class="h-px flex-1 border-t border-dashed border-gold/40" />
           </p>
           <ol start={inicio + 1} class="grid gap-y-12 md:grid-cols-3 md:gap-x-12">
-            {metodo.slice(inicio, inicio + 3).map((etapa, j) => (
-              <li class="relative">
-                <div data-build style={`--d:${j * 90}ms`} class="card h-full p-6 hover:border-gold/50">
-                  <span class="text-sm font-light text-gold">{String(inicio + j + 1).padStart(2, '0')}</span>
-                  <h3 class="mt-4 font-semibold">{etapa.titulo}</h3>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">{etapa.descricao}</p>
-                </div>
-                {j < 2 && <span class="flow-connector" aria-hidden="true" />}
-              </li>
-            ))}
+            {metodo.slice(inicio, inicio + 3).map((etapa, j) => {
+              const numero = String(inicio + j + 1).padStart(2, '0');
+              return (
+                <li class="relative">
+                  <div data-build style={`--d:${j * 90}ms`} class="card h-full p-6">
+                    <span class="text-sm font-light text-gold">{numero}</span>
+                    <h3 class="mt-4 font-semibold">{etapa.titulo}</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-muted">{etapa.descricao}</p>
+                    <ModalTrigger target={`etapa-${numero}`} name={etapa.titulo} />
+                    <CardPeek target={`etapa-${numero}`}>
+                      <p class="text-[11px] font-medium tracking-[0.2em] text-gold uppercase">Você recebe</p>
+                      <p class="mt-1.5 text-sm text-sand">{etapa.entrega}</p>
+                    </CardPeek>
+                  </div>
+                  {j < 2 && <span class="flow-connector" aria-hidden="true" />}
+                  <Modal id={`etapa-${numero}`} eyebrow={`Etapa ${numero} · ${fase(inicio)}`} title={etapa.titulo}>
+                    <p class="mt-4 leading-relaxed text-muted">{etapa.descricao}</p>
+                    <div class="mt-6 rounded-xl border border-dashed border-gold/50 p-5">
+                      <p class="text-xs font-medium tracking-[0.2em] text-gold uppercase">Você recebe</p>
+                      <p class="mt-2 text-sand">{etapa.entrega}</p>
+                    </div>
+                    <a href="/como-trabalhamos" class="btn-secondary mt-8">Ver o método completo</a>
+                  </Modal>
+                </li>
+              );
+            })}
           </ol>
         </div>
       ))}
