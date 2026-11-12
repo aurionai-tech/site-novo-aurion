@@ -301,7 +301,8 @@ export function initFio() {
     if (!agendado) agendado = requestAnimationFrame(layout);
   };
 
-  layout();
+  // A primeira medição espera o próximo quadro para não forçar um cálculo de layout no meio do carregamento.
+  agendarLayout();
   const observador = new ResizeObserver(agendarLayout);
   secoes.forEach((s) => observador.observe(s));
   window.addEventListener('resize', agendarLayout);

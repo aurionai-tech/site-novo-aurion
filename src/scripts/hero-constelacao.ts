@@ -96,30 +96,30 @@ export const criarCenaConstelacao: CriarCena = (_section, canvas) => {
   // Linhas entre partículas próximas; perto do fim, só as vizinhas no contorno continuam ligadas.
   const desenharRede = (visiveis: number) => {
     const alcance = g.desktop ? 110 : 70;
-    for (let n = 0; n < NIVEIS_LIGACAO.length; n++) {
-      ctx.beginPath();
-      for (let i = 0; i < total; i++) {
-        if (bs[i] > 0.98) continue;
-        for (let j = i + 1; j < total; j++) {
-          const dx = xs[j] - xs[i];
-          const dy = ys[j] - ys[i];
-          if (Math.abs(dx) > alcance || Math.abs(dy) > alcance) continue;
-          const d = Math.hypot(dx, dy);
-          if (d > alcance) continue;
-          // Ligações de partículas a caminho do símbolo somem rápido, para não cruzarem a tela esticadas.
-          const soltas = 1 - Math.max(bs[i], bs[j]);
-          const forca = (1 - d / alcance) * soltas * soltas * Math.min(es[i], es[j]);
-          if (Math.min(NIVEIS_LIGACAO.length - 1, Math.floor(forca * NIVEIS_LIGACAO.length)) !== n || forca < 0.05) {
-            continue;
-          }
-          ctx.moveTo(xs[i], ys[i]);
-          ctx.lineTo(xs[j], ys[j]);
-        }
+    // Uma passada só pelos pares; cada ligação vai para o traçado do seu nível de intensidade.
+    const niveis = NIVEIS_LIGACAO.map(() => new Path2D());
+    for (let i = 0; i < total; i++) {
+      if (bs[i] > 0.98) continue;
+      for (let j = i + 1; j < total; j++) {
+        const dx = xs[j] - xs[i];
+        const dy = ys[j] - ys[i];
+        if (Math.abs(dx) > alcance || Math.abs(dy) > alcance) continue;
+        const d = Math.hypot(dx, dy);
+        if (d > alcance) continue;
+        // Ligações de partículas a caminho do símbolo somem rápido, para não cruzarem a tela esticadas.
+        const soltas = 1 - Math.max(bs[i], bs[j]);
+        const forca = (1 - d / alcance) * soltas * soltas * Math.min(es[i], es[j]);
+        if (forca < 0.05) continue;
+        const nivel = niveis[Math.min(NIVEIS_LIGACAO.length - 1, Math.floor(forca * NIVEIS_LIGACAO.length))];
+        nivel.moveTo(xs[i], ys[i]);
+        nivel.lineTo(xs[j], ys[j]);
       }
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = `rgb(214 190 120 / ${NIVEIS_LIGACAO[n] * visiveis})`;
-      ctx.stroke();
     }
+    ctx.lineWidth = 1;
+    niveis.forEach((nivel, n) => {
+      ctx.strokeStyle = `rgb(214 190 120 / ${NIVEIS_LIGACAO[n] * visiveis})`;
+      ctx.stroke(nivel);
+    });
 
     ctx.beginPath();
     for (let i = 0; i < total; i++) {

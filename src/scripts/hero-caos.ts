@@ -47,7 +47,7 @@ export type Cena = {
 
 export type CriarCena = (section: HTMLElement, canvas: HTMLCanvasElement) => Cena | null;
 
-export type PontoContorno = { sx: number; sy: number; ang: number; ouro: boolean; pos: number };
+export type PontoContorno = { sx: number; sy: number; ouro: boolean; pos: number };
 
 // Pontos em intervalos iguais ao longo do contorno das duas barras, em unidades da altura do símbolo.
 export function amostrarContorno(count: number) {
@@ -69,15 +69,10 @@ export function amostrarContorno(count: number) {
     const pos = ((i + 0.5) / count) * total;
     const ouro = pos >= lens[0];
     const path = paths[ouro ? 1 : 0];
-    const len = lens[ouro ? 1 : 0];
-    const s = ouro ? pos - lens[0] : pos;
-    const p = path.getPointAtLength(s);
-    const p0 = path.getPointAtLength(Math.max(0, s - 1));
-    const p1 = path.getPointAtLength(Math.min(len, s + 1));
+    const p = path.getPointAtLength(ouro ? pos - lens[0] : pos);
     pontos.push({
       sx: (p.x - SIMBOLO.x) / SIMBOLO.h,
       sy: (p.y - SIMBOLO.y) / SIMBOLO.h,
-      ang: Math.atan2(p1.y - p0.y, p1.x - p0.x),
       ouro,
       pos: pos / total,
     });
@@ -212,6 +207,7 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
   let target = progress;
   let faseAtiva = -1;
   const start = performance.now();
+  let ultimaChave = '';
 
   const layout = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -243,6 +239,10 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
       symX = (w - symW) / 2;
       symY = topo + (livre - symH) / 2;
     }
+    // As animações de entrada disparam vários relayouts seguidos; sem mudança real, nada é recriado.
+    const chave = [w, h, dpr, symX, symY, symH, legendaBase, textoDir, textoTopo].map((v) => v.toFixed(1)).join();
+    if (chave === ultimaChave) return;
+    ultimaChave = chave;
     cena.layout({ w, h, dpr, desktop, symX, symY, symW, symH, legendaBase, textoDir, textoTopo });
 
     // O fio condutor da home nasce na ponta inferior da barra de ouro (x = 538 no favicon.svg).
