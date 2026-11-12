@@ -37,6 +37,19 @@ import Encerramento from '../components/home/Encerramento.astro';
         scrollTrigger: { trigger: el, start: 'top 88%' },
       });
     });
+
+    gsap.utils.toArray<HTMLElement>('[data-palavra-fundo="rolagem"]').forEach((el) => {
+      const direcao = Number(el.dataset.direcao) || 1;
+      gsap.fromTo(
+        el,
+        { xPercent: 12 * direcao },
+        {
+          xPercent: -2 * direcao,
+          ease: 'none',
+          scrollTrigger: { trigger: el.closest('section'), start: 'top bottom', end: 'bottom top', scrub: true },
+        },
+      );
+    });
   }
 
   document.fonts?.ready.then(() => ScrollTrigger.refresh());

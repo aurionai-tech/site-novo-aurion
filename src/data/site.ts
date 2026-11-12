@@ -1,6 +1,7 @@
 // Conteúdo central do site. Textos em rascunho: validar com a liderança antes de publicar.
-// Fonte: vault aurion-vault (notas Aurion, Valores, Matriz de Responsabilidades)
-// e "Apresentação Conceito de Identidade Aurion" (Agência Ideia Brasil, 2026).
+// Fonte: vault aurion-vault (notas Aurion, Valores, Matriz de Responsabilidades),
+// "Apresentação Conceito de Identidade Aurion" e "Manual de Marca" (Agência Ideia Brasil, 2026)
+// e o modelo de "Proposta Comercial" do diagnóstico.
 
 export const site = {
   nome: 'Aurion',
@@ -16,7 +17,6 @@ export const site = {
 export const nav = [
   { href: '/como-trabalhamos', label: 'Como trabalhamos' },
   { href: '/servicos', label: 'Serviços' },
-  { href: '/segmentos', label: 'Segmentos' },
   { href: '/sobre', label: 'Sobre' },
 ];
 
@@ -85,6 +85,53 @@ export const metodo = [
     entrega: 'Evolução contínua e documentada',
   },
 ];
+
+// Como acontece a primeira etapa do método, com base no modelo de proposta do diagnóstico.
+// Prazo, número de encontros e investimento variam por cliente e ficam fora do site.
+export const diagnostico = {
+  etapas: [
+    {
+      titulo: 'Imersão',
+      conduz: 'Conduzida pela sua equipe',
+      descricao: 'Em alguns encontros, a sua equipe apresenta como a empresa funciona hoje, área por área.',
+      temas: ['Estrutura e cultura', 'Sistemas e cadastros', 'Operação e financeiro', 'Marketing e comercial'],
+    },
+    {
+      titulo: 'Alinhamento',
+      conduz: 'Em conjunto',
+      descricao: 'Fechamos a análise e confirmamos quais setores e pontos críticos precisam ser corrigidos ou desenvolvidos.',
+      temas: ['Setores críticos', 'Prioridades'],
+    },
+    {
+      titulo: 'Diagnóstico por setor',
+      conduz: 'Conduzido pela Aurion',
+      descricao: 'Apresentamos o diagnóstico de cada setor: o que está funcionando, o que trava e por quê.',
+      temas: ['Pontos críticos', 'Causas', 'Oportunidades'],
+    },
+    {
+      titulo: 'Plano de ação',
+      conduz: 'Conduzido pela Aurion',
+      descricao: 'Entregamos o plano com cronograma, as áreas de intervenção e o que vale desenvolver ou automatizar.',
+      temas: ['Cronograma', 'Melhoria contínua', 'Automação'],
+    },
+  ],
+  entregaveis: [
+    'Diagnóstico dos pontos críticos encontrados',
+    'Áreas prioritárias de intervenção',
+    'Recomendações de correção, desenvolvimento e automação',
+    'Plano de ação com cronograma',
+    'Direção para a melhoria contínua',
+  ],
+  preparo: [
+    'Organograma e quem decide em cada setor',
+    'Cadastros e itens ativos',
+    'Sistemas, infraestrutura e rotinas de backup',
+    'Fluxo de pedido, faturamento e financeiro',
+    'Planejamento comercial e de marketing',
+    'Canais de venda e distribuição',
+  ],
+  presenca: 'Em cada encontro, precisamos de quem toma as decisões e do responsável técnico pela área em pauta.',
+};
 
 export const servicos = [
   {
@@ -165,6 +212,16 @@ export const submarcas = [
 
 // Frentes marcadas como emBreve ficam fora do site até serem lançadas.
 export const submarcasPublicas = submarcas.filter((m) => !m.emBreve);
+
+// Texto "Sobre a marca" do Manual de Marca, adaptado para o site.
+export const historia = {
+  paragrafos: [
+    'A Aurion nasceu de uma convicção simples: antes de falar em tecnologia, é preciso entender como a empresa funciona, com seus processos, pessoas e decisões.',
+    'Mais do que desenvolver sistemas, transformamos o conhecimento do negócio em informação centralizada, acessível e segura. Com software, dados e infraestrutura, ajudamos indústrias e empresas familiares e tradicionais a decidir melhor, preservar o que sabem e não perder mercado.',
+    'O nome vem do ouro: aquilo que tem valor, resiste ao tempo e vira patrimônio. Para nós, o maior ativo de uma empresa é o conhecimento que ela construiu, e a Aurion existe para que ele não se perca e continue gerando valor.',
+  ],
+  fecho: ['Antes de crescer, é preciso preservar.', 'Antes de decidir, é preciso saber.', 'E antes de evoluir, é preciso conectar.'],
+};
 
 export const conceitoMarca = {
   palavras: ['Valor', 'Conexão', 'Segurança', 'Evolução', 'Continuidade', 'Conhecimento'],

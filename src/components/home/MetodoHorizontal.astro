@@ -1,5 +1,6 @@
 ---
 import { fases, metodo } from '../../data/site';
+import PalavraFundo from './PalavraFundo.astro';
 
 const grupos = [
   { numero: '01', titulo: fases.processo, etapas: metodo.slice(0, 3), inicio: 0 },
@@ -8,6 +9,7 @@ const grupos = [
 ---
 
 <section data-metodo data-fio="metodo" class="relative overflow-hidden border-t border-line bg-surface">
+  <PalavraFundo texto="Método" modo="pin" fundo="surface" />
   <!-- No desktop a seção fica presa na tela, então tudo escala com a altura dela para não cortar conteúdo. -->
   <div class="flex flex-col justify-center py-28 lg:min-h-svh lg:py-[clamp(1.25rem,6svh,5rem)]">
     <div class="container-site flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
@@ -114,6 +116,7 @@ const grupos = [
   const janela = section?.querySelector<HTMLElement>('[data-metodo-janela]');
   const trilho = section?.querySelector<HTMLElement>('[data-metodo-trilho]');
   const etapas = section ? [...section.querySelectorAll<HTMLElement>('[data-etapa]')] : [];
+  const palavra = section?.querySelector<HTMLElement>('[data-palavra-fundo]');
 
   if (section && janela && trilho) {
     if (reduceMotion) {
@@ -149,6 +152,17 @@ const grupos = [
             toggleClass: 'is-active',
           }),
         );
+        if (palavra) {
+          gsap.fromTo(
+            palavra,
+            { xPercent: 10 },
+            {
+              xPercent: -2,
+              ease: 'none',
+              scrollTrigger: { trigger: section, start: 'top top', end: () => `+=${distancia()}`, scrub: 0.8 },
+            },
+          );
+        }
         return () => {
           janela.style.overflowX = '';
           delete section.dataset.fioPin;
@@ -159,6 +173,17 @@ const grupos = [
         etapas.forEach((el) =>
           ScrollTrigger.create({ trigger: el, start: 'top 75%', end: 'bottom 25%', toggleClass: 'is-active' }),
         );
+        if (palavra) {
+          gsap.fromTo(
+            palavra,
+            { xPercent: 12 },
+            {
+              xPercent: -2,
+              ease: 'none',
+              scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true },
+            },
+          );
+        }
       });
     }
   }

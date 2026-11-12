@@ -30,13 +30,19 @@ export type Geometria = {
   symY: number;
   symW: number;
   symH: number;
+  // Áreas com texto que a rede não deve cobrir: base da legenda das fases, fim do texto à esquerda
+  // (só no desktop) e topo do texto (só no celular).
+  legendaBase: number;
+  textoDir: number;
+  textoTopo: number;
 };
 
 type Quadro = { progress: number; t: number; intro: number };
 
 export type Cena = {
   layout(g: Geometria): void;
-  draw(q: Quadro): void;
+  // Retorna true enquanto houver animação própria da cena, mesmo com a rolagem parada.
+  draw(q: Quadro): boolean | void;
 };
 
 export type CriarCena = (section: HTMLElement, canvas: HTMLCanvasElement) => Cena | null;
@@ -121,6 +127,35 @@ export function desenharCamada(ctx: CanvasRenderingContext2D, camada: HTMLCanvas
   ctx.globalAlpha = 1;
 }
 
+// Faixa de luz que atravessa o símbolo na diagonal, recortada pelo próprio desenho dele.
+export function criarReflexo(camada: HTMLCanvasElement | null) {
+  if (!camada) return null;
+  const tela = document.createElement('canvas');
+  tela.width = camada.width;
+  tela.height = camada.height;
+  const c = tela.getContext('2d');
+  if (!c) return null;
+  return (ctx: CanvasRenderingContext2D, g: Geometria, posicao: number, alpha: number) => {
+    if (alpha <= 0.01 || posicao <= 0 || posicao >= 1) return;
+    const { width: lw, height: lh } = tela;
+    c.globalCompositeOperation = 'source-over';
+    c.clearRect(0, 0, lw, lh);
+    c.drawImage(camada, 0, 0);
+    c.globalCompositeOperation = 'source-in';
+    const largura = lw * 0.35;
+    const x = lerp(-largura, lw + largura, posicao);
+    const faixa = c.createLinearGradient(x - largura, lh * 0.2, x + largura, lh * 0.8);
+    faixa.addColorStop(0, 'rgb(255 246 220 / 0)');
+    faixa.addColorStop(0.5, 'rgb(255 246 220 / 0.55)');
+    faixa.addColorStop(1, 'rgb(255 246 220 / 0)');
+    c.fillStyle = faixa;
+    c.fillRect(0, 0, lw, lh);
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(tela, g.symX - MARGEM_CAMADA, g.symY - MARGEM_CAMADA, g.symW + MARGEM_CAMADA * 2, g.symH + MARGEM_CAMADA * 2);
+    ctx.globalAlpha = 1;
+  };
+}
+
 export function criarBrilho(ctx: CanvasRenderingContext2D, g: Geometria) {
   const bx = g.symX + g.symW / 2;
   const by = g.symY + g.symH;
@@ -136,6 +171,23 @@ export function desenharBrilho(ctx: CanvasRenderingContext2D, brilho: CanvasGrad
   ctx.fillStyle = brilho;
   ctx.fillRect(g.symX - g.symW, g.symY, g.symW * 3, g.symH * 1.6);
   ctx.globalAlpha = 1;
+}
+
+// Borda direita do texto de fato (linhas e botões), já que os blocos ocupam a largura toda do container.
+function fimDoTexto(raiz: HTMLElement) {
+  let direita = 0;
+  const range = document.createRange();
+  const walker = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    const no = walker.currentNode;
+    if (!no.textContent?.trim()) continue;
+    range.selectNodeContents(no);
+    direita = Math.max(direita, range.getBoundingClientRect().right);
+  }
+  raiz.querySelectorAll('a').forEach((a) => {
+    if (a.offsetParent) direita = Math.max(direita, a.getBoundingClientRect().right);
+  });
+  return direita;
 }
 
 export function prepararCanvas2d(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, g: Geometria) {
@@ -168,6 +220,8 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
     const desktop = w >= 1024;
     const canvasTop = canvas.getBoundingClientRect().top;
     const legendaBase = legenda ? legenda.getBoundingClientRect().bottom - canvasTop : 90;
+    const textoTopo = texto ? texto.getBoundingClientRect().top - canvasTop : h * 0.5;
+    const textoDir = texto?.parentElement ? fimDoTexto(texto.parentElement) - canvas.getBoundingClientRect().left : 0;
     let symH: number;
     let symW: number;
     let symX: number;
@@ -183,14 +237,13 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
     } else {
       // No celular o símbolo ocupa só a faixa livre entre o indicador de fases e o texto.
       const topo = legendaBase + 24;
-      const textoTop = texto ? texto.getBoundingClientRect().top - canvasTop : h * 0.5;
-      const livre = Math.max(textoTop - topo - 24, h * 0.18);
+      const livre = Math.max(textoTopo - topo - 24, h * 0.18);
       symH = Math.min(livre, w * 0.6);
       symW = symH * (SIMBOLO.w / SIMBOLO.h);
       symX = (w - symW) / 2;
       symY = topo + (livre - symH) / 2;
     }
-    cena.layout({ w, h, dpr, desktop, symX, symY, symW, symH });
+    cena.layout({ w, h, dpr, desktop, symX, symY, symW, symH, legendaBase, textoDir, textoTopo });
 
     // O fio condutor da home nasce na ponta inferior da barra de ouro (x = 538 no favicon.svg).
     section.dataset.simboloPonta = String(symX + ((538 - SIMBOLO.x) / SIMBOLO.h) * symH);
@@ -209,10 +262,11 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
     if (cue) cue.style.opacity = String(1 - clamp01(progress * 25));
   };
 
+  let animandoCena = false;
   const draw = (now: number) => {
     const t = (now - start) / 1000;
     const intro = reduceMotion ? 1 : smooth(clamp01(t / 1.4));
-    cena.draw({ progress, t, intro });
+    animandoCena = cena.draw({ progress, t, intro }) === true;
   };
 
   layout();
@@ -236,7 +290,7 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
   let ultimo = 0;
   const running = () => inView && document.visibilityState === 'visible';
   // Com o símbolo completo e a rolagem parada, a cena fica estática e o loop dorme.
-  const parado = () => progress > 0.97 && Math.abs(target - progress) < 0.0005;
+  const parado = () => progress > 0.97 && Math.abs(target - progress) < 0.0005 && !animandoCena;
 
   const trigger = ScrollTrigger.create({
     trigger: section,

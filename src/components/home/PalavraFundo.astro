@@ -1,0 +1,67 @@
+---
+interface Props {
+  texto: string;
+  // 1 corre para a esquerda conforme a rolagem, -1 para a direita.
+  direcao?: 1 | -1;
+  // 'pin' deixa o movimento por conta da seção que fica presa na tela.
+  modo?: 'rolagem' | 'pin';
+  // Cor de fundo da seção: o preenchimento da palavra é opaco e precisa terminar nela.
+  fundo?: 'bg' | 'surface';
+}
+
+const { texto, direcao = 1, modo = 'rolagem', fundo = 'bg' } = Astro.props;
+---
+
+<div class="palavra-fundo" aria-hidden="true" style={`--fundo: var(--color-${fundo})`}>
+  <span data-palavra-fundo={modo} data-direcao={direcao} data-texto={texto}>{texto}</span>
+</div>
+
+<style>
+  .palavra-fundo {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /*
+   * As letras da Montserrat são feitas de contornos sobrepostos, e o text-stroke desenha todos eles.
+   * Por isso o contorno fica numa camada de baixo e uma cópia opaca por cima esconde as linhas internas,
+   * deixando à mostra só a metade externa do traço.
+   */
+  .palavra-fundo span {
+    position: absolute;
+    bottom: 0.2em;
+    left: 2vw;
+    font-size: clamp(3.5rem, 14vw, 15rem);
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 2px rgb(198 178 114 / 0.38);
+    will-change: transform;
+  }
+
+  .palavra-fundo span::after {
+    content: attr(data-texto);
+    position: absolute;
+    inset: 0;
+    -webkit-text-stroke: 0;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-gold) 20%, var(--fundo)),
+      color-mix(in srgb, var(--color-gold) 3%, var(--fundo)) 85%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .palavra-fundo span[data-direcao='-1'] {
+    left: auto;
+    right: 2vw;
+  }
+</style>

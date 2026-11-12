@@ -1,10 +1,4 @@
----
-import { Image } from 'astro:assets';
-import HeroWordmark from '../HeroWordmark.astro';
-import barrasOuro from '../../assets/brand/barras-ouro.png';
----
-
-<section data-encerramento data-fio="encerramento" class="relative overflow-hidden border-t border-line">
+<section data-encerramento data-fio="encerramento" class="relative overflow-hidden border-t border-line bg-bg">
   <div class="relative container-site flex flex-col items-center pt-32 text-center md:pt-44">
     <p data-reveal class="eyebrow">Próximo passo</p>
     <h2 data-reveal class="mt-8 text-[clamp(2.4rem,6vw,5.5rem)] leading-[1.02] font-light tracking-tight">
@@ -17,51 +11,55 @@ import barrasOuro from '../../assets/brand/barras-ouro.png';
     <a data-reveal data-fio-fim href="/contato" class="btn-primary mt-12">Agendar diagnóstico</a>
   </div>
 
-  <div class="encerramento-foto relative mt-10 md:-mt-10">
-    <Image
-      data-encerramento-foto
-      src={barrasOuro}
-      alt="Símbolo da Aurion representado por uma barra de concreto e uma barra de ouro inclinada"
-      widths={[800, 1400, 2000]}
-      sizes="100vw"
-      class="mx-auto aspect-video w-full max-w-7xl object-cover"
-    />
-  </div>
-
-  <div data-draw-on-view class="container-site pt-4 pb-20">
-    <HeroWordmark class="h-auto w-full" />
+  <div class="container-site pt-12 pb-16 md:pt-16 md:pb-24">
+    <!-- O fundo preto do vídeo some sobre o fundo da seção graças ao mix-blend-mode. -->
+    <video
+      data-logo-animacao
+      class="logo-animacao mx-auto aspect-[864/340] w-full max-w-4xl object-cover"
+      src="/brand/logo-animacao.mp4"
+      muted
+      playsinline
+      preload="auto"
+      disablepictureinpicture
+      disableremoteplayback
+      controlslist="nodownload nofullscreen noremoteplayback"
+      tabindex="-1"
+      aria-label="Animação do logotipo da Aurion se formando, com a assinatura Tecnologia que movimenta valor"
+    ></video>
   </div>
 </section>
 
 <style>
-  .encerramento-foto {
-    mask-image: radial-gradient(ellipse 50% 50% at center, black 45%, transparent 100%);
+  /* Sem eventos de ponteiro o navegador não mostra os botões flutuantes sobre o vídeo. */
+  .logo-animacao {
+    mix-blend-mode: screen;
+    pointer-events: none;
+    user-select: none;
   }
 </style>
 
 <script>
-  import { gsap, reduceMotion } from '../../scripts/motion';
+  import { reduceMotion } from '../../scripts/motion';
 
-  const section = document.querySelector<HTMLElement>('[data-encerramento]');
-  const foto = section?.querySelector<HTMLElement>('[data-encerramento-foto]');
-  const wordmark = section?.querySelector<HTMLElement>('[data-draw-on-view]');
+  const video = document.querySelector<HTMLVideoElement>('[data-logo-animacao]');
 
-  if (foto && !reduceMotion) {
-    gsap.fromTo(
-      foto,
-      { scale: 1.18, opacity: 0.4 },
-      { scale: 1, opacity: 1, ease: 'none', scrollTrigger: { trigger: foto, start: 'top bottom', end: 'center center', scrub: true } },
-    );
-  }
-
-  if (wordmark) {
-    new IntersectionObserver(
-      ([entry], observer) => {
-        if (!entry.isIntersecting) return;
-        wordmark.classList.add('is-visible');
-        observer.disconnect();
-      },
-      { threshold: 0.4 },
-    ).observe(wordmark);
+  if (video) {
+    if (reduceMotion) {
+      // Sem animação: mostra direto o quadro final, com o logotipo completo.
+      const irParaFim = () => {
+        video.currentTime = Math.max(0, video.duration - 0.05);
+      };
+      if (video.readyState >= 1) irParaFim();
+      else video.addEventListener('loadedmetadata', irParaFim, { once: true });
+    } else {
+      new IntersectionObserver(
+        ([entry], observer) => {
+          if (!entry.isIntersecting) return;
+          video.play().catch(() => {});
+          observer.disconnect();
+        },
+        { threshold: 0.5 },
+      ).observe(video);
+    }
   }
 </script>

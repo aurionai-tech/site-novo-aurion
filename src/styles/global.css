@@ -223,36 +223,6 @@
   }
 }
 
-/* Nome AURION desenhado em contorno no topo da home. */
-.wordmark-draw :is(path, rect, polygon) {
-  fill: rgb(198 178 114 / 0);
-  stroke: var(--color-gold);
-  stroke-width: 1.2;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation:
-    wordmark-draw 2.2s cubic-bezier(0.65, 0, 0.35, 1) forwards,
-    wordmark-fill 1.2s ease forwards;
-  animation-delay: calc(var(--i, 0) * 140ms), calc(2s + var(--i, 0) * 140ms);
-}
-
-@keyframes wordmark-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes wordmark-fill {
-  to {
-    fill: rgb(198 178 114 / 0.08);
-  }
-}
-
-/* O contorno só começa a ser desenhado quando o bloco entra na tela. */
-[data-draw-on-view]:not(.is-visible) .wordmark-draw :is(path, rect, polygon) {
-  animation-play-state: paused;
-}
-
 /* Fio condutor da home (src/scripts/fio.ts). Fica atrás do conteúdo de cada seção. */
 [data-fio] {
   isolation: isolate;
@@ -401,12 +371,6 @@ html.js [data-build]:not(.is-built) > * {
   .line-reveal > span,
   .fade-up {
     animation: none;
-  }
-
-  .wordmark-draw :is(path, rect, polygon) {
-    animation: none;
-    stroke-dashoffset: 0;
-    fill: rgb(198 178 114 / 0.08);
   }
 
   html.js [data-build]:not(.card):not(.is-built) {
