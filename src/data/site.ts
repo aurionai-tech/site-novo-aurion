@@ -24,6 +24,28 @@ export const principio = {
   frase: 'Não tem como automatizar o que não é processo.',
   explicacao:
     'Qualquer automação, seja com IA, integração, bot ou script, depende de um fluxo mapeado e combinado com a equipe. Sem isso, ela só aumenta o retrabalho.',
+  comparacao: {
+    sem: {
+      rotulo: 'Sem processo',
+      titulo: 'Automação em cima do improviso',
+      itens: [
+        'Cada pessoa faz de um jeito, e o sistema copia só um deles.',
+        'Ninguém previu as exceções, então a automação trava no primeiro caso diferente.',
+        'Quando algo dá errado, não fica claro quem resolve.',
+        'O retrabalho continua, só que mais rápido.',
+      ],
+    },
+    com: {
+      rotulo: 'Com processo',
+      titulo: 'Automação em cima de um fluxo acordado',
+      itens: [
+        'A equipe segue as mesmas etapas, e a automação segue junto.',
+        'As exceções já têm um caminho definido.',
+        'Cada etapa tem um responsável.',
+        'A tecnologia tira trabalho da equipe em vez de criar mais.',
+      ],
+    },
+  },
 };
 
 export const fases = {

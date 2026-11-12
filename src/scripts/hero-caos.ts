@@ -191,6 +191,12 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
       symY = topo + (livre - symH) / 2;
     }
     cena.layout({ w, h, dpr, desktop, symX, symY, symW, symH });
+
+    // O fio condutor da home nasce na ponta inferior da barra de ouro (x = 538 no favicon.svg).
+    section.dataset.simboloPonta = String(symX + ((538 - SIMBOLO.x) / SIMBOLO.h) * symH);
+    section.dataset.simboloFolga = String(h - symY - symH);
+    section.toggleAttribute('data-simbolo-desktop', desktop);
+    window.dispatchEvent(new Event('aurion:simbolo'));
   };
 
   const atualizarFase = () => {
@@ -256,6 +262,14 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
     }
   };
 
+  // Barra lateral e teclado rolam a página de forma nativa. Ali a pessoa controla a posição diretamente,
+  // então a rolagem não é segurada (brigaria com o arraste) e a animação acompanha sem limite de velocidade.
+  const rolagemNativa = () => getLenis()?.isScrolling === 'native';
+  window.addEventListener('pointerdown', (event) => {
+    // Clique na barra lateral: interrompe qualquer puxão em andamento para o Lenis aceitar o arraste.
+    if (event.clientX >= document.documentElement.clientWidth) getLenis()?.reset();
+  });
+
   function loop(now: number) {
     const dt = ultimo ? Math.min((now - ultimo) / 1000, 0.05) : 0;
     ultimo = now;
@@ -263,6 +277,8 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
     // Logo após o carregamento a cena acompanha a posição restaurada pelo navegador sem animar.
     if (now - start < 900) {
       progress = target;
+    } else if (rolagemNativa()) {
+      progress += (target - progress) * (1 - Math.exp(-dt * 12));
     } else {
       const diff = target - progress;
       const limite = VELOCIDADE_MAX * dt;

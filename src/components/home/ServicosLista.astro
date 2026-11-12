@@ -2,7 +2,7 @@
 import { servicos } from '../../data/site';
 ---
 
-<section class="border-t border-line">
+<section data-fio="servicos" class="relative border-t border-line">
   <div class="container-site py-28 md:py-36">
     <div class="flex flex-wrap items-end justify-between gap-8">
       <div>
@@ -19,7 +19,7 @@ import { servicos } from '../../data/site';
     <ul class="mt-16 border-t border-line">
       {
         servicos.map((s, i) => (
-          <li data-reveal class="servico group relative border-b border-line">
+          <li data-reveal data-fio-no class="servico group relative border-b border-line">
             <div class="relative grid gap-5 py-10 md:grid-cols-[4rem_1.2fr_1fr] md:gap-10 md:py-12">
               <span class="pt-2 text-sm font-medium tracking-[0.2em] text-gold">{String(i + 1).padStart(2, '0')}</span>
               <h3 class="text-3xl leading-tight font-light tracking-tight transition duration-500 group-hover:translate-x-2 group-hover:text-gold-light md:text-4xl">
@@ -59,6 +59,10 @@ import { servicos } from '../../data/site';
     opacity: 1;
   }
 
+  .servico.fio-aceso::before {
+    opacity: 0.6;
+  }
+
   .servico-linha {
     position: absolute;
     inset: auto 0 -1px;
@@ -69,7 +73,8 @@ import { servicos } from '../../data/site';
     transition: scale 0.8s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .servico:hover .servico-linha {
+  .servico:hover .servico-linha,
+  .servico.fio-aceso .servico-linha {
     scale: 1 1;
   }
 </style>

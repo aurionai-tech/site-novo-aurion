@@ -7,7 +7,7 @@ const grupos = [
 ];
 ---
 
-<section data-metodo class="relative overflow-hidden border-t border-line bg-surface">
+<section data-metodo data-fio="metodo" class="relative overflow-hidden border-t border-line bg-surface">
   <!-- No desktop a seção fica presa na tela, então tudo escala com a altura dela para não cortar conteúdo. -->
   <div class="flex flex-col justify-center py-28 lg:min-h-svh lg:py-[clamp(1.25rem,6svh,5rem)]">
     <div class="container-site flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
@@ -35,13 +35,19 @@ const grupos = [
         {
           grupos.map((g) => (
             <>
-              <div class="flex flex-col justify-end lg:w-80 lg:pr-12 lg:pb-1">
-                <span class="text-xs font-medium tracking-[0.3em] text-gold uppercase">Fase {g.numero}</span>
-                <p class="mt-4 text-3xl leading-tight font-light tracking-tight lg:text-4xl">{g.titulo}</p>
+              <div class="flex flex-col lg:w-80 lg:justify-center lg:pr-12 lg:pb-[8svh]">
+                <span class="flex items-center gap-3 text-sm font-semibold tracking-[0.3em] text-gold uppercase">
+                  <span class="h-px w-8 bg-gold" />
+                  Fase {g.numero}
+                </span>
+                <p class="mt-4 text-3xl leading-tight font-normal tracking-tight text-sand lg:text-[clamp(2rem,5.5svh,2.75rem)]">
+                  {g.titulo}
+                </p>
               </div>
               {g.etapas.map((etapa, j) => (
                 <article
                   data-etapa
+                  data-fio-no="celular"
                   class="etapa flex flex-col border-t border-line pt-8 lg:w-104 lg:border-t-0 lg:border-l lg:px-10 lg:pt-0"
                 >
                   <span class="etapa-numero text-[6rem] leading-[0.8] font-light tracking-tight lg:text-[clamp(3.5rem,15svh,8rem)]">
@@ -63,10 +69,9 @@ const grupos = [
       </div>
     </div>
 
+    <!-- Marca a altura em que o fio condutor corre na horizontal enquanto as etapas passam. -->
     <div class="container-site mt-16 hidden lg:mt-[clamp(1.25rem,6svh,4rem)] lg:block">
-      <div class="relative h-px bg-line">
-        <span data-metodo-barra class="absolute inset-0 origin-left bg-gold" style="scale: 0 1"></span>
-      </div>
+      <div data-fio-barra class="h-px"></div>
     </div>
   </div>
 </section>
@@ -88,6 +93,14 @@ const grupos = [
     opacity: 0.4;
   }
 
+  [data-metodo-janela] {
+    mask-image: linear-gradient(
+      to right,
+      transparent var(--fio-corte-de, -2px),
+      #000 var(--fio-corte-ate, -1px)
+    );
+  }
+
   .etapa.is-active .etapa-numero {
     color: var(--color-gold);
     -webkit-text-stroke-color: var(--color-gold);
@@ -100,7 +113,6 @@ const grupos = [
   const section = document.querySelector<HTMLElement>('[data-metodo]');
   const janela = section?.querySelector<HTMLElement>('[data-metodo-janela]');
   const trilho = section?.querySelector<HTMLElement>('[data-metodo-trilho]');
-  const barra = section?.querySelector<HTMLElement>('[data-metodo-barra]');
   const etapas = section ? [...section.querySelectorAll<HTMLElement>('[data-etapa]')] : [];
 
   if (section && janela && trilho) {
@@ -123,7 +135,9 @@ const grupos = [
             pin: true,
             scrub: 0.8,
             invalidateOnRefresh: true,
-            onUpdate: (self) => barra?.style.setProperty('scale', `${self.progress} 1`),
+            onUpdate: (self) => {
+              section.dataset.fioPin = String(self.progress);
+            },
           },
         });
         etapas.forEach((el) =>
@@ -137,6 +151,7 @@ const grupos = [
         );
         return () => {
           janela.style.overflowX = '';
+          delete section.dataset.fioPin;
         };
       });
 

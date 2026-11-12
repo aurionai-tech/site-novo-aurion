@@ -20,8 +20,10 @@ import Encerramento from '../components/home/Encerramento.astro';
 
 <script>
   import { gsap, ScrollTrigger, reduceMotion, startSmoothScroll } from '../scripts/motion';
+  import { initFio } from '../scripts/fio';
 
   startSmoothScroll();
+  initFio();
 
   if (!reduceMotion) {
     gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
