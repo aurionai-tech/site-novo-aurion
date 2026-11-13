@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
-import { segmentos, site } from '../data/site';
+import { site } from '../data/site';
 
 const inputClass =
   'mt-2 w-full rounded-md border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition placeholder:text-muted/60 focus:border-gold focus:ring-2 focus:ring-gold/20';
@@ -15,7 +15,7 @@ const labelClass = 'block text-sm font-medium text-sand';
   <PageHero
     eyebrow="Agendar diagnóstico"
     title="Comece contando como funciona hoje"
-    intro="Não precisa ter a solução pronta. Quanto melhor entendermos o processo atual, mais útil será a primeira conversa."
+    intro="Não precisa ter a solução pronta. Quanto mais detalhes você der, mais útil será a primeira conversa."
   />
 
   <section>
@@ -61,17 +61,13 @@ const labelClass = 'block text-sm font-medium text-sand';
             <input name="telefone" type="tel" autocomplete="tel" class={inputClass} />
           </label>
           <label class:list={[labelClass, 'sm:col-span-2']}>
-            Segmento
-            <select name="segmento" class={inputClass}>
-              <option value="">Selecione</option>
-              {segmentos.map((s) => <option>{s.titulo}</option>)}
-              <option>Outro</option>
-            </select>
+            Ramo de atuação
+            <input name="segmento" placeholder="Indústria, distribuição, contabilidade..." class={inputClass} />
           </label>
         </fieldset>
 
         <fieldset class="grid gap-6">
-          <legend class="eyebrow mb-6">Sobre o processo</legend>
+          <legend class="eyebrow mb-6">Sobre a operação</legend>
           <label class={labelClass}>
             Como o processo funciona hoje?
             <textarea
@@ -82,7 +78,7 @@ const labelClass = 'block text-sm font-medium text-sand';
               class={inputClass}></textarea>
           </label>
           <label class={labelClass}>
-            Quem é o responsável por esse processo?
+            Quem é o responsável hoje?
             <input name="responsavel" placeholder="Cargo ou área" class={inputClass} />
           </label>
           <label class={labelClass}>
@@ -119,7 +115,7 @@ const labelClass = 'block text-sm font-medium text-sand';
         <h2 class="eyebrow">O que acontece depois</h2>
         <ol class="mt-4 grid gap-3 text-sm text-muted">
           <li>1. Lemos com atenção o que você descreveu.</li>
-          <li>2. Marcamos uma conversa para entender o processo em detalhe.</li>
+          <li>2. Marcamos uma conversa para entender cada etapa em detalhe.</li>
           <li>3. Você recebe uma visão clara do problema e dos próximos passos.</li>
         </ol>
 

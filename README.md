@@ -16,7 +16,7 @@ npm run build    # gera o site estático em dist/
 
 | O quê | Onde |
 |---|---|
-| Textos gerais, método, serviços, segmentos, equipe | `src/data/site.ts` |
+| Textos gerais, método, serviços, competências | `src/data/site.ts` |
 | Cores e fontes | `src/styles/global.css` (bloco `@theme`) |
 | Páginas | `src/pages/` |
 

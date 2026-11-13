@@ -26,7 +26,7 @@ export const principio = {
     'Qualquer automação, seja com IA, integração, bot ou script, depende de um fluxo mapeado e combinado com a equipe. Sem isso, ela só aumenta o retrabalho.',
   comparacao: {
     sem: {
-      rotulo: 'Sem processo',
+      rotulo: 'O cenário comum',
       titulo: 'Automação em cima do improviso',
       itens: [
         'Cada pessoa faz de um jeito, e o sistema copia só um deles.',
@@ -36,7 +36,7 @@ export const principio = {
       ],
     },
     com: {
-      rotulo: 'Com processo',
+      rotulo: 'O jeito Aurion',
       titulo: 'Automação em cima de um fluxo acordado',
       itens: [
         'A equipe segue as mesmas etapas, e a automação segue junto.',
@@ -49,8 +49,8 @@ export const principio = {
 };
 
 export const fases = {
-  processo: 'Primeiro o processo',
-  tecnologia: 'Depois a tecnologia',
+  entender: 'Entender e organizar',
+  construir: 'Construir e automatizar',
 };
 
 export const metodo = [
@@ -61,8 +61,8 @@ export const metodo = [
   },
   {
     titulo: 'Mapeamento',
-    descricao: 'Documentamos o processo atual com entrevistas, acesso aos sistemas e diagramas.',
-    entrega: 'Processo atual documentado',
+    descricao: 'Registramos o funcionamento atual com entrevistas, acesso aos sistemas e diagramas.',
+    entrega: 'Mapa de como o trabalho acontece hoje',
   },
   {
     titulo: 'Fluxo acordado',
@@ -72,11 +72,11 @@ export const metodo = [
   {
     titulo: 'Implementação',
     descricao: 'Desenvolvemos o software a partir do fluxo validado, com entregas que você consegue acompanhar.',
-    entrega: 'Sistema funcionando no processo real',
+    entrega: 'Sistema rodando na operação real',
   },
   {
     titulo: 'Automação e dados',
-    descricao: 'Com o processo estável, aplicamos IA, integrações e indicadores nos pontos em que fazem diferença.',
+    descricao: 'Com a rotina estável, aplicamos IA, integrações e indicadores nos pontos em que fazem diferença.',
     entrega: 'Automação confiável e dados para decidir',
   },
   {
@@ -142,7 +142,7 @@ export const servicos = [
   },
   {
     titulo: 'Engenharia de software',
-    descricao: 'Sistemas, aplicativos e e-commerce construídos sob medida para o processo do cliente.',
+    descricao: 'Sistemas, aplicativos e e-commerce construídos sob medida para a rotina de cada cliente.',
     itens: ['Sistemas web', 'Aplicativos mobile', 'E-commerce', 'Integrações'],
   },
   {
@@ -152,28 +152,13 @@ export const servicos = [
   },
   {
     titulo: 'IA, automação e chatbots',
-    descricao: 'Agentes, bots e automações aplicados sobre processos que já foram mapeados e validados.',
+    descricao: 'Agentes, bots e automações aplicados sobre fluxos que já foram mapeados e validados.',
     itens: ['Chatbots e atendimento', 'Agentes de IA', 'Automação de rotinas'],
   },
   {
     titulo: 'Infraestrutura e TI',
     descricao: 'Base técnica para a operação rodar com segurança.',
     itens: ['Redes', 'Servidores e backup', 'Segurança da informação'],
-  },
-];
-
-export const segmentos = [
-  {
-    titulo: 'Contabilidade',
-    descricao: 'Rotinas com muitos documentos e etapas repetidas, em que organizar e automatizar dá resultado rápido.',
-  },
-  {
-    titulo: 'Agronegócio',
-    descricao: 'Operações de campo, logística e dados que precisam chegar a quem decide.',
-  },
-  {
-    titulo: 'Mobile',
-    descricao: 'Aplicativos para equipes em campo e para o cliente final.',
   },
 ];
 
@@ -242,7 +227,7 @@ export const comoOperamos = [
     descricao: 'Seu projeto não depende de uma única pessoa. As responsabilidades são divididas e cada troca de responsável é documentada.',
   },
   {
-    titulo: 'Processos auditáveis',
+    titulo: 'Tudo rastreável',
     descricao: 'Dá para saber quem fez cada tarefa e por que cada decisão foi tomada.',
   },
   {
