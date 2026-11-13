@@ -1,0 +1,166 @@
+---
+import { principio } from '../../data/site';
+import PalavraFundo from './PalavraFundo.astro';
+
+const palavras = principio.frase.replace(/\.$/, '').split(' ');
+const { sem, com } = principio.comparacao;
+
+// Caminhos embaralhados: dois terminam em beco sem saída e só um chega ao fim, depois de várias voltas.
+const trilhasSem = [
+  'M12 40 C70 40 70 112 130 100 S200 18 160 50 S118 122 220 110 S300 42 262 32',
+  'M12 70 C60 70 92 20 150 30 S232 122 280 92 S322 42 304 64',
+  'M12 100 C80 100 60 40 120 60 S190 132 250 72 S330 30 388 70',
+];
+const becos = [
+  [262, 32],
+  [304, 64],
+];
+const nos = [100, 190, 280];
+---
+
+<section data-manifesto data-fio="manifesto" class="relative border-t border-line">
+  <PalavraFundo texto="Processo" />
+  <div class="container-site grid gap-12 py-32 md:py-44 lg:grid-cols-[12rem_1fr]">
+    <h2 class="eyebrow pt-4">Princípio Aurion</h2>
+    <div>
+      <blockquote data-fio-no class="text-[clamp(2.2rem,5vw,4.5rem)] leading-[1.08] font-light tracking-tight">
+        {
+          palavras.map((p, i) => (
+            <span data-palavra class:list={['manifesto-palavra', i === palavras.length - 1 && 'font-semibold text-gold']}>
+              {p}
+              {i < palavras.length - 1 ? ' ' : '.'}
+            </span>
+          ))
+        }
+      </blockquote>
+      <div class="mt-14 grid gap-8 md:grid-cols-[auto_1fr] md:items-start">
+        <span data-manifesto-linha class="mt-3 hidden h-px w-24 origin-left bg-gold md:block"></span>
+        <p class="max-w-xl text-lg leading-relaxed text-muted">{principio.explicacao}</p>
+      </div>
+
+      <div data-fio-no class="mt-20 grid gap-5 md:grid-cols-2">
+        <article data-comparacao class="rounded-2xl border border-line bg-surface/40 p-7 md:p-9">
+          <p class="text-[11px] font-medium tracking-[0.25em] text-muted uppercase">{sem.rotulo}</p>
+          <h3 class="mt-3 text-2xl leading-snug font-light tracking-tight">{sem.titulo}</h3>
+          <svg class="mt-8 w-full overflow-visible" viewBox="0 0 400 140" fill="none" aria-hidden="true">
+            {trilhasSem.map((d) => <path data-trilha d={d} pathLength="1" stroke="rgb(154 154 154 / 0.5)" stroke-width="1.5" />)}
+            {[40, 70, 100].map((y) => <circle cx="12" cy={y} r="4" fill="#9a9a9a" />)}
+            {
+              becos.map(([x, y]) => (
+                <path d={`M${x - 5} ${y - 5} l10 10 m0 -10 l-10 10`} stroke="#9a9a9a" stroke-width="1.5" />
+              ))
+            }
+            <rect x="382" y="64" width="12" height="12" rx="2" stroke="#9a9a9a" stroke-width="1.5" />
+            <circle class="ponto-movel" r="3.5" fill="#e8dfd4">
+              <animateMotion dur="3.6s" repeatCount="indefinite" path={trilhasSem[0]} />
+              <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.8;0.9;1" dur="3.6s" repeatCount="indefinite" />
+            </circle>
+          </svg>
+          <ul class="mt-8 space-y-4">
+            {
+              sem.itens.map((item) => (
+                <li class="flex gap-4 leading-relaxed text-muted">
+                  <svg class="mt-1.5 size-3 shrink-0" viewBox="0 0 12 12" aria-hidden="true">
+                    <path d="M2 2l8 8m0-8l-8 8" stroke="currentColor" stroke-width="1.5" />
+                  </svg>
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+
+        <article data-comparacao class="rounded-2xl border border-gold/30 bg-gold/4 p-7 md:p-9">
+          <p class="text-[11px] font-medium tracking-[0.25em] text-gold uppercase">{com.rotulo}</p>
+          <h3 class="mt-3 text-2xl leading-snug font-light tracking-tight">{com.titulo}</h3>
+          <svg class="mt-8 w-full overflow-visible" viewBox="0 0 400 140" fill="none" aria-hidden="true">
+            <path data-trilha d="M12 70 H382" pathLength="1" stroke="#c6b272" stroke-width="1.5" />
+            <path
+              data-desvio
+              d="M190 70 C190 112 214 112 235 112 C256 112 280 112 280 70"
+              stroke="rgb(198 178 114 / 0.55)"
+              stroke-width="1.5"
+              stroke-dasharray="4 5"
+            />
+            <circle cx="12" cy="70" r="4" fill="#c6b272" />
+            {nos.map((x) => <circle cx={x} cy="70" r="6" fill="#0a0a0a" stroke="#c6b272" stroke-width="1.5" />)}
+            <rect x="382" y="64" width="12" height="12" rx="2" fill="#c6b272" />
+            <circle class="ponto-movel" r="3.5" fill="#f1d98f">
+              <animateMotion dur="3.6s" repeatCount="indefinite" path="M12 70 H388" />
+            </circle>
+            <circle class="ponto-movel" r="3" fill="#dccb93">
+              <animateMotion
+                dur="3.6s"
+                begin="1.2s"
+                repeatCount="indefinite"
+                path="M12 70 H190 C190 112 214 112 235 112 C256 112 280 112 280 70 H388"
+              />
+            </circle>
+          </svg>
+          <ul class="mt-8 space-y-4">
+            {
+              com.itens.map((item) => (
+                <li class="flex gap-4 leading-relaxed text-sand">
+                  <span class="mt-2 size-2.5 shrink-0 rounded-full border border-gold"></span>
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .ponto-movel {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, reduceMotion } from '../../scripts/motion';
+
+  const section = document.querySelector<HTMLElement>('[data-manifesto]');
+  if (section && !reduceMotion) {
+    gsap.fromTo(
+      section.querySelectorAll('[data-palavra]'),
+      { opacity: 0.12 },
+      {
+        opacity: 1,
+        stagger: 0.12,
+        ease: 'none',
+        scrollTrigger: { trigger: section.querySelector('blockquote'), start: 'top 85%', end: 'bottom 60%', scrub: true },
+      },
+    );
+    const linha = section.querySelector('[data-manifesto-linha]');
+    gsap.from(linha, {
+      scaleX: 0,
+      duration: 1.4,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: linha, start: 'top 85%' },
+    });
+
+    section.querySelectorAll<HTMLElement>('[data-comparacao]').forEach((card, i) => {
+      const gatilho = { trigger: card, start: 'top 92%' };
+      gsap.from(card, { y: 24, opacity: 0, duration: 0.7, delay: i * 0.08, ease: 'power3.out', scrollTrigger: gatilho });
+      gsap.fromTo(
+        card.querySelectorAll('[data-trilha]'),
+        { strokeDasharray: 1, strokeDashoffset: 1 },
+        { strokeDashoffset: 0, duration: 1.1, delay: 0.1 + i * 0.08, stagger: 0.1, ease: 'power2.inOut', scrollTrigger: gatilho },
+      );
+      gsap.from(card.querySelectorAll('[data-desvio], li'), {
+        opacity: 0,
+        y: 8,
+        duration: 0.5,
+        delay: 0.15 + i * 0.08,
+        stagger: 0.05,
+        ease: 'power2.out',
+        scrollTrigger: gatilho,
+      });
+    });
+  }
+</script>

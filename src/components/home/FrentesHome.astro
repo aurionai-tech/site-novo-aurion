@@ -1,0 +1,41 @@
+---
+import { submarcasPublicas } from '../../data/site';
+import PalavraFundo from './PalavraFundo.astro';
+---
+
+<section data-fio="frentes" class="relative border-t border-line bg-surface">
+  <PalavraFundo texto="Frentes" fundo="surface" />
+  <div class="container-site grid gap-14 py-28 md:py-36 lg:grid-cols-[1fr_2fr] lg:gap-20">
+    <div data-reveal>
+      <p class="eyebrow">Frentes Aurion</p>
+      <h2 class="mt-5 text-4xl leading-tight font-light tracking-tight md:text-5xl">
+        Uma marca, frentes <span class="font-semibold text-gold">especializadas</span>
+      </h2>
+      <p class="mt-6 max-w-sm leading-relaxed text-muted">
+        Todas as frentes levam o nome e a identidade da Aurion. Assim, cada projeto entregue reforça a confiança nas
+        outras, e você reconhece a Aurion em qualquer ponto de contato.
+      </p>
+    </div>
+    <div data-reveal class="grid gap-6 sm:grid-cols-2">
+      {
+        submarcasPublicas.map((m) => (
+          <article data-tilt class="card flex flex-col bg-bg p-8 md:p-10">
+            <img src={m.logo} alt={m.nome} width="192" height="99" class="h-auto w-44" loading="lazy" />
+            <p class="mt-8 leading-relaxed text-muted">{m.descricao}</p>
+            <ul class="mt-6 flex flex-wrap gap-2">
+              {m.itens.map((item) => (
+                <li class="rounded-full border border-line px-3 py-1 text-xs text-sand">{item}</li>
+              ))}
+            </ul>
+            <a
+              href="/contato"
+              class="mt-auto pt-10 text-xs font-semibold tracking-[0.15em] text-gold uppercase hover:text-gold-light"
+            >
+              Falar com a Aurion →
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

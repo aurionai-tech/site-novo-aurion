@@ -1,0 +1,65 @@
+<section data-encerramento data-fio="encerramento" class="relative overflow-hidden border-t border-line bg-bg">
+  <div class="relative container-site flex flex-col items-center pt-32 text-center md:pt-44">
+    <p data-reveal class="eyebrow">Próximo passo</p>
+    <h2 data-reveal class="mt-8 text-[clamp(2.4rem,6vw,5.5rem)] leading-[1.02] font-light tracking-tight">
+      Vamos começar<br />pelo <span class="font-semibold text-gold">processo</span>?
+    </h2>
+    <p data-reveal class="mt-8 max-w-xl text-lg leading-relaxed text-muted">
+      Conte como a sua operação funciona hoje. A primeira conversa serve para entender o seu cenário antes de qualquer
+      proposta.
+    </p>
+    <a data-reveal data-fio-fim href="/contato" class="btn-primary mt-12">Agendar diagnóstico</a>
+  </div>
+
+  <div class="container-site pt-12 pb-16 md:pt-16 md:pb-24">
+    <!-- O fundo preto do vídeo some sobre o fundo da seção graças ao mix-blend-mode. -->
+    <video
+      data-logo-animacao
+      class="logo-animacao mx-auto aspect-[864/340] w-full max-w-4xl object-cover"
+      src="/brand/logo-animacao.mp4"
+      muted
+      playsinline
+      preload="auto"
+      disablepictureinpicture
+      disableremoteplayback
+      controlslist="nodownload nofullscreen noremoteplayback"
+      tabindex="-1"
+      aria-label="Animação do logotipo da Aurion se formando, com a assinatura Tecnologia que movimenta valor"
+    ></video>
+  </div>
+</section>
+
+<style>
+  /* Sem eventos de ponteiro o navegador não mostra os botões flutuantes sobre o vídeo. */
+  .logo-animacao {
+    mix-blend-mode: screen;
+    pointer-events: none;
+    user-select: none;
+  }
+</style>
+
+<script>
+  import { reduceMotion } from '../../scripts/motion';
+
+  const video = document.querySelector<HTMLVideoElement>('[data-logo-animacao]');
+
+  if (video) {
+    if (reduceMotion) {
+      // Sem animação: mostra direto o quadro final, com o logotipo completo.
+      const irParaFim = () => {
+        video.currentTime = Math.max(0, video.duration - 0.05);
+      };
+      if (video.readyState >= 1) irParaFim();
+      else video.addEventListener('loadedmetadata', irParaFim, { once: true });
+    } else {
+      new IntersectionObserver(
+        ([entry], observer) => {
+          if (!entry.isIntersecting) return;
+          video.play().catch(() => {});
+          observer.disconnect();
+        },
+        { threshold: 0.5 },
+      ).observe(video);
+    }
+  }
+</script>

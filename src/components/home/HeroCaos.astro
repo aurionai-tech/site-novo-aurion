@@ -1,0 +1,147 @@
+---
+import { Image } from 'astro:assets';
+import simboloBrilho from '../../assets/brand/simbolo-brilho.png';
+import { site } from '../../data/site';
+
+const fases = [
+  { titulo: 'Como costuma ser', texto: 'Cada pessoa faz do seu jeito, entre planilhas, mensagens e exceções.' },
+  { titulo: 'Processo mapeado', texto: 'Um fluxo claro, com etapas e responsáveis que todo mundo segue.' },
+  { titulo: 'Tecnologia aplicada', texto: 'Com a base organizada, software, dados e IA passam a gerar valor.' },
+];
+---
+
+<section data-hero-caos class="hero-caos relative">
+  <div class="sticky top-0 h-svh overflow-hidden">
+    <Image
+      src={simboloBrilho}
+      alt=""
+      widths={[800, 1400, 2000]}
+      sizes="100vw"
+      loading="eager"
+      class="hero-fallback pointer-events-none absolute inset-0 h-full w-full object-cover object-right opacity-70"
+    />
+    <canvas data-hero-canvas class="absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
+    <div
+      class="pointer-events-none absolute inset-0 bg-linear-to-t from-bg via-bg/70 to-transparent lg:bg-linear-to-r lg:from-bg lg:via-bg/50 lg:to-transparent"
+    >
+    </div>
+
+    <div class="relative container-site flex h-full flex-col justify-end pb-32 lg:justify-center lg:pb-0">
+      <p data-hero-texto class="eyebrow fade-up" style="--d:0.2s">{site.assinatura}</p>
+      <h1 class="mt-6 text-[clamp(2.25rem,4.2vw,4.2rem)] leading-[1.02] font-light tracking-tight">
+        <span class="line-reveal"><span style="--d:0.3s">Primeiro o processo.</span></span>
+        <span class="line-reveal">
+          <span style="--d:0.45s" class="font-semibold text-gold">Depois a tecnologia.</span>
+        </span>
+      </h1>
+      <p class="fade-up mt-8 max-w-md leading-relaxed text-muted md:text-lg" style="--d:0.8s">
+        A Aurion começa entendendo como a sua operação funciona no dia a dia. Só depois partimos para software, dados e
+        automação.
+      </p>
+      <div class="fade-up mt-10 flex flex-wrap gap-4" style="--d:1s">
+        <a href="/contato" class="btn-primary">Agendar diagnóstico</a>
+        <a href="/como-trabalhamos" class="btn-secondary hidden sm:inline-flex">Como trabalhamos</a>
+      </div>
+    </div>
+
+    <div class="fade-up pointer-events-none absolute inset-x-0 top-6 lg:top-10" style="--d:1.2s">
+      <div class="container-site">
+        <div data-hero-fases class="lg:ml-auto lg:max-w-176">
+          <div class="relative h-px bg-line">
+            <span data-fase-barra class="absolute inset-0 origin-left bg-gold" style="scale: 0 1"></span>
+          </div>
+          <ol class="mt-4 grid lg:grid-cols-3 lg:gap-8">
+            {
+              fases.map((f, i) => (
+                <li data-fase data-active={i === 0 ? '' : undefined} class="fase">
+                  <p class="text-[11px] font-medium tracking-[0.25em] uppercase">
+                    <span class="mr-2 text-gold">0{i + 1}</span>
+                    {f.titulo}
+                  </p>
+                  <p class="mt-2 hidden text-sm leading-relaxed text-muted lg:block">{f.texto}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div data-scroll-cue class="pointer-events-none absolute inset-x-0 bottom-10 hidden lg:block">
+      <div class="container-site flex items-center gap-4 text-[11px] tracking-[0.25em] text-muted uppercase">
+        <span class="scroll-cue-line" aria-hidden="true"></span>
+        Role para organizar
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-caos {
+    height: 100svh;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .hero-caos {
+      height: 340vh;
+    }
+  }
+
+  :global(html.js) .hero-fallback {
+    display: none;
+  }
+
+  .fase {
+    opacity: 0.35;
+    transition: opacity 0.5s ease;
+  }
+
+  .fase[data-active] {
+    opacity: 1;
+  }
+
+  @media (width < 64rem) {
+    .fase:not([data-active]) {
+      display: none;
+    }
+  }
+
+  .scroll-cue-line {
+    position: relative;
+    width: 3rem;
+    height: 1px;
+    overflow: hidden;
+    background: var(--color-line);
+  }
+
+  .scroll-cue-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-gold);
+    animation: cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  @keyframes cue {
+    from {
+      translate: -100% 0;
+    }
+    to {
+      translate: 100% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue-line::after {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { initHeroCaos } from '../../scripts/hero-caos';
+  import { criarCenaConstelacao } from '../../scripts/hero-constelacao';
+
+  const section = document.querySelector<HTMLElement>('[data-hero-caos]');
+  if (section) initHeroCaos(section, criarCenaConstelacao);
+</script>

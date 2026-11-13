@@ -5,7 +5,7 @@ import PageHero from '../components/PageHero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import CtaDiagnostico from '../components/CtaDiagnostico.astro';
 import barrasOuro from '../assets/brand/barras-ouro.png';
-import { comoOperamos, competencias, conceitoMarca, principio, site } from '../data/site';
+import { comoOperamos, competencias, conceitoMarca, historia, principio, site } from '../data/site';
 ---
 
 <Layout
@@ -15,15 +15,33 @@ import { comoOperamos, competencias, conceitoMarca, principio, site } from '../d
   <PageHero
     eyebrow="Sobre a Aurion"
     title="Um hub de tecnologia que começa pelo negócio"
-    intro="Somos uma software house multidisciplinar: engenharia de software, inteligência de dados e transformação digital, sempre sobre processos reais."
+    intro="Somos uma software house que trabalha com engenharia de software, inteligência de dados e transformação digital, sempre a partir dos processos do cliente."
   />
 
   <section>
-    <div class="container-site py-24">
-      <span class="rascunho">história da Aurion a escrever</span>
-      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
-        [Rascunho] Como e por que a Aurion surgiu, e o que nos move.
-      </p>
+    <div class="container-site grid gap-14 py-24 lg:grid-cols-[1.4fr_1fr] lg:gap-20">
+      <div>
+        <p class="eyebrow">Nossa história</p>
+        <div class="mt-8 grid gap-6 text-lg leading-relaxed text-muted">
+          {historia.paragrafos.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+      <blockquote class="self-end border-l-2 border-gold pl-8">
+        {
+          historia.fecho.map((linha, i) => (
+            <p
+              data-build
+              style={`--d:${i * 120}ms`}
+              class:list={[
+                'text-2xl leading-snug font-light tracking-tight md:text-3xl',
+                i === historia.fecho.length - 1 && 'font-medium text-gold',
+              ]}
+            >
+              {linha}
+            </p>
+          ))
+        }
+      </blockquote>
     </div>
   </section>
 
@@ -75,7 +93,7 @@ import { comoOperamos, competencias, conceitoMarca, principio, site } from '../d
       <SectionHeading
         eyebrow="Competências"
         title="Do processo à infraestrutura"
-        intro="Cobrimos as frentes que um projeto precisa, do diagnóstico à operação."
+        intro="Cuidamos de tudo o que um projeto precisa, do diagnóstico à operação."
       />
       <ul class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {
