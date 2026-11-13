@@ -1,40 +1,123 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
 import CtaDiagnostico from '../components/CtaDiagnostico.astro';
+import { site } from '../data/site';
 
-const compromissos = [
+// Itens com revisar: true aparecem com o selo "a confirmar". A área de segurança confirma (e tira o campo),
+// ajusta o texto ou corta o item. Prática que não é seguida hoje deve sair da página, não ser suavizada.
+interface Item {
+  titulo: string;
+  texto: string;
+  revisar?: boolean;
+}
+
+const praticas: Item[] = [
   {
-    titulo: 'Segurança desde o início',
-    texto: 'Pensamos em segurança da informação desde o diagnóstico, junto com o resto do projeto.',
+    titulo: 'Acesso mínimo',
+    texto: 'Cada pessoa da equipe acessa só os sistemas e dados de que precisa naquele projeto, sempre com autenticação em dois fatores.',
+    revisar: true,
   },
   {
-    titulo: 'Conformidade com a LGPD',
-    texto: 'Tratamos dados pessoais dos seus clientes e colaboradores com base legal, finalidade clara e o mínimo necessário.',
+    titulo: 'Senhas fora do código',
+    texto: 'Senhas, chaves e tokens ficam em um cofre de credenciais. Não vão para o código nem circulam por mensagem.',
+    revisar: true,
   },
   {
-    titulo: 'Controle sobre os dados',
-    texto: 'Decisões sobre onde os dados ficam e quem acessa são tomadas com você e documentadas.',
+    titulo: 'Ambientes separados',
+    texto: 'Desenvolvimento e testes acontecem fora da produção e, sempre que possível, com dados fictícios ou anonimizados.',
+    revisar: true,
+  },
+  {
+    titulo: 'Criptografia',
+    texto: 'Os dados são protegidos com criptografia tanto na transmissão quanto no armazenamento.',
+    revisar: true,
+  },
+  {
+    titulo: 'Backups testados',
+    texto: 'Os backups seguem uma rotina definida e são restaurados em teste periodicamente, para garantir que funcionam quando forem necessários.',
+    revisar: true,
+  },
+  {
+    titulo: 'Registro de acessos',
+    texto: 'Fica registrado quem acessou o quê e quando, para que qualquer ação possa ser auditada depois.',
+    revisar: true,
+  },
+];
+
+const lgpd: Item[] = [
+  {
+    titulo: 'Contrato antes do acesso',
+    texto: 'O contrato traz cláusulas de proteção de dados e confidencialidade, assinadas antes de qualquer acesso aos seus sistemas.',
+    revisar: true,
+  },
+  {
+    titulo: 'Só o necessário',
+    texto: 'Pedimos acesso apenas aos dados de que o projeto realmente precisa.',
+    revisar: true,
+  },
+  {
+    titulo: 'Pedidos dos titulares',
+    texto: 'Quando alguém pede para ver, corrigir ou apagar os próprios dados, ajudamos a sua equipe a responder dentro do prazo.',
+    revisar: true,
+  },
+  {
+    titulo: 'Aviso de incidentes',
+    texto: 'Se houver um incidente de segurança, avisamos a sua empresa sem demora, com o que aconteceu e o que está sendo feito, para que vocês possam cumprir as obrigações com a ANPD.',
+    revisar: true,
+  },
+];
+
+const encerramento: Item[] = [
+  { titulo: 'Tudo é seu', texto: 'O código, os dados e a documentação do projeto pertencem à sua empresa.', revisar: true },
+  { titulo: 'Acessos revogados', texto: 'Os acessos da equipe Aurion aos seus sistemas são encerrados.', revisar: true },
+  {
+    titulo: 'Dados devolvidos',
+    texto: 'Devolvemos os dados e apagamos as cópias que ficaram com a Aurion, com registro do descarte.',
+    revisar: true,
+  },
+  {
+    titulo: 'Sem dependência',
+    texto: 'A documentação permite que outra equipe continue o trabalho, se for essa a sua escolha.',
+    revisar: true,
   },
 ];
 ---
 
-<Layout title="Segurança e LGPD" description="Como a Aurion trata segurança da informação e proteção de dados.">
+<Layout
+  title="Segurança e LGPD"
+  description="Como a Aurion protege os sistemas e dados dos clientes: práticas de segurança, LGPD e o que acontece ao fim de cada projeto."
+>
   <PageHero
     eyebrow="Segurança e LGPD"
     title="Proteger os dados faz parte do trabalho"
-    intro="Automação e dados só geram valor se forem confiáveis e seguros."
+    intro="Para entregar software, dados e automação, precisamos de acesso aos sistemas e às informações da sua empresa. Aqui está como cuidamos disso."
   />
+
+  <div class="container-site pt-12">
+    <p class="rounded-lg border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-300">
+      Rascunho. Os itens marcados com “a confirmar” precisam ser validados pela área de segurança antes do lançamento. O que
+      não for prática da Aurion hoje deve ser cortado.
+    </p>
+  </div>
 
   <section>
     <div class="container-site py-24">
-      <span class="rascunho">texto a revisar com a área de segurança</span>
-      <div class="mt-8 grid gap-6 md:grid-cols-3">
+      <SectionHeading
+        eyebrow="No dia a dia"
+        title="Práticas em todos os projetos"
+        intro="Valem do diagnóstico à manutenção, e não dependem de quem está no projeto."
+      />
+      <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {
-          compromissos.map((c, i) => (
-            <article data-build style={`--d:${i * 100}ms`} class="card p-8">
-              <h2 class="text-lg font-semibold">{c.titulo}</h2>
-              <p class="mt-3 text-sm leading-relaxed text-muted">{c.texto}</p>
+          praticas.map((p, i) => (
+            <article data-build style={`--d:${i * 60}ms`} class="card p-7">
+              <div class="flex flex-wrap items-center gap-3">
+                <h3 class="font-semibold">{p.titulo}</h3>
+                {p.revisar && <span class="rascunho">a confirmar</span>}
+              </div>
+              <p class="mt-3 text-sm leading-relaxed text-muted">{p.texto}</p>
             </article>
           ))
         }
@@ -42,5 +125,95 @@ const compromissos = [
     </div>
   </section>
 
-  <CtaDiagnostico />
+  <section class="border-t border-line bg-surface">
+    <div class="container-site grid gap-14 py-24 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+      <SectionHeading
+        eyebrow="LGPD na prática"
+        title="A sua empresa decide. A Aurion executa."
+        intro="Quando trabalhamos com dados dos seus clientes e colaboradores, a sua empresa é a controladora: é ela quem define para que os dados são usados e com qual base legal. A Aurion atua como operadora e trata os dados só para o que foi combinado."
+      />
+      <ul class="grid content-start gap-4">
+        {
+          lgpd.map((item, i) => (
+            <li data-build style={`--d:${i * 80}ms`} class="card bg-bg p-6">
+              <div class="flex flex-wrap items-center gap-3">
+                <h3 class="font-semibold">{item.titulo}</h3>
+                {item.revisar && <span class="rascunho">a confirmar</span>}
+              </div>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{item.texto}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="border-t border-line">
+    <div class="container-site py-24">
+      <SectionHeading
+        eyebrow="Quando o projeto termina"
+        title="Nada fica preso com a Aurion"
+        intro="O fim de um contrato não deveria deixar a sua empresa sem acesso ao que é dela."
+      />
+      <ol class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {
+          encerramento.map((item, i) => (
+            <li data-build style={`--d:${i * 80}ms`} class="card">
+              <span class="text-3xl font-light tracking-tight text-gold">{String(i + 1).padStart(2, '0')}</span>
+              <div class="mt-4 flex flex-wrap items-center gap-3">
+                <h3 class="font-semibold">{item.titulo}</h3>
+                {item.revisar && <span class="rascunho">a confirmar</span>}
+              </div>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{item.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-surface">
+    <div class="container-site grid gap-6 py-24 md:grid-cols-2">
+      <article data-build class="card flex flex-col bg-bg p-8">
+        <p class="eyebrow">Também é serviço</p>
+        <h2 class="mt-4 text-2xl font-light tracking-tight">Segurança da sua infraestrutura</h2>
+        <p class="mt-4 leading-relaxed text-muted">
+          Além de proteger os projetos que desenvolvemos, cuidamos de redes, servidores, backup e segurança na nuvem dos
+          clientes, pela área de Infraestrutura e TI e pela Aurion Cloud.
+        </p>
+        <div class="mt-auto pt-8">
+          <a href="/servicos" class="btn-secondary">Ver serviços</a>
+        </div>
+      </article>
+      <article data-build style="--d:80ms" class="card flex flex-col bg-bg p-8">
+        <p class="eyebrow">Dados deste site</p>
+        <h2 class="mt-4 text-2xl font-light tracking-tight">Privacidade de quem nos procura</h2>
+        <p class="mt-4 leading-relaxed text-muted">
+          O formulário de diagnóstico coleta só o necessário para retornarmos o contato. Os detalhes estão na política de
+          privacidade.
+        </p>
+        <p class="mt-4 text-sm text-sand">
+          Encarregado de dados:{' '}
+          {
+            site.encarregado ? (
+              <a href={`mailto:${site.encarregado}`} class="text-gold hover:underline">
+                {site.encarregado}
+              </a>
+            ) : (
+              <span class="rascunho">a definir</span>
+            )
+          }
+        </p>
+        <div class="mt-auto pt-8">
+          <a href="/privacidade" class="btn-secondary">Política de privacidade</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <CtaDiagnostico
+    title="A sua TI ou o jurídico precisa de mais detalhes?"
+    text="Conversamos com a sua equipe técnica ou jurídica antes de qualquer acesso aos seus sistemas."
+    label="Falar com a Aurion"
+  />
 </Layout>

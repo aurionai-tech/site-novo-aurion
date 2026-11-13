@@ -11,7 +11,10 @@ export const site = {
   // Preencher quando houver canais oficiais. Vazio = aparece como "a definir".
   email: '',
   whatsapp: '',
-  linkedin: '',
+  linkedin: 'https://www.linkedin.com/company/labs-aurion/',
+  instagram: 'https://www.instagram.com/labs.aurion/',
+  // E-mail do encarregado de dados (DPO), exigido pela LGPD. Aparece em Segurança e deve constar na política de privacidade.
+  encarregado: '',
 };
 
 export const nav = [

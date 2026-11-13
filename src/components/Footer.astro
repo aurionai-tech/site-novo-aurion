@@ -21,7 +21,8 @@ const ano = new Date().getFullYear();
       <p class="eyebrow mb-1">Contato</p>
       {site.email ? <a href={`mailto:${site.email}`} class="text-muted hover:text-gold">{site.email}</a> : <span class="rascunho w-fit">e-mail a definir</span>}
       {site.whatsapp ? <a href={`https://wa.me/${site.whatsapp}`} class="text-muted hover:text-gold">WhatsApp</a> : <span class="rascunho w-fit">WhatsApp a definir</span>}
-      {site.linkedin && <a href={site.linkedin} class="text-muted hover:text-gold">LinkedIn</a>}
+      {site.linkedin && <a href={site.linkedin} target="_blank" rel="noopener noreferrer" class="text-muted hover:text-gold">LinkedIn</a>}
+      {site.instagram && <a href={site.instagram} target="_blank" rel="noopener noreferrer" class="text-muted hover:text-gold">Instagram</a>}
     </div>
   </div>
 

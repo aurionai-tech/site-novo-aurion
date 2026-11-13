@@ -2,11 +2,13 @@
 interface Props {
   title?: string;
   text?: string;
+  label?: string;
 }
 
 const {
   title = 'Vamos começar pelo processo?',
   text = 'Conte como a sua operação funciona hoje. A primeira conversa serve para entender o seu cenário antes de qualquer proposta.',
+  label = 'Agendar diagnóstico',
 } = Astro.props;
 ---
 
@@ -20,6 +22,6 @@ const {
     <p class="eyebrow">Próximo passo</p>
     <h2 class="mt-6 text-4xl leading-tight font-light tracking-tight md:text-6xl">{title}</h2>
     <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">{text}</p>
-    <a href="/contato" class="btn-primary mt-12">Agendar diagnóstico</a>
+    <a href="/contato" class="btn-primary mt-12">{label}</a>
   </div>
 </section>
