@@ -10,12 +10,13 @@ const PATH_OURO = new Path2D(D_OURO);
 const SIMBOLO = { x: 114, y: 109, w: 489, h: 464 };
 const MARGEM_CAMADA = 60;
 
-// A animação inteira leva no mínimo ~3,5 s, por mais rápido que a página seja rolada.
-const VELOCIDADE_MAX = 0.28;
+// A animação inteira leva no mínimo ~3,7 s, por mais rápido que a página seja rolada.
+const VELOCIDADE_MAX = 0.27;
 const VELOCIDADE_MIN = 0.08;
-const SUAVIZACAO = 5;
-// Quanto a rolagem pode ficar à frente da animação antes de ser segurada.
-const FOLGA_ROLAGEM = 0.05;
+const SUAVIZACAO = 8;
+// Quanto a rolagem pode ficar à frente da animação antes de ser segurada. Junto com a SUAVIZACAO, limita a
+// velocidade real a ~FOLGA_ROLAGEM × SUAVIZACAO por segundo, que precisa ficar acima de VELOCIDADE_MAX.
+const FOLGA_ROLAGEM = 0.15;
 
 export const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 export const smooth = (v: number) => v * v * (3 - 2 * v);
@@ -306,8 +307,8 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
   // Se a rolagem passou da animação, segura a página até ela alcançar.
   const segurarRolagem = () => {
     // Perto do fim a rolagem já fica livre; o restante da animação termina enquanto a página desce.
-    if (progress + FOLGA_ROLAGEM >= 1) return;
-    const permitido = trigger.start + (progress + FOLGA_ROLAGEM) * (trigger.end - trigger.start);
+    if (progress >= 0.95) return;
+    const permitido = trigger.start + Math.min(progress + FOLGA_ROLAGEM, 1) * (trigger.end - trigger.start);
     const lenis = getLenis();
     if (lenis) {
       if (lenis.targetScroll > permitido + 1) lenis.scrollTo(permitido, { lerp: 0.2 });
