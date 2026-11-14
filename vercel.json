@@ -20,7 +20,7 @@
     {
       "source": "/cartao",
       "has": [{ "type": "host", "value": "go.aurionai.com.br" }],
-      "destination": "https://aurionai.com.br/#contato",
+      "destination": "https://aurionai.com.br/cartao",
       "permanent": false
     }
   ]

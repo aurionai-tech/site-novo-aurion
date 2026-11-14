@@ -1,30 +1,140 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
-
-const secoes = [
-  'Quem é o controlador dos dados (razão social, CNPJ, contato do encarregado)',
-  'Quais dados coletamos (formulário de diagnóstico: nome, empresa, e-mail, telefone e descrição do processo)',
-  'Para que usamos os dados e com qual base legal (consentimento marcado no formulário)',
-  'Com quem compartilhamos (Microsoft 365, que recebe o e-mail do formulário; Vercel, que hospeda o site)',
-  'Por quanto tempo guardamos (inclui a cópia em Itens enviados da caixa de e-mail)',
-  'Direitos do titular e como exercê-los',
-  'Cookies e métricas (hoje o site não usa cookies nem ferramenta de métricas)',
-];
+import { site } from '../data/site';
 ---
 
 <Layout title="Política de privacidade" description="Política de privacidade do site da Aurion.">
   <PageHero eyebrow="Privacidade" title="Política de privacidade" />
 
   <section>
-    <div class="container-site max-w-3xl py-24">
-      <p class="rounded-lg border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-300">
-        Rascunho. Esta política precisa ser escrita e revisada (jurídico e segurança da informação) antes do lançamento.
-      </p>
-      <h2 class="mt-12 text-xl font-semibold">Seções a cobrir</h2>
-      <ul class="mt-5 grid list-disc gap-2 pl-5 text-muted marker:text-gold">
-        {secoes.map((s) => <li>{s}</li>)}
-      </ul>
+    <div class="container-site max-w-3xl py-24 grid gap-10 text-sm leading-relaxed text-muted">
+
+      <div>
+        <p class="text-xs text-sand">Última atualização: novembro de 2025</p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">1. Quem é o controlador</h2>
+        <p>
+          A <strong class="text-fg">Aurion Software LTDA</strong>, inscrita no CNPJ sob o n.º 66.985.716/0001-01,
+          é a controladora dos dados pessoais coletados por meio deste site, nos termos da Lei n.º 13.709/2018 (LGPD).
+        </p>
+        <p>
+          Encarregado de dados (DPO):{' '}
+          <a href={`mailto:${site.encarregado}`} class="text-gold hover:underline">{site.encarregado}</a>
+        </p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">2. Quais dados coletamos</h2>
+        <p>
+          Coletamos apenas os dados fornecidos voluntariamente no formulário de diagnóstico:
+        </p>
+        <ul class="list-disc pl-5 grid gap-1 marker:text-gold">
+          <li>Nome completo</li>
+          <li>Nome da empresa</li>
+          <li>Endereço de e-mail</li>
+          <li>Telefone ou WhatsApp (opcional)</li>
+          <li>Ramo de atuação (opcional)</li>
+          <li>Descrição do processo e da operação (texto livre)</li>
+        </ul>
+        <p>
+          O site não usa cookies de rastreamento, pixels de terceiros nem ferramentas de analytics.
+        </p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">3. Para que usamos os dados</h2>
+        <p>
+          Os dados coletados têm uma única finalidade: entrar em contato para agendar a conversa de diagnóstico
+          solicitada pelo próprio titular.
+        </p>
+        <p>
+          A base legal é o <strong class="text-fg">consentimento</strong> (art. 7.º, I, da LGPD), manifestado pela
+          marcação do campo obrigatório no formulário. O consentimento é registrado com data e hora no e-mail recebido.
+        </p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">4. Com quem compartilhamos</h2>
+        <p>Não vendemos nem cedemos dados a terceiros. Os dados trafegam apenas pelos seguintes serviços:</p>
+        <ul class="list-disc pl-5 grid gap-1 marker:text-gold">
+          <li>
+            <strong class="text-fg">Microsoft 365 (Graph API)</strong> — recebe o conteúdo do formulário como e-mail
+            enviado para a caixa da Aurion. Os dados ficam armazenados na caixa de Itens Enviados da conta corporativa,
+            hospedada nos servidores da Microsoft.
+          </li>
+          <li>
+            <strong class="text-fg">Vercel</strong> — plataforma que hospeda este site. Processa a requisição do
+            formulário em servidor (serverless function) sem armazenar os dados além do tempo de execução.
+          </li>
+        </ul>
+        <p>
+          Ambos os serviços operam sob contratos com cláusulas de proteção de dados compatíveis com a LGPD e o GDPR.
+        </p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">5. Por quanto tempo guardamos</h2>
+        <p>
+          Os dados permanecem na caixa de e-mail corporativa da Aurion pelo tempo necessário para o relacionamento
+          comercial com o titular e por até 5 (cinco) anos após o encerramento do contato, para fins de eventual
+          comprovação legal.
+        </p>
+        <p>
+          Caso não haja continuidade após o diagnóstico, os dados são eliminados em até 12 (doze) meses a partir do
+          último contato, salvo obrigação legal de retenção.
+        </p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">6. Direitos do titular</h2>
+        <p>
+          Nos termos do art. 18 da LGPD, o titular pode, a qualquer momento, solicitar:
+        </p>
+        <ul class="list-disc pl-5 grid gap-1 marker:text-gold">
+          <li>Confirmação da existência de tratamento</li>
+          <li>Acesso aos dados</li>
+          <li>Correção de dados incompletos, inexatos ou desatualizados</li>
+          <li>Anonimização, bloqueio ou eliminação de dados desnecessários</li>
+          <li>Portabilidade dos dados</li>
+          <li>Eliminação dos dados tratados com base no consentimento</li>
+          <li>Revogação do consentimento</li>
+        </ul>
+        <p>
+          Para exercer qualquer desses direitos, envie um e-mail para{' '}
+          <a href={`mailto:${site.encarregado}`} class="text-gold hover:underline">{site.encarregado}</a>{' '}
+          com o assunto "Direitos LGPD". Responderemos em até 15 dias úteis.
+        </p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">7. Segurança</h2>
+        <p>
+          O formulário trafega por HTTPS com TLS. A API de envio valida a origem da requisição, aplica limite de
+          tentativas por IP e utiliza um campo honeypot para reduzir envios automatizados. As credenciais de acesso
+          ao e-mail corporativo não estão no código-fonte do site.
+        </p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">8. Alterações nesta política</h2>
+        <p>
+          Esta política pode ser atualizada para refletir mudanças na operação ou na legislação. A data de última
+          atualização é indicada no topo da página. Alterações relevantes serão comunicadas pelo mesmo canal em que
+          o contato foi iniciado.
+        </p>
+      </div>
+
+      <div class="grid gap-3">
+        <h2 class="text-base font-semibold text-fg">9. Contato</h2>
+        <p>
+          Dúvidas sobre esta política ou sobre o tratamento dos seus dados:{' '}
+          <a href={`mailto:${site.encarregado}`} class="text-gold hover:underline">{site.encarregado}</a>
+        </p>
+      </div>
+
     </div>
   </section>
 </Layout>

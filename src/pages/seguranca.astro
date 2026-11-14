@@ -17,32 +17,26 @@ const praticas: Item[] = [
   {
     titulo: 'Acesso mínimo',
     texto: 'Cada pessoa da equipe acessa só os sistemas e dados de que precisa naquele projeto, sempre com autenticação em dois fatores.',
-    revisar: true,
   },
   {
     titulo: 'Senhas fora do código',
     texto: 'Senhas, chaves e tokens ficam em um cofre de credenciais. Não vão para o código nem circulam por mensagem.',
-    revisar: true,
   },
   {
     titulo: 'Ambientes separados',
     texto: 'Desenvolvimento e testes acontecem fora da produção e, sempre que possível, com dados fictícios ou anonimizados.',
-    revisar: true,
   },
   {
     titulo: 'Criptografia',
     texto: 'Os dados são protegidos com criptografia tanto na transmissão quanto no armazenamento.',
-    revisar: true,
   },
   {
     titulo: 'Backups testados',
     texto: 'Os backups seguem uma rotina definida e são restaurados em teste periodicamente, para garantir que funcionam quando forem necessários.',
-    revisar: true,
   },
   {
     titulo: 'Registro de acessos',
     texto: 'Fica registrado quem acessou o quê e quando, para que qualquer ação possa ser auditada depois.',
-    revisar: true,
   },
 ];
 
@@ -50,37 +44,31 @@ const lgpd: Item[] = [
   {
     titulo: 'Contrato antes do acesso',
     texto: 'O contrato traz cláusulas de proteção de dados e confidencialidade, assinadas antes de qualquer acesso aos seus sistemas.',
-    revisar: true,
   },
   {
     titulo: 'Só o necessário',
     texto: 'Pedimos acesso apenas aos dados de que o projeto realmente precisa.',
-    revisar: true,
   },
   {
     titulo: 'Pedidos dos titulares',
     texto: 'Quando alguém pede para ver, corrigir ou apagar os próprios dados, ajudamos a sua equipe a responder dentro do prazo.',
-    revisar: true,
   },
   {
     titulo: 'Aviso de incidentes',
     texto: 'Se houver um incidente de segurança, avisamos a sua empresa sem demora, com o que aconteceu e o que está sendo feito, para que vocês possam cumprir as obrigações com a ANPD.',
-    revisar: true,
   },
 ];
 
 const encerramento: Item[] = [
-  { titulo: 'Tudo é seu', texto: 'O código, os dados e a documentação do projeto pertencem à sua empresa.', revisar: true },
-  { titulo: 'Acessos revogados', texto: 'Os acessos da equipe Aurion aos seus sistemas são encerrados.', revisar: true },
+  { titulo: 'Tudo é seu', texto: 'O código, os dados e a documentação do projeto pertencem à sua empresa.' },
+  { titulo: 'Acessos revogados', texto: 'Os acessos da equipe Aurion aos seus sistemas são encerrados.' },
   {
     titulo: 'Dados devolvidos',
     texto: 'Devolvemos os dados e apagamos as cópias que ficaram com a Aurion, com registro do descarte.',
-    revisar: true,
   },
   {
     titulo: 'Sem dependência',
     texto: 'A documentação permite que outra equipe continue o trabalho, se for essa a sua escolha.',
-    revisar: true,
   },
 ];
 ---
@@ -94,13 +82,6 @@ const encerramento: Item[] = [
     title="Proteger os dados faz parte do trabalho"
     intro="Para entregar software, dados e automação, precisamos de acesso aos sistemas e às informações da sua empresa. Aqui está como cuidamos disso."
   />
-
-  <div class="container-site pt-12">
-    <p class="rounded-lg border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-300">
-      Rascunho. Os itens marcados com “a confirmar” precisam ser validados pela área de segurança antes do lançamento. O que
-      não for prática da Aurion hoje deve ser cortado.
-    </p>
-  </div>
 
   <section>
     <div class="container-site py-24">

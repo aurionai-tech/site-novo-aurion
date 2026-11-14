@@ -9,12 +9,12 @@ export const site = {
   descricao:
     'A Aurion é uma software house que faz análise de negócio, engenharia de software, inteligência de dados e automação a partir dos processos de cada cliente.',
   // Preencher quando houver canais oficiais. Vazio = aparece como "a definir".
-  email: '',
-  whatsapp: '',
+  email: 'contato@aurionai.com.br',
+  whatsapp: '5535991674020',
   linkedin: 'https://www.linkedin.com/company/labs-aurion/',
   instagram: 'https://www.instagram.com/labs.aurion/',
   // E-mail do encarregado de dados (DPO), exigido pela LGPD. Aparece em Segurança e deve constar na política de privacidade.
-  encarregado: '',
+  encarregado: 'contato@aurionai.com.br',
 };
 
 export const nav = [
