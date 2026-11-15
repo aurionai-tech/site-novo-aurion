@@ -1,4 +1,4 @@
-// Conteúdo central do site.
+// Conteúdo central do site. Textos revisados pela liderança (nov/2026).
 // Fonte: vault aurion-vault (notas Aurion, Valores, Matriz de Responsabilidades),
 // "Apresentação Conceito de Identidade Aurion" e "Manual de Marca" (Agência Ideia Brasil, 2026)
 // e o modelo de "Proposta Comercial" do diagnóstico.
