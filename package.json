@@ -8,10 +8,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:azure": "astro build --config astro.config.azure.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/node": "^11.1.13",
     "@astrojs/sitemap": "^3.7.4",
     "@astrojs/vercel": "^11.0.20",
     "@fontsource-variable/montserrat": "^5.3.0",
