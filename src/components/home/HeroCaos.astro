@@ -85,6 +85,13 @@ const fases = [
     :global(html.js) .hero-caos {
       height: 300vh;
     }
+
+    /* No celular a seção fica mais curta: menos rolagem presa no canvas pesado. */
+    @media (max-width: 63.99rem) {
+      :global(html.js) .hero-caos {
+        height: 200vh;
+      }
+    }
   }
 
   :global(html.js) .hero-fallback {

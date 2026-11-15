@@ -7,10 +7,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// No toque, a rolagem nativa do sistema é bem mais fluida do que o Lenis (que atrasa o dedo).
+export const touchUi =
+  window.matchMedia('(hover: none)').matches || window.matchMedia('(pointer: coarse)').matches;
+
 let lenis: Lenis | null = null;
 
 export function startSmoothScroll() {
-  if (reduceMotion || lenis) return lenis;
+  if (reduceMotion || touchUi || lenis) return lenis;
   lenis = new Lenis({ lerp: 0.1 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis?.raf(time * 1000));

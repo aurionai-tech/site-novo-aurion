@@ -94,32 +94,34 @@ export const criarCenaConstelacao: CriarCena = (_section, canvas) => {
   const yFaixa = (k: number) => laneCy + (k - (FAIXAS - 1) / 2) * laneGap;
 
   // Linhas entre partículas próximas; perto do fim, só as vizinhas no contorno continuam ligadas.
+  // No celular pulamos a rede O(n²): ela é o trecho mais caro do quadro e pouco se nota em tela pequena.
   const desenharRede = (visiveis: number) => {
-    const alcance = g.desktop ? 110 : 70;
-    // Uma passada só pelos pares; cada ligação vai para o traçado do seu nível de intensidade.
-    const niveis = NIVEIS_LIGACAO.map(() => new Path2D());
-    for (let i = 0; i < total; i++) {
-      if (bs[i] > 0.98) continue;
-      for (let j = i + 1; j < total; j++) {
-        const dx = xs[j] - xs[i];
-        const dy = ys[j] - ys[i];
-        if (Math.abs(dx) > alcance || Math.abs(dy) > alcance) continue;
-        const d = Math.hypot(dx, dy);
-        if (d > alcance) continue;
-        // Ligações de partículas a caminho do símbolo somem rápido, para não cruzarem a tela esticadas.
-        const soltas = 1 - Math.max(bs[i], bs[j]);
-        const forca = (1 - d / alcance) * soltas * soltas * Math.min(es[i], es[j]);
-        if (forca < 0.05) continue;
-        const nivel = niveis[Math.min(NIVEIS_LIGACAO.length - 1, Math.floor(forca * NIVEIS_LIGACAO.length))];
-        nivel.moveTo(xs[i], ys[i]);
-        nivel.lineTo(xs[j], ys[j]);
+    if (g.desktop) {
+      const alcance = 110;
+      const niveis = NIVEIS_LIGACAO.map(() => new Path2D());
+      for (let i = 0; i < total; i++) {
+        if (bs[i] > 0.98) continue;
+        for (let j = i + 1; j < total; j++) {
+          const dx = xs[j] - xs[i];
+          const dy = ys[j] - ys[i];
+          if (Math.abs(dx) > alcance || Math.abs(dy) > alcance) continue;
+          const d = Math.hypot(dx, dy);
+          if (d > alcance) continue;
+          // Ligações de partículas a caminho do símbolo somem rápido, para não cruzarem a tela esticadas.
+          const soltas = 1 - Math.max(bs[i], bs[j]);
+          const forca = (1 - d / alcance) * soltas * soltas * Math.min(es[i], es[j]);
+          if (forca < 0.05) continue;
+          const nivel = niveis[Math.min(NIVEIS_LIGACAO.length - 1, Math.floor(forca * NIVEIS_LIGACAO.length))];
+          nivel.moveTo(xs[i], ys[i]);
+          nivel.lineTo(xs[j], ys[j]);
+        }
       }
+      ctx.lineWidth = 1;
+      niveis.forEach((nivel, n) => {
+        ctx.strokeStyle = `rgb(214 190 120 / ${NIVEIS_LIGACAO[n] * visiveis})`;
+        ctx.stroke(nivel);
+      });
     }
-    ctx.lineWidth = 1;
-    niveis.forEach((nivel, n) => {
-      ctx.strokeStyle = `rgb(214 190 120 / ${NIVEIS_LIGACAO[n] * visiveis})`;
-      ctx.stroke(nivel);
-    });
 
     ctx.beginPath();
     for (let i = 0; i < total; i++) {
@@ -131,7 +133,7 @@ export const criarCenaConstelacao: CriarCena = (_section, canvas) => {
     ctx.strokeStyle = `rgb(220 203 147 / ${0.8 * visiveis})`;
     ctx.stroke();
 
-    const lado = g.desktop ? 2.6 : 2;
+    const lado = g.desktop ? 2.6 : 2.2;
     ctx.globalAlpha = visiveis;
     for (let cor = 0; cor < CORES.length; cor++) {
       ctx.fillStyle = CORES[cor];
@@ -190,7 +192,7 @@ export const criarCenaConstelacao: CriarCena = (_section, canvas) => {
       mascaraTexto.addColorStop(0, '#000');
       mascaraTexto.addColorStop(1, 'rgb(0 0 0 / 0)');
 
-      const count = g.w < 768 ? 120 : 220;
+      const count = g.desktop ? 220 : 64;
       if (count !== total) {
         total = count;
         ({ particulas, vizinha } = criarParticulas(count));

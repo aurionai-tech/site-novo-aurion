@@ -1,4 +1,4 @@
-import { ScrollTrigger, getLenis, reduceMotion } from './motion';
+import { ScrollTrigger, getLenis, reduceMotion, touchUi } from './motion';
 
 // Contornos oficiais das duas barras do símbolo, no sistema de coordenadas do favicon.svg.
 const D_CONCRETO =
@@ -211,7 +211,7 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
   let ultimaChave = '';
 
   const layout = () => {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, touchUi ? 1.25 : 1.5);
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
     const desktop = w >= 1024;
@@ -304,27 +304,22 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
   });
   progress = target = trigger.progress;
 
-  // Se a rolagem passou da animação, segura a página até ela alcançar.
+  // Se a rolagem passou da animação, segura a página até ela alcançar (só no desktop com Lenis).
   const segurarRolagem = () => {
     // Perto do fim a rolagem já fica livre; o restante da animação termina enquanto a página desce.
     if (progress >= 0.95) return;
     const permitido = trigger.start + Math.min(progress + FOLGA_ROLAGEM, 1) * (trigger.end - trigger.start);
     const lenis = getLenis();
     if (lenis) {
-      if (lenis.targetScroll > permitido + 1) {
-        // No início da animação o snap precisa ser mais agressivo para evitar que o swipe mobile
-        // avance visivelmente antes da correção chegar.
-        const lerp = progress < 0.1 ? 0.7 : 0.2;
-        lenis.scrollTo(permitido, { lerp });
-      }
+      if (lenis.targetScroll > permitido + 1) lenis.scrollTo(permitido, { lerp: 0.2 });
     } else if (window.scrollY > permitido + 1) {
       window.scrollTo(0, permitido);
     }
   };
 
-  // Barra lateral e teclado rolam a página de forma nativa. Ali a pessoa controla a posição diretamente,
-  // então a rolagem não é segurada (brigaria com o arraste) e a animação acompanha sem limite de velocidade.
-  const rolagemNativa = () => getLenis()?.isScrolling === 'native';
+  // Barra lateral, teclado e toque: a pessoa controla a posição diretamente.
+  // Nessas situações a rolagem não é segurada (brigaria com o dedo/arraste) e a animação acompanha rápido.
+  const rolagemLivre = () => touchUi || getLenis()?.isScrolling === 'native';
   window.addEventListener('pointerdown', (event) => {
     // Clique na barra lateral: interrompe qualquer puxão em andamento para o Lenis aceitar o arraste.
     if (event.clientX >= document.documentElement.clientWidth) getLenis()?.reset();
@@ -337,8 +332,8 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
     // Logo após o carregamento a cena acompanha a posição restaurada pelo navegador sem animar.
     if (now - start < 900) {
       progress = target;
-    } else if (rolagemNativa()) {
-      progress += (target - progress) * (1 - Math.exp(-dt * 12));
+    } else if (rolagemLivre()) {
+      progress += (target - progress) * (1 - Math.exp(-dt * 14));
     } else {
       const diff = target - progress;
       const limite = VELOCIDADE_MAX * dt;
