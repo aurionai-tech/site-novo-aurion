@@ -7,7 +7,7 @@ import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
-  // Domínio oficial ainda não definido: configure SITE_URL no deploy.
+  // Em produção, cadastre SITE_URL na Vercel (ex.: https://aurionai.com.br). Sem isso, canônicas e sitemap usam localhost.
   site: process.env.SITE_URL ?? 'http://localhost:4321',
 
   adapter: vercel(),

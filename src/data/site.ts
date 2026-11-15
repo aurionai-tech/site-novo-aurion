@@ -1,4 +1,4 @@
-// Conteúdo central do site. Textos em rascunho: validar com a liderança antes de publicar.
+// Conteúdo central do site.
 // Fonte: vault aurion-vault (notas Aurion, Valores, Matriz de Responsabilidades),
 // "Apresentação Conceito de Identidade Aurion" e "Manual de Marca" (Agência Ideia Brasil, 2026)
 // e o modelo de "Proposta Comercial" do diagnóstico.
@@ -8,12 +8,11 @@ export const site = {
   assinatura: 'Tecnologia que movimenta valor',
   descricao:
     'A Aurion é uma software house que faz análise de negócio, engenharia de software, inteligência de dados e automação a partir dos processos de cada cliente.',
-  // Preencher quando houver canais oficiais. Vazio = aparece como "a definir".
   email: 'contato@aurionai.com.br',
   whatsapp: '5535991674020',
   linkedin: 'https://www.linkedin.com/company/labs-aurion/',
   instagram: 'https://www.instagram.com/labs.aurion/',
-  // E-mail do encarregado de dados (DPO), exigido pela LGPD. Aparece em Segurança e deve constar na política de privacidade.
+  // Encarregado de dados (DPO). Aparece em Segurança e na política de privacidade.
   encarregado: 'contato@aurionai.com.br',
 };
 

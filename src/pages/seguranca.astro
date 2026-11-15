@@ -5,12 +5,9 @@ import SectionHeading from '../components/SectionHeading.astro';
 import CtaDiagnostico from '../components/CtaDiagnostico.astro';
 import { site } from '../data/site';
 
-// Itens com revisar: true aparecem com o selo "a confirmar". A área de segurança confirma (e tira o campo),
-// ajusta o texto ou corta o item. Prática que não é seguida hoje deve sair da página, não ser suavizada.
 interface Item {
   titulo: string;
   texto: string;
-  revisar?: boolean;
 }
 
 const praticas: Item[] = [
@@ -94,10 +91,7 @@ const encerramento: Item[] = [
         {
           praticas.map((p, i) => (
             <article data-build style={`--d:${i * 60}ms`} class="card p-7">
-              <div class="flex flex-wrap items-center gap-3">
-                <h3 class="font-semibold">{p.titulo}</h3>
-                {p.revisar && <span class="rascunho">a confirmar</span>}
-              </div>
+              <h3 class="font-semibold">{p.titulo}</h3>
               <p class="mt-3 text-sm leading-relaxed text-muted">{p.texto}</p>
             </article>
           ))
@@ -117,10 +111,7 @@ const encerramento: Item[] = [
         {
           lgpd.map((item, i) => (
             <li data-build style={`--d:${i * 80}ms`} class="card bg-bg p-6">
-              <div class="flex flex-wrap items-center gap-3">
-                <h3 class="font-semibold">{item.titulo}</h3>
-                {item.revisar && <span class="rascunho">a confirmar</span>}
-              </div>
+              <h3 class="font-semibold">{item.titulo}</h3>
               <p class="mt-2 text-sm leading-relaxed text-muted">{item.texto}</p>
             </li>
           ))
@@ -141,10 +132,7 @@ const encerramento: Item[] = [
           encerramento.map((item, i) => (
             <li data-build style={`--d:${i * 80}ms`} class="card">
               <span class="text-3xl font-light tracking-tight text-gold">{String(i + 1).padStart(2, '0')}</span>
-              <div class="mt-4 flex flex-wrap items-center gap-3">
-                <h3 class="font-semibold">{item.titulo}</h3>
-                {item.revisar && <span class="rascunho">a confirmar</span>}
-              </div>
+              <h3 class="mt-4 font-semibold">{item.titulo}</h3>
               <p class="mt-2 text-sm leading-relaxed text-muted">{item.texto}</p>
             </li>
           ))
@@ -175,15 +163,9 @@ const encerramento: Item[] = [
         </p>
         <p class="mt-4 text-sm text-sand">
           Encarregado de dados:{' '}
-          {
-            site.encarregado ? (
-              <a href={`mailto:${site.encarregado}`} class="text-gold hover:underline">
-                {site.encarregado}
-              </a>
-            ) : (
-              <span class="rascunho">a definir</span>
-            )
-          }
+          <a href={`mailto:${site.encarregado}`} class="text-gold hover:underline">
+            {site.encarregado}
+          </a>
         </p>
         <div class="mt-auto pt-8">
           <a href="/privacidade" class="btn-secondary">Política de privacidade</a>
