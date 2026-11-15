@@ -311,7 +311,12 @@ export function initHeroCaos(section: HTMLElement, criarCena: CriarCena) {
     const permitido = trigger.start + Math.min(progress + FOLGA_ROLAGEM, 1) * (trigger.end - trigger.start);
     const lenis = getLenis();
     if (lenis) {
-      if (lenis.targetScroll > permitido + 1) lenis.scrollTo(permitido, { lerp: 0.2 });
+      if (lenis.targetScroll > permitido + 1) {
+        // No início da animação o snap precisa ser mais agressivo para evitar que o swipe mobile
+        // avance visivelmente antes da correção chegar.
+        const lerp = progress < 0.1 ? 0.7 : 0.2;
+        lenis.scrollTo(permitido, { lerp });
+      }
     } else if (window.scrollY > permitido + 1) {
       window.scrollTo(0, permitido);
     }

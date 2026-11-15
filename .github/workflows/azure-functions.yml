@@ -1,0 +1,38 @@
+name: Azure Functions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'functions/**'
+      - '.github/workflows/azure-functions.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build and Deploy Function
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: functions/contact/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: functions/contact
+
+      - name: Build
+        run: npm run build
+        working-directory: functions/contact
+
+      - name: Deploy to Azure Functions
+        uses: Azure/functions-action@v1
+        with:
+          app-name: aurion-contact
+          package: functions/contact
+          publish-profile: ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}
+          respect-funcignore: true

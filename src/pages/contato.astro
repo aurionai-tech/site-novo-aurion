@@ -41,16 +41,16 @@ const labelClass = 'block text-sm font-medium text-sand';
             <input type="text" name="_hp" tabindex="-1" autocomplete="off" />
           </label>
         </div>
+        <input type="hidden" name="origem" value="" id="campo-origem" />
 
-        <fieldset class="grid gap-6 sm:grid-cols-2">
-          <legend class="eyebrow mb-6">Sobre você</legend>
+        <div class="grid gap-6 sm:grid-cols-2">
           <label class={labelClass}>
             Nome
             <input name="nome" required autocomplete="name" class={inputClass} />
           </label>
           <label class={labelClass}>
             Empresa
-            <input name="empresa" required autocomplete="organization" class={inputClass} />
+            <input name="empresa" autocomplete="organization" class={inputClass} />
           </label>
           <label class={labelClass}>
             E-mail
@@ -60,51 +60,36 @@ const labelClass = 'block text-sm font-medium text-sand';
             Telefone / WhatsApp
             <input name="telefone" type="tel" autocomplete="tel" class={inputClass} />
           </label>
-          <label class:list={[labelClass, 'sm:col-span-2']}>
+          <label id="label-segmento" class:list={[labelClass, 'sm:col-span-2']}>
             Ramo de atuação
-            <input name="segmento" placeholder="Indústria, distribuição, contabilidade..." class={inputClass} />
+            <input
+              id="input-segmento"
+              name="segmento"
+              placeholder="Indústria, distribuição, contabilidade..."
+              class={inputClass}
+            />
           </label>
-        </fieldset>
-
-        <fieldset class="grid gap-6">
-          <legend class="eyebrow mb-6">Sobre a operação</legend>
-          <label class={labelClass}>
-            Como o processo funciona hoje?
+          <label id="label-contexto" class:list={[labelClass, 'sm:col-span-2']}>
+            O que você quer resolver?
             <textarea
-              name="processo_atual"
+              id="textarea-contexto"
+              name="contexto"
               rows="4"
-              required
-              placeholder="Descreva o passo a passo, mesmo que seja informal."
+              placeholder="Descreva o problema ou o que está te travando — pode ser informal."
               class={inputClass}></textarea>
           </label>
-          <label class={labelClass}>
-            Quem é o responsável hoje?
-            <input name="responsavel" placeholder="Cargo ou área" class={inputClass} />
-          </label>
-          <label class={labelClass}>
-            Onde está a maior dor?
-            <textarea
-              name="dor"
-              rows="3"
-              placeholder="Tempo perdido, erros, retrabalho, falta de informação..."
-              class={inputClass}></textarea>
-          </label>
-          <label class={labelClass}>
-            Quais sistemas ou ferramentas vocês usam hoje?
-            <input name="sistemas" placeholder="ERP, planilhas, WhatsApp..." class={inputClass} />
-          </label>
-        </fieldset>
+        </div>
 
         <label class="flex items-start gap-3 text-sm text-muted">
           <input type="checkbox" name="consentimento" required class="mt-1 size-4 accent-gold" />
           <span>
-            Concordo com o uso destes dados para que a Aurion entre em contato sobre o diagnóstico, conforme a
+            Concordo com o uso destes dados para que a Aurion entre em contato sobre <span id="texto-consentimento">o diagnóstico</span>, conforme a
             <a href="/privacidade" class="font-medium text-gold underline">política de privacidade</a>.
           </span>
         </label>
 
         <div class="flex flex-wrap items-center gap-4">
-          <button type="submit" class="btn-primary w-fit disabled:cursor-not-allowed disabled:opacity-50">
+          <button id="btn-submit" type="submit" class="btn-primary w-fit disabled:cursor-not-allowed disabled:opacity-50">
             Enviar para diagnóstico
           </button>
           <p id="form-status" role="status" aria-live="polite" class="text-sm text-muted"></p>
@@ -113,7 +98,7 @@ const labelClass = 'block text-sm font-medium text-sand';
 
       <aside class="card h-fit p-8">
         <h2 class="eyebrow">O que acontece depois</h2>
-        <ol class="mt-4 grid gap-3 text-sm text-muted">
+        <ol id="lista-depois" class="mt-4 grid gap-3 text-sm text-muted">
           <li>1. Lemos com atenção o que você descreveu.</li>
           <li>2. Marcamos uma conversa para entender cada etapa em detalhe.</li>
           <li>3. Você recebe uma visão clara do problema e dos próximos passos.</li>
@@ -131,6 +116,61 @@ const labelClass = 'block text-sm font-medium text-sand';
   </section>
 
   <script>
+    const params = new URLSearchParams(window.location.search);
+    const isLab = params.get('origem') === 'aurion-lab';
+
+    if (isLab) {
+      // Hero — seletores diretos do PageHero
+      const heroSection = document.querySelector('section.relative.overflow-hidden');
+      if (heroSection) {
+        const eyebrowEl = heroSection.querySelector('p.eyebrow');
+        const titleEl = heroSection.querySelector('h1');
+        const introEl = heroSection.querySelector('p.text-muted');
+        if (eyebrowEl) eyebrowEl.textContent = 'Aurion Lab';
+        if (titleEl) titleEl.textContent = 'Conte como você imagina o produto';
+        if (introEl) introEl.textContent = 'Não precisa estar tudo definido. Queremos entender a ideia, o problema que ela resolve e quem vai usar.';
+      }
+
+      // Campo origem
+      const campoOrigem = document.querySelector<HTMLInputElement>('#campo-origem');
+      if (campoOrigem) campoOrigem.value = 'aurion-lab';
+
+      // Segmento
+      const labelSegmento = document.querySelector<HTMLLabelElement>('#label-segmento');
+      const inputSegmento = document.querySelector<HTMLInputElement>('#input-segmento');
+      if (labelSegmento) {
+        labelSegmento.childNodes.forEach((n) => { if (n.nodeType === Node.TEXT_NODE) n.textContent = 'Tipo de projeto'; });
+      }
+      if (inputSegmento) inputSegmento.placeholder = 'App mobile, sistema web, protótipo, produto SaaS...';
+
+      // Contexto
+      const labelContexto = document.querySelector<HTMLLabelElement>('#label-contexto');
+      const textareaContexto = document.querySelector<HTMLTextAreaElement>('#textarea-contexto');
+      if (labelContexto) {
+        labelContexto.childNodes.forEach((n) => { if (n.nodeType === Node.TEXT_NODE) n.textContent = 'Qual é a ideia?'; });
+      }
+      if (textareaContexto) textareaContexto.placeholder = 'Descreva a ideia, o problema que quer resolver e quem vai usar o app — pode ser informal.';
+
+      // Consentimento
+      const textoConsentimento = document.querySelector('#texto-consentimento');
+      if (textoConsentimento) textoConsentimento.textContent = 'o projeto';
+
+      // Botão
+      const btn = document.querySelector<HTMLButtonElement>('#btn-submit');
+      if (btn) btn.textContent = 'Enviar proposta';
+
+      // O que acontece depois
+      const lista = document.querySelector('#lista-depois');
+      if (lista) {
+        lista.innerHTML = `
+          <li>1. Lemos com atenção o que você descreveu sobre o projeto.</li>
+          <li>2. Marcamos uma conversa para entender a ideia, os usuários e o que precisa ser construído.</li>
+          <li>3. Você recebe uma direção clara sobre escopo, tecnologia e próximos passos.</li>
+        `;
+      }
+    }
+
+    // Formulário
     const form = document.querySelector<HTMLFormElement>('#form-diagnostico');
     const status = document.querySelector<HTMLElement>('#form-status');
     const sucesso = document.querySelector<HTMLElement>('#form-sucesso');
@@ -163,11 +203,9 @@ const labelClass = 'block text-sm font-medium text-sand';
             email: texto('email'),
             telefone: texto('telefone'),
             segmento: texto('segmento'),
-            processo: texto('processo_atual'),
-            responsavel: texto('responsavel'),
-            dor: texto('dor'),
-            sistemas: texto('sistemas'),
+            contexto: texto('contexto'),
             lgpd: data.get('consentimento') === 'on',
+            origem: texto('origem'),
             _hp: texto('_hp'),
           }),
         });

@@ -33,7 +33,12 @@ const idDe = (nome: string) => nome.toLowerCase().replace(/\s+/g, '-');
           <li class="rounded-md border border-line px-3 py-1.5 text-xs tracking-[0.15em] text-sand uppercase">{item}</li>
         ))}
       </ul>
-      <a href="/contato" class="btn-primary mt-8">Falar com a Aurion</a>
+      <a
+        href={m.nome === 'Aurion Lab' ? '/contato?origem=aurion-lab' : '/contato'}
+        class="btn-primary mt-8"
+      >
+        {m.nome === 'Aurion Lab' ? 'Falar sobre o projeto' : 'Falar com a Aurion'}
+      </a>
     </Modal>
   ))
 }
