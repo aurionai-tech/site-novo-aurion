@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import node from '@astrojs/node';
 
 export default defineConfig({
-  site: process.env.SITE_URL ?? 'http://localhost:4321',
+  site: process.env.SITE_URL || 'https://happy-pebble-03648d80f.5.azurestaticapps.net',
 
   adapter: node({ mode: 'standalone' }),
 
