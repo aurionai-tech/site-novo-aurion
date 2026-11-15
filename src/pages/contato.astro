@@ -42,8 +42,7 @@ const labelClass = 'block text-sm font-medium text-sand';
           </label>
         </div>
 
-        <fieldset class="grid gap-6 sm:grid-cols-2">
-          <legend class="eyebrow mb-6">Sobre você</legend>
+        <div class="grid gap-6 sm:grid-cols-2">
           <label class={labelClass}>
             Nome
             <input name="nome" required autocomplete="name" class={inputClass} />
@@ -64,36 +63,15 @@ const labelClass = 'block text-sm font-medium text-sand';
             Ramo de atuação
             <input name="segmento" placeholder="Indústria, distribuição, contabilidade..." class={inputClass} />
           </label>
-        </fieldset>
-
-        <fieldset class="grid gap-6">
-          <legend class="eyebrow mb-6">Sobre a operação</legend>
-          <label class={labelClass}>
-            Como o processo funciona hoje?
+          <label class:list={[labelClass, 'sm:col-span-2']}>
+            O que você quer resolver?
             <textarea
-              name="processo_atual"
+              name="contexto"
               rows="4"
-              required
-              placeholder="Descreva o passo a passo, mesmo que seja informal."
+              placeholder="Descreva o problema ou o que está te travando — pode ser informal."
               class={inputClass}></textarea>
           </label>
-          <label class={labelClass}>
-            Quem é o responsável hoje?
-            <input name="responsavel" placeholder="Cargo ou área" class={inputClass} />
-          </label>
-          <label class={labelClass}>
-            Onde está a maior dor?
-            <textarea
-              name="dor"
-              rows="3"
-              placeholder="Tempo perdido, erros, retrabalho, falta de informação..."
-              class={inputClass}></textarea>
-          </label>
-          <label class={labelClass}>
-            Quais sistemas ou ferramentas vocês usam hoje?
-            <input name="sistemas" placeholder="ERP, planilhas, WhatsApp..." class={inputClass} />
-          </label>
-        </fieldset>
+        </div>
 
         <label class="flex items-start gap-3 text-sm text-muted">
           <input type="checkbox" name="consentimento" required class="mt-1 size-4 accent-gold" />
@@ -163,10 +141,7 @@ const labelClass = 'block text-sm font-medium text-sand';
             email: texto('email'),
             telefone: texto('telefone'),
             segmento: texto('segmento'),
-            processo: texto('processo_atual'),
-            responsavel: texto('responsavel'),
-            dor: texto('dor'),
-            sistemas: texto('sistemas'),
+            contexto: texto('contexto'),
             lgpd: data.get('consentimento') === 'on',
             _hp: texto('_hp'),
           }),
