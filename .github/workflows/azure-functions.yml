@@ -14,28 +14,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: functions/contact/package-lock.json
-
-      - name: Install
-        run: npm ci
-        working-directory: functions/contact
-
-      - name: Build
-        run: npm run build
-        working-directory: functions/contact
-
-      - name: Zip
-        run: cd functions/contact && zip -r ../../function.zip dist package.json package-lock.json host.json .funcignore
-
-      - name: Azure login
-        uses: azure/login@v3
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Deploy
-        run: az functionapp deployment source config-zip --name aurion-contact --resource-group aurion-site --src function.zip
+      - name: Echo test
+        run: echo "workflow ok"
