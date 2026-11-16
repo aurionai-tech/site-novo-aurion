@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Function
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -30,18 +31,12 @@ jobs:
         working-directory: functions/contact
 
       - name: Zip for deployment
-        run: |
-          cd functions/contact
-          zip -r ../../function.zip dist package.json package-lock.json host.json .funcignore
+        run: cd functions/contact && zip -r ../../function.zip dist package.json package-lock.json host.json .funcignore
 
-      - name: Deploy via Azure CLI
+      - name: Azure login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Upload zip
-        run: |
-          az functionapp deployment source config-zip \
-            --name aurion-contact \
-            --resource-group aurion-site \
-            --src function.zip
+      - name: Deploy zip
+        run: az functionapp deployment source config-zip --name aurion-contact --resource-group aurion-site --src function.zip
