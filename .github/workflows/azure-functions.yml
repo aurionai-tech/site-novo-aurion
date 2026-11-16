@@ -14,23 +14,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install
-        run: npm ci
+      - name: Echo with working-directory
+        run: echo "ok"
         working-directory: functions/contact
-
-      - name: Build
-        run: npm run build
-        working-directory: functions/contact
-
-      - name: Zip
-        run: cd functions/contact && zip -r ../../function.zip dist package.json package-lock.json host.json .funcignore
-
-      - name: Test secret access
-        env:
-          AZURE_CREDS: ${{ secrets.AZURE_CREDENTIALS }}
-        run: echo "secret length ${#AZURE_CREDS}"
