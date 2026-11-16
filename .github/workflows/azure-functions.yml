@@ -30,5 +30,11 @@ jobs:
       - name: Zip
         run: cd functions/contact && zip -r ../../function.zip dist package.json package-lock.json host.json .funcignore
 
-      - name: Echo zip size
-        run: ls -lh function.zip
+      - name: Deploy
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        run: |
+          az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID" --output none
+          az functionapp deployment source config-zip --name aurion-contact --resource-group aurion-site --src function.zip
