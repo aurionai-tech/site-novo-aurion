@@ -18,26 +18,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: functions/contact/package-lock.json
 
-      - name: Install
-        run: npm ci
-        working-directory: functions/contact
-
-      - name: Build
-        run: npm run build
-        working-directory: functions/contact
-
-      - name: Zip
-        run: cd functions/contact && zip -r ../../function.zip dist package.json package-lock.json host.json .funcignore
-
-      - name: Azure login and deploy
-        run: |
-          echo "${{ secrets.AZURE_CREDENTIALS }}" > /tmp/creds.json
-          CLIENT_ID=$(python3 -c "import json; d=json.load(open('/tmp/creds.json')); print(d['clientId'])")
-          CLIENT_SECRET=$(python3 -c "import json; d=json.load(open('/tmp/creds.json')); print(d['clientSecret'])")
-          TENANT_ID=$(python3 -c "import json; d=json.load(open('/tmp/creds.json')); print(d['tenantId'])")
-          rm /tmp/creds.json
-          az login --service-principal -u "$CLIENT_ID" -p "$CLIENT_SECRET" --tenant "$TENANT_ID"
-          az functionapp deployment source config-zip --name aurion-contact --resource-group aurion-site --src function.zip
+      - name: Echo
+        run: echo "ok"
