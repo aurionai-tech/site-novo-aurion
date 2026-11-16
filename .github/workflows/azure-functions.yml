@@ -14,6 +14,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install
         run: npm ci
         working-directory: functions/contact
@@ -22,5 +27,15 @@ jobs:
         run: npm run build
         working-directory: functions/contact
 
-      - name: Echo
-        run: echo "done"
+      - name: Zip
+        run: cd functions/contact && zip -r ../../function.zip dist package.json package-lock.json host.json .funcignore
+
+      - name: Deploy
+        env:
+          AZURE_CREDS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          CLIENT_ID=$(echo "$AZURE_CREDS" | python3 -c "import sys,json; print(json.load(sys.stdin)['clientId'])")
+          CLIENT_SECRET=$(echo "$AZURE_CREDS" | python3 -c "import sys,json; print(json.load(sys.stdin)['clientSecret'])")
+          TENANT_ID=$(echo "$AZURE_CREDS" | python3 -c "import sys,json; print(json.load(sys.stdin)['tenantId'])")
+          az login --service-principal -u "$CLIENT_ID" -p "$CLIENT_SECRET" --tenant "$TENANT_ID" --output none
+          az functionapp deployment source config-zip --name aurion-contact --resource-group aurion-site --src function.zip
