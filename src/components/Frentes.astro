@@ -34,10 +34,16 @@ const idDe = (nome: string) => nome.toLowerCase().replace(/\s+/g, '-');
         ))}
       </ul>
       <a
-        href={m.nome === 'Aurion Lab' ? '/contato?origem=aurion-lab' : '/contato'}
+        href={
+          m.nome === 'Aurion Lab'
+            ? '/contato?origem=aurion-lab'
+            : m.nome === 'Aurion Cloud'
+              ? '/contato?origem=aurion-cloud'
+              : '/contato'
+        }
         class="btn-primary mt-8"
       >
-        {m.nome === 'Aurion Lab' ? 'Falar sobre o projeto' : 'Falar com a Aurion'}
+        {m.nome === 'Aurion Lab' || m.nome === 'Aurion Cloud' ? 'Falar sobre o projeto' : 'Falar com a Aurion'}
       </a>
     </Modal>
   ))

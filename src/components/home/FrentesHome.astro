@@ -28,10 +28,16 @@ import PalavraFundo from './PalavraFundo.astro';
               ))}
             </ul>
             <a
-              href="/contato"
+              href={
+                m.nome === 'Aurion Lab'
+                  ? '/contato?origem=aurion-lab'
+                  : m.nome === 'Aurion Cloud'
+                    ? '/contato?origem=aurion-cloud'
+                    : '/contato'
+              }
               class="mt-auto pt-10 text-xs font-semibold tracking-[0.15em] text-gold uppercase hover:text-gold-light"
             >
-              Falar com a Aurion →
+              {m.nome === 'Aurion Lab' || m.nome === 'Aurion Cloud' ? 'Falar sobre o projeto →' : 'Falar com a Aurion →'}
             </a>
           </article>
         ))

@@ -15,7 +15,7 @@ let lenis: Lenis | null = null;
 
 export function startSmoothScroll() {
   if (reduceMotion || touchUi || lenis) return lenis;
-  lenis = new Lenis({ lerp: 0.1 });
+  lenis = new Lenis({ lerp: 0.06 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis?.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);

@@ -6,16 +6,41 @@ import { site } from '../data/site';
 const inputClass =
   'mt-2 w-full rounded-md border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition placeholder:text-muted/60 focus:border-gold focus:ring-2 focus:ring-gold/20';
 const labelClass = 'block text-sm font-medium text-sand';
+
+const origem = Astro.url.searchParams.get('origem');
+const isLab = origem === 'aurion-lab';
+const isCloud = origem === 'aurion-cloud';
+
+const heroPorOrigem = isLab
+  ? {
+      title: 'Falar sobre o projeto',
+      description: 'Conte como você imagina o produto. A primeira conversa com a Aurion Lab é sobre o seu projeto.',
+      eyebrow: 'Aurion Lab',
+      heroTitle: 'Conte como você imagina o produto',
+      heroIntro: 'Não precisa estar tudo definido. Queremos entender a ideia, o problema que ela resolve e quem vai usar.',
+    }
+  : isCloud
+    ? {
+        title: 'Falar sobre o projeto',
+        description: 'Conte como está sua infraestrutura hoje. A primeira conversa com a Aurion Cloud é sobre o seu projeto.',
+        eyebrow: 'Aurion Cloud',
+        heroTitle: 'Conte como está sua infraestrutura hoje',
+        heroIntro: 'Não precisa ter o diagnóstico pronto. Queremos entender o ambiente atual, os riscos e o que você precisa resolver.',
+      }
+    : {
+        title: 'Agendar diagnóstico',
+        description: 'Conte como a sua operação funciona hoje. A primeira conversa com a Aurion é um diagnóstico.',
+        eyebrow: 'Agendar diagnóstico',
+        heroTitle: 'Comece contando como funciona hoje',
+        heroIntro: 'Não precisa ter a solução pronta. Quanto mais detalhes você der, mais útil será a primeira conversa.',
+      };
 ---
 
-<Layout
-  title="Agendar diagnóstico"
-  description="Conte como a sua operação funciona hoje. A primeira conversa com a Aurion é um diagnóstico."
->
+<Layout title={heroPorOrigem.title} description={heroPorOrigem.description}>
   <PageHero
-    eyebrow="Agendar diagnóstico"
-    title="Comece contando como funciona hoje"
-    intro="Não precisa ter a solução pronta. Quanto mais detalhes você der, mais útil será a primeira conversa."
+    eyebrow={heroPorOrigem.eyebrow}
+    title={heroPorOrigem.heroTitle}
+    intro={heroPorOrigem.heroIntro}
   />
 
   <section>
@@ -117,56 +142,91 @@ const labelClass = 'block text-sm font-medium text-sand';
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const isLab = params.get('origem') === 'aurion-lab';
+    const origem = params.get('origem');
+    const isLab = origem === 'aurion-lab';
+    const isCloud = origem === 'aurion-cloud';
 
-    if (isLab) {
+    const textosPorOrigem = {
+      'aurion-lab': {
+        eyebrow: 'Aurion Lab',
+        titulo: 'Conte como você imagina o produto',
+        intro: 'Não precisa estar tudo definido. Queremos entender a ideia, o problema que ela resolve e quem vai usar.',
+        labelSegmento: 'Tipo de projeto',
+        placeholderSegmento: 'App mobile, sistema web, protótipo, produto SaaS...',
+        labelContexto: 'Qual é a ideia?',
+        placeholderContexto: 'Descreva a ideia, o problema que quer resolver e quem vai usar o app — pode ser informal.',
+        consentimento: 'o projeto',
+        botao: 'Enviar proposta',
+        depois: [
+          'Lemos com atenção o que você descreveu sobre o projeto.',
+          'Marcamos uma conversa para entender a ideia, os usuários e o que precisa ser construído.',
+          'Você recebe uma direção clara sobre escopo, tecnologia e próximos passos.',
+        ],
+      },
+      'aurion-cloud': {
+        eyebrow: 'Aurion Cloud',
+        titulo: 'Conte como está sua infraestrutura hoje',
+        intro: 'Não precisa ter o diagnóstico pronto. Queremos entender o ambiente atual, os riscos e o que você precisa resolver.',
+        labelSegmento: 'Tipo de ambiente',
+        placeholderSegmento: 'Servidores próprios, nuvem, híbrido, sem infraestrutura ainda...',
+        labelContexto: 'O que você precisa resolver?',
+        placeholderContexto: 'Descreva o ambiente atual, hospedagem, segurança ou o que está travando — pode ser informal.',
+        consentimento: 'o projeto',
+        botao: 'Enviar proposta',
+        depois: [
+          'Lemos com atenção o que você descreveu sobre o ambiente e a infraestrutura.',
+          'Marcamos uma conversa para entender riscos, hospedagem e segurança em detalhe.',
+          'Você recebe uma direção clara sobre infraestrutura, custos e próximos passos.',
+        ],
+      },
+    } as const;
+
+    if (isLab || isCloud) {
+      const textos = textosPorOrigem[origem as 'aurion-lab' | 'aurion-cloud'];
+
       // Hero — seletores diretos do PageHero
       const heroSection = document.querySelector('section.relative.overflow-hidden');
       if (heroSection) {
         const eyebrowEl = heroSection.querySelector('p.eyebrow');
         const titleEl = heroSection.querySelector('h1');
         const introEl = heroSection.querySelector('p.text-muted');
-        if (eyebrowEl) eyebrowEl.textContent = 'Aurion Lab';
-        if (titleEl) titleEl.textContent = 'Conte como você imagina o produto';
-        if (introEl) introEl.textContent = 'Não precisa estar tudo definido. Queremos entender a ideia, o problema que ela resolve e quem vai usar.';
+        if (eyebrowEl) eyebrowEl.textContent = textos.eyebrow;
+        if (titleEl) titleEl.textContent = textos.titulo;
+        if (introEl) introEl.textContent = textos.intro;
       }
 
       // Campo origem
       const campoOrigem = document.querySelector<HTMLInputElement>('#campo-origem');
-      if (campoOrigem) campoOrigem.value = 'aurion-lab';
+      if (campoOrigem) campoOrigem.value = origem ?? '';
 
       // Segmento
       const labelSegmento = document.querySelector<HTMLLabelElement>('#label-segmento');
       const inputSegmento = document.querySelector<HTMLInputElement>('#input-segmento');
       if (labelSegmento) {
-        labelSegmento.childNodes.forEach((n) => { if (n.nodeType === Node.TEXT_NODE) n.textContent = 'Tipo de projeto'; });
+        labelSegmento.childNodes.forEach((n) => { if (n.nodeType === Node.TEXT_NODE) n.textContent = textos.labelSegmento; });
       }
-      if (inputSegmento) inputSegmento.placeholder = 'App mobile, sistema web, protótipo, produto SaaS...';
+      if (inputSegmento) inputSegmento.placeholder = textos.placeholderSegmento;
 
       // Contexto
       const labelContexto = document.querySelector<HTMLLabelElement>('#label-contexto');
       const textareaContexto = document.querySelector<HTMLTextAreaElement>('#textarea-contexto');
       if (labelContexto) {
-        labelContexto.childNodes.forEach((n) => { if (n.nodeType === Node.TEXT_NODE) n.textContent = 'Qual é a ideia?'; });
+        labelContexto.childNodes.forEach((n) => { if (n.nodeType === Node.TEXT_NODE) n.textContent = textos.labelContexto; });
       }
-      if (textareaContexto) textareaContexto.placeholder = 'Descreva a ideia, o problema que quer resolver e quem vai usar o app — pode ser informal.';
+      if (textareaContexto) textareaContexto.placeholder = textos.placeholderContexto;
 
       // Consentimento
       const textoConsentimento = document.querySelector('#texto-consentimento');
-      if (textoConsentimento) textoConsentimento.textContent = 'o projeto';
+      if (textoConsentimento) textoConsentimento.textContent = textos.consentimento;
 
       // Botão
       const btn = document.querySelector<HTMLButtonElement>('#btn-submit');
-      if (btn) btn.textContent = 'Enviar proposta';
+      if (btn) btn.textContent = textos.botao;
 
       // O que acontece depois
       const lista = document.querySelector('#lista-depois');
       if (lista) {
-        lista.innerHTML = `
-          <li>1. Lemos com atenção o que você descreveu sobre o projeto.</li>
-          <li>2. Marcamos uma conversa para entender a ideia, os usuários e o que precisa ser construído.</li>
-          <li>3. Você recebe uma direção clara sobre escopo, tecnologia e próximos passos.</li>
-        `;
+        lista.innerHTML = textos.depois.map((item, i) => `<li>${i + 1}. ${item}</li>`).join('\n');
       }
     }
 
