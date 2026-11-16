@@ -33,9 +33,9 @@ jobs:
         run: cd functions/contact && zip -r ../../function.zip dist package.json package-lock.json host.json .funcignore
 
       - name: Azure login
-        uses: azure/login@v3
+        uses: azure/login@v1
         with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy
         run: az functionapp deployment source config-zip --name aurion-contact --resource-group aurion-site --src function.zip
