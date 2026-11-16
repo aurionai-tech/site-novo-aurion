@@ -38,4 +38,4 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy
-        run: az functionapp deployment source config-zip --name aurion-contact --resource-group aurion-site --src function.zip
+        run: az functionapp deployment source config-zip --name aurion-contact --resource-group aurion-site --src function.zip --timeout 300
