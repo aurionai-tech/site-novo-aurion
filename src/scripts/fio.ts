@@ -1,4 +1,4 @@
-import { ScrollTrigger, getLenis, reduceMotion, touchUi } from './motion';
+import { ScrollTrigger, getLenis, reduceMotion } from './motion';
 
 // Fio condutor: uma linha dourada que atravessa as seções da home conforme a rolagem
 // e acende cada ponto marcado com data-fio-no por onde passa.
@@ -9,8 +9,6 @@ const RAIO = 32;
 const PASSO = 6;
 // Trechos laterais consomem parte da rolagem, senão as curvas largas passariam num instante.
 const PESO_LATERAL = 0.35;
-// No toque a rolagem nativa chega aos saltos; este fator aproxima o desenho do alvo a cada frame.
-const SUAVIZACAO_TOQUE = 0.34;
 const NS = 'http://www.w3.org/2000/svg';
 
 type Ponto = [number, number];
@@ -34,7 +32,6 @@ type Trecho = {
   // No método do desktop a seção fica presa: o trecho vertical, o horizontal e a saída seguem o progresso do pin.
   pin: { vertical: number; horizontal: number; barY: number } | null;
   desenhado: number;
-  visual: number;
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
@@ -115,7 +112,6 @@ function criarTrecho(section: HTMLElement): Trecho {
     ss: new Float32Array(0),
     pin: null,
     desenhado: -1,
-    visual: 0,
   };
 }
 
@@ -278,61 +274,44 @@ export function initFio() {
   const trechos = secoes.map(criarTrecho);
   const desktopQuery = window.matchMedia('(min-width: 64rem)');
 
-  // Devolve true se ainda precisa de outro frame (suavização no toque).
   const atualizar = () => {
     if (reduceMotion) {
-      for (const t of trechos) {
-        t.visual = t.total;
-        aplicar(t, t.total, false);
-      }
-      return false;
+      for (const t of trechos) aplicar(t, t.total, false);
+      return;
     }
     const vh = window.innerHeight;
     const linhaCabeca = CABECA * vh;
     // Todas as leituras antes das escritas, para não forçar um novo cálculo de layout a cada seção.
     const topos = trechos.map((t) => t.section.getBoundingClientRect().top);
-    let precisaSuavizar = false;
 
     trechos.forEach((t, indice) => {
       const top = topos[indice];
       const bottom = top + t.altura;
-      let alvo: number;
+      let d: number;
 
       // Fora da faixa útil: aplica 0 ou completo sem recalcular a ponta.
       if (bottom < -80) {
-        alvo = t.total;
+        d = t.total;
       } else if (top > vh + 80) {
-        alvo = 0;
+        d = 0;
       } else {
         const yLimite = linhaCabeca - top;
         if (t.pin) {
           const progresso = Number(t.section.dataset.fioPin ?? 0);
           const { vertical, horizontal, barY } = t.pin;
-          if (progresso <= 0) alvo = Math.min(comprimentoAte(t, yLimite), vertical);
+          if (progresso <= 0) d = Math.min(comprimentoAte(t, yLimite), vertical);
           else if (progresso < 1) {
-            alvo = lerp(Math.min(linhaCabeca, vertical), vertical, clamp(progresso / 0.12, 0, 1));
-            alvo += (horizontal - vertical) * clamp((progresso - 0.12) / 0.88, 0, 1);
-          } else alvo = horizontal + Math.max(0, yLimite - barY);
+            d = lerp(Math.min(linhaCabeca, vertical), vertical, clamp(progresso / 0.12, 0, 1));
+            d += (horizontal - vertical) * clamp((progresso - 0.12) / 0.88, 0, 1);
+          } else d = horizontal + Math.max(0, yLimite - barY);
         } else {
-          alvo = comprimentoAte(t, yLimite);
+          d = comprimentoAte(t, yLimite);
         }
-      }
-
-      let d = alvo;
-      if (touchUi) {
-        t.visual += (alvo - t.visual) * SUAVIZACAO_TOQUE;
-        if (Math.abs(alvo - t.visual) < 0.45) t.visual = alvo;
-        else precisaSuavizar = true;
-        d = t.visual;
-      } else {
-        t.visual = alvo;
       }
 
       const naFaixa = bottom >= -80 && top <= vh + 80;
       aplicar(t, d, naFaixa && d > 0 && d < t.total);
     });
-
-    return precisaSuavizar;
   };
 
   let agendado = 0;
@@ -347,12 +326,13 @@ export function initFio() {
     if (!agendado) agendado = requestAnimationFrame(layout);
   };
 
-  const tickScroll = () => {
-    frameScroll = 0;
-    if (atualizar()) frameScroll = requestAnimationFrame(tickScroll);
-  };
+  // Um update por frame: evita trabalho duplicado no scroll nativo sem atrasar o fio.
   const onScroll = () => {
-    if (!frameScroll) frameScroll = requestAnimationFrame(tickScroll);
+    if (frameScroll) return;
+    frameScroll = requestAnimationFrame(() => {
+      frameScroll = 0;
+      atualizar();
+    });
   };
 
   // A primeira medição espera o próximo quadro para não forçar um cálculo de layout no meio do carregamento.
