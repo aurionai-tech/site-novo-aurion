@@ -281,8 +281,12 @@ function aplicar(t: Trecho, desenhado: number, comPonta: boolean) {
 export function initFio() {
   const secoes = [...document.querySelectorAll<HTMLElement>('[data-fio]')];
   if (!secoes.length) return;
-  const trechos = secoes.map(criarTrecho);
+
+  // No celular/tablet o fio não acompanha bem a rolagem nativa — só desktop.
   const desktopQuery = window.matchMedia('(min-width: 64rem)');
+  if (!desktopQuery.matches) return;
+
+  const trechos = secoes.map(criarTrecho);
 
   const atualizar = () => {
     if (reduceMotion) {

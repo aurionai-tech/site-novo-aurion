@@ -260,6 +260,13 @@
   fill: none;
 }
 
+/* Celular/tablet: sem a linha decorativa. */
+@media (max-width: 63.99rem) {
+  .fio {
+    display: none;
+  }
+}
+
 .fio-trilho {
   stroke: rgb(198 178 114 / 0.12);
   stroke-width: 1;
