@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Footer from '../components/Footer.astro';
 import Dock from '../components/Dock.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import CookieConsent from '../components/CookieConsent.astro';
 import { site } from '../data/site';
 import { SITE_INDEXABLE } from 'astro:env/server';
 
@@ -53,6 +54,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
     <Footer />
     <Dock />
     <WhatsAppFloat />
+    <CookieConsent />
 
     <script>
       const blocks = document.querySelectorAll<HTMLElement>('[data-build]');

@@ -40,7 +40,8 @@ import { site } from '../data/site';
           <li>Descrição do processo e da operação (texto livre)</li>
         </ul>
         <p>
-          O site não usa cookies de rastreamento, pixels de terceiros nem ferramentas de analytics.
+          O site não usa cookies de rastreamento, pixels de terceiros nem ferramentas de analytics. Sobre cookies,
+          veja a seção 6.
         </p>
       </div>
 
@@ -88,8 +89,32 @@ import { site } from '../data/site';
         </p>
       </div>
 
+      <div id="cookies" class="grid scroll-mt-24 gap-3">
+        <h2 class="text-base font-semibold text-fg">6. Cookies</h2>
+        <p>
+          Não utilizamos cookies de publicidade, remarketing, redes sociais embutidas nem ferramentas de medição de
+          audiência (analytics).
+        </p>
+        <p>Podem existir apenas recursos estritamente necessários ao funcionamento e à transparência do site:</p>
+        <ul class="list-disc pl-5 grid gap-1 marker:text-gold">
+          <li>
+            <strong class="text-fg">Preferência do aviso de cookies</strong> — registrada no navegador
+            (localStorage) quando você confirma o aviso, para que ele não reapareça a cada visita.
+          </li>
+          <li>
+            <strong class="text-fg">Cookies técnicos da hospedagem</strong> — a plataforma que serve o site (Vercel)
+            pode definir cookies estritamente necessários à segurança e à entrega da página.
+          </li>
+        </ul>
+        <p>
+          Esses usos se enquadram como necessários à operação do site e à comunicação transparente com o visitante.
+          Você pode limpar o armazenamento do navegador a qualquer momento ou reabrir o aviso pelo link "Cookies" no
+          rodapé.
+        </p>
+      </div>
+
       <div class="grid gap-3">
-        <h2 class="text-base font-semibold text-fg">6. Direitos do titular</h2>
+        <h2 class="text-base font-semibold text-fg">7. Direitos do titular</h2>
         <p>
           Nos termos do art. 18 da LGPD, o titular pode, a qualquer momento, solicitar:
         </p>
@@ -110,7 +135,7 @@ import { site } from '../data/site';
       </div>
 
       <div class="grid gap-3">
-        <h2 class="text-base font-semibold text-fg">7. Segurança</h2>
+        <h2 class="text-base font-semibold text-fg">8. Segurança</h2>
         <p>
           O formulário trafega por HTTPS com TLS. A API de envio valida a origem da requisição, aplica limite de
           tentativas por IP e utiliza um campo honeypot para reduzir envios automatizados. As credenciais de acesso
@@ -119,7 +144,7 @@ import { site } from '../data/site';
       </div>
 
       <div class="grid gap-3">
-        <h2 class="text-base font-semibold text-fg">8. Alterações nesta política</h2>
+        <h2 class="text-base font-semibold text-fg">9. Alterações nesta política</h2>
         <p>
           Esta política pode ser atualizada para refletir mudanças na operação ou na legislação. A data de última
           atualização é indicada no topo da página. Alterações relevantes serão comunicadas pelo mesmo canal em que
@@ -128,7 +153,7 @@ import { site } from '../data/site';
       </div>
 
       <div class="grid gap-3">
-        <h2 class="text-base font-semibold text-fg">9. Contato</h2>
+        <h2 class="text-base font-semibold text-fg">10. Contato</h2>
         <p>
           Dúvidas sobre esta política ou sobre o tratamento dos seus dados:{' '}
           <a href={`mailto:${site.encarregado}`} class="text-gold hover:underline">{site.encarregado}</a>

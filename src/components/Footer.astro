@@ -15,6 +15,9 @@ const ano = new Date().getFullYear();
       {nav.map((item) => <a href={item.href} class="text-muted hover:text-gold">{item.label}</a>)}
       <a href="/seguranca" class="text-muted hover:text-gold">Segurança e LGPD</a>
       <a href="/privacidade" class="text-muted hover:text-gold">Política de privacidade</a>
+      <button type="button" data-cookie-open class="cursor-pointer text-left text-muted hover:text-gold">
+        Cookies
+      </button>
     </nav>
 
     <div class="grid content-start gap-3 text-sm">

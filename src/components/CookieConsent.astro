@@ -1,0 +1,116 @@
+---
+const STORAGE_KEY = 'aurion-cookie-notice';
+---
+
+<aside
+  data-cookie-banner
+  class="cookie-banner"
+  hidden
+  role="dialog"
+  aria-labelledby="cookie-banner-title"
+  aria-describedby="cookie-banner-desc"
+>
+  <div class="cookie-banner-panel">
+    <div class="min-w-0">
+      <p id="cookie-banner-title" class="eyebrow">Cookies e privacidade</p>
+      <p id="cookie-banner-desc" class="mt-2 text-sm leading-relaxed text-muted">
+        Este site não usa cookies de rastreamento nem ferramentas de analytics. Guardamos apenas a sua preferência
+        sobre este aviso, para não exibi-lo de novo.{' '}
+        <a href="/privacidade#cookies" class="text-gold underline-offset-2 hover:underline">Saiba mais</a>
+      </p>
+    </div>
+    <button type="button" class="btn-primary shrink-0" data-cookie-accept>Entendi</button>
+  </div>
+</aside>
+
+<script define:vars={{ STORAGE_KEY }}>
+  const banner = document.querySelector('[data-cookie-banner]');
+  const accept = document.querySelector('[data-cookie-accept]');
+
+  const mostrar = () => {
+    if (!banner) return;
+    banner.hidden = false;
+    document.documentElement.dataset.cookieBanner = 'open';
+  };
+
+  const ocultar = () => {
+    if (!banner) return;
+    banner.hidden = true;
+    delete document.documentElement.dataset.cookieBanner;
+  };
+
+  const salvar = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: 1, at: new Date().toISOString() }));
+    } catch {
+      /* modo privado / storage bloqueado */
+    }
+  };
+
+  const jaAceitou = () => {
+    try {
+      return Boolean(localStorage.getItem(STORAGE_KEY));
+    } catch {
+      return false;
+    }
+  };
+
+  if (!jaAceitou()) mostrar();
+
+  accept?.addEventListener('click', () => {
+    salvar();
+    ocultar();
+  });
+
+  document.querySelectorAll('[data-cookie-open]').forEach((el) => {
+    el.addEventListener('click', (event) => {
+      event.preventDefault();
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* ignore */
+      }
+      mostrar();
+      banner?.querySelector('button')?.focus();
+    });
+  });
+</script>
+
+<style>
+  .cookie-banner {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 56;
+    padding: 0.75rem max(0.75rem, var(--safe-left)) calc(0.75rem + var(--safe-bottom)) max(0.75rem, var(--safe-right));
+    pointer-events: none;
+  }
+
+  .cookie-banner-panel {
+    pointer-events: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-inline: auto;
+    max-width: 72rem;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--color-line);
+    border-radius: 0.75rem;
+    background: rgb(20 20 20 / 0.94);
+    box-shadow: 0 18px 48px rgb(0 0 0 / 0.55);
+    backdrop-filter: blur(14px);
+  }
+
+  /* Sobe o aviso acima do dock e do WhatsApp. */
+  :global(html[data-cookie-banner='open']) .cookie-banner {
+    padding-bottom: calc(var(--dock-clearance) + 0.5rem);
+  }
+
+  @media (width >= 40rem) {
+    .cookie-banner-panel {
+      padding: 1.1rem 1.35rem;
+    }
+  }
+</style>
