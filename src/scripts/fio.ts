@@ -1,4 +1,4 @@
-import { ScrollTrigger, getLenis, reduceMotion } from './motion';
+import { ScrollTrigger, getLenis, reduceMotion, touchUi } from './motion';
 
 // Fio condutor: uma linha dourada que atravessa as seções da home conforme a rolagem
 // e acende cada ponto marcado com data-fio-no por onde passa.
@@ -9,6 +9,8 @@ const RAIO = 32;
 const PASSO = 6;
 // Trechos laterais consomem parte da rolagem, senão as curvas largas passariam num instante.
 const PESO_LATERAL = 0.35;
+// No toque a rolagem nativa chega aos saltos; este fator aproxima o desenho do alvo a cada frame.
+const SUAVIZACAO_TOQUE = 0.34;
 const NS = 'http://www.w3.org/2000/svg';
 
 type Ponto = [number, number];
@@ -24,6 +26,7 @@ type Trecho = {
   grupoNos: SVGGElement;
   nos: No[];
   total: number;
+  altura: number;
   lens: Float32Array;
   xs: Float32Array;
   ys: Float32Array;
@@ -31,6 +34,7 @@ type Trecho = {
   // No método do desktop a seção fica presa: o trecho vertical, o horizontal e a saída seguem o progresso do pin.
   pin: { vertical: number; horizontal: number; barY: number } | null;
   desenhado: number;
+  visual: number;
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
@@ -104,12 +108,14 @@ function criarTrecho(section: HTMLElement): Trecho {
     grupoNos,
     nos: [],
     total: 0,
+    altura: 0,
     lens: new Float32Array(0),
     xs: new Float32Array(0),
     ys: new Float32Array(0),
     ss: new Float32Array(0),
     pin: null,
     desenhado: -1,
+    visual: 0,
   };
 }
 
@@ -183,6 +189,7 @@ function layoutTrecho(t: Trecho, desktop: boolean) {
   t.linha.setAttribute('d', d);
   const total = t.linha.getTotalLength();
   t.total = total;
+  t.altura = t.section.offsetHeight;
   t.linha.style.strokeDasharray = `${total} ${total + 10}`;
 
   const n = Math.max(2, Math.ceil(total / PASSO) + 1);
@@ -235,17 +242,25 @@ function comprimentoAte(t: Trecho, yLimite: number) {
   return lerp(t.lens[i - 1], t.lens[i], f);
 }
 
+function pontoNaLinha(t: Trecho, len: number) {
+  const i = Math.min(t.lens.length - 1, Math.max(1, busca(t.lens, len)));
+  const len0 = t.lens[i - 1];
+  const len1 = t.lens[i];
+  const f = len1 > len0 ? clamp((len - len0) / (len1 - len0), 0, 1) : 1;
+  return { x: lerp(t.xs[i - 1], t.xs[i], f), y: lerp(t.ys[i - 1], t.ys[i], f) };
+}
+
 function aplicar(t: Trecho, desenhado: number, comPonta: boolean) {
   const d = clamp(desenhado, 0, t.total);
-  if (Math.abs(d - t.desenhado) < 0.3) return;
+  if (Math.abs(d - t.desenhado) < 0.25) return;
   t.desenhado = d;
   t.linha.style.strokeDashoffset = String(t.total - d);
 
   const mostrarPonta = comPonta && d > 0.5 && d < t.total - 0.5;
   t.ponta.style.opacity = mostrarPonta ? '1' : '0';
   if (mostrarPonta) {
-    const i = Math.min(t.lens.length - 1, Math.round((d / t.total) * (t.lens.length - 1)));
-    t.ponta.setAttribute('transform', `translate(${t.xs[i]} ${t.ys[i]})`);
+    const p = pontoNaLinha(t, d);
+    t.ponta.setAttribute('transform', `translate(${p.x} ${p.y})`);
   }
 
   for (const no of t.nos) {
@@ -263,34 +278,65 @@ export function initFio() {
   const trechos = secoes.map(criarTrecho);
   const desktopQuery = window.matchMedia('(min-width: 64rem)');
 
+  // Devolve true se ainda precisa de outro frame (suavização no toque).
   const atualizar = () => {
     if (reduceMotion) {
-      for (const t of trechos) aplicar(t, t.total, false);
-      return;
+      for (const t of trechos) {
+        t.visual = t.total;
+        aplicar(t, t.total, false);
+      }
+      return false;
     }
     const vh = window.innerHeight;
     const linhaCabeca = CABECA * vh;
     // Todas as leituras antes das escritas, para não forçar um novo cálculo de layout a cada seção.
     const topos = trechos.map((t) => t.section.getBoundingClientRect().top);
+    let precisaSuavizar = false;
+
     trechos.forEach((t, indice) => {
-      const yLimite = linhaCabeca - topos[indice];
-      let d: number;
-      if (t.pin) {
-        const progresso = Number(t.section.dataset.fioPin ?? 0);
-        const { vertical, horizontal, barY } = t.pin;
-        if (progresso <= 0) d = Math.min(comprimentoAte(t, yLimite), vertical);
-        else if (progresso < 1) {
-          d = lerp(Math.min(linhaCabeca, vertical), vertical, clamp(progresso / 0.12, 0, 1));
-          d += (horizontal - vertical) * clamp((progresso - 0.12) / 0.88, 0, 1);
-        } else d = horizontal + Math.max(0, yLimite - barY);
+      const top = topos[indice];
+      const bottom = top + t.altura;
+      let alvo: number;
+
+      // Fora da faixa útil: aplica 0 ou completo sem recalcular a ponta.
+      if (bottom < -80) {
+        alvo = t.total;
+      } else if (top > vh + 80) {
+        alvo = 0;
       } else {
-        d = comprimentoAte(t, yLimite);
+        const yLimite = linhaCabeca - top;
+        if (t.pin) {
+          const progresso = Number(t.section.dataset.fioPin ?? 0);
+          const { vertical, horizontal, barY } = t.pin;
+          if (progresso <= 0) alvo = Math.min(comprimentoAte(t, yLimite), vertical);
+          else if (progresso < 1) {
+            alvo = lerp(Math.min(linhaCabeca, vertical), vertical, clamp(progresso / 0.12, 0, 1));
+            alvo += (horizontal - vertical) * clamp((progresso - 0.12) / 0.88, 0, 1);
+          } else alvo = horizontal + Math.max(0, yLimite - barY);
+        } else {
+          alvo = comprimentoAte(t, yLimite);
+        }
       }
-      aplicar(t, d, true);
+
+      let d = alvo;
+      if (touchUi) {
+        t.visual += (alvo - t.visual) * SUAVIZACAO_TOQUE;
+        if (Math.abs(alvo - t.visual) < 0.45) t.visual = alvo;
+        else precisaSuavizar = true;
+        d = t.visual;
+      } else {
+        t.visual = alvo;
+      }
+
+      const naFaixa = bottom >= -80 && top <= vh + 80;
+      aplicar(t, d, naFaixa && d > 0 && d < t.total);
     });
+
+    return precisaSuavizar;
   };
 
   let agendado = 0;
+  let frameScroll = 0;
   const layout = () => {
     agendado = 0;
     const desktop = desktopQuery.matches;
@@ -299,6 +345,14 @@ export function initFio() {
   };
   const agendarLayout = () => {
     if (!agendado) agendado = requestAnimationFrame(layout);
+  };
+
+  const tickScroll = () => {
+    frameScroll = 0;
+    if (atualizar()) frameScroll = requestAnimationFrame(tickScroll);
+  };
+  const onScroll = () => {
+    if (!frameScroll) frameScroll = requestAnimationFrame(tickScroll);
   };
 
   // A primeira medição espera o próximo quadro para não forçar um cálculo de layout no meio do carregamento.
@@ -311,6 +365,6 @@ export function initFio() {
 
   if (reduceMotion) return;
   const lenis = getLenis();
-  if (lenis) lenis.on('scroll', atualizar);
-  else window.addEventListener('scroll', atualizar, { passive: true });
+  if (lenis) lenis.on('scroll', onScroll);
+  else window.addEventListener('scroll', onScroll, { passive: true });
 }

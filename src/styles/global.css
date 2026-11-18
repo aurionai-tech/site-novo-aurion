@@ -258,7 +258,6 @@
   overflow: visible;
   pointer-events: none;
   fill: none;
-  will-change: transform;
 }
 
 .fio-trilho {
@@ -269,6 +268,14 @@
 .fio-linha {
   stroke: var(--color-gold);
   stroke-width: 1.5;
+  will-change: stroke-dashoffset;
+}
+
+/* No toque o will-change contínuo custa memória; só anima o que está na tela. */
+@media (hover: none), (pointer: coarse) {
+  .fio-linha {
+    will-change: auto;
+  }
 }
 
 .fio-no {

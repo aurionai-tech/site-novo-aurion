@@ -119,11 +119,16 @@ const ogImage = new URL('/og-image.png', Astro.site);
       }
 
       const progress = document.querySelector<HTMLElement>('[data-scroll-progress]');
+      let progressFrame = 0;
       const updateProgress = () => {
+        progressFrame = 0;
         const max = document.documentElement.scrollHeight - window.innerHeight;
         progress?.style.setProperty('--p', String(max > 0 ? window.scrollY / max : 0));
       };
-      window.addEventListener('scroll', updateProgress, { passive: true });
+      const onProgressScroll = () => {
+        if (!progressFrame) progressFrame = requestAnimationFrame(updateProgress);
+      };
+      window.addEventListener('scroll', onProgressScroll, { passive: true });
       window.addEventListener('resize', updateProgress);
       updateProgress();
     </script>
