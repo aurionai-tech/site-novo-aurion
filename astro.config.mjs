@@ -5,17 +5,25 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
+const siteUrl =
+  process.env.SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL
+      ? 'https://aurionai.com.br'
+      : 'http://localhost:4321');
+
 // https://astro.build/config
 export default defineConfig({
-  // Em produção, cadastre SITE_URL na Vercel (ex.: https://aurionai.com.br). Sem isso, canônicas e sitemap usam localhost.
-  site: process.env.SITE_URL ?? 'http://localhost:4321',
+  // Preferir SITE_URL na Vercel. Em deploy, cai no domínio de produção da Vercel ou em aurionai.com.br.
+  site: siteUrl,
 
   adapter: vercel(),
 
   env: {
     schema: {
-      // Enquanto false, todas as páginas saem com noindex. Ligar só no lançamento.
-      SITE_INDEXABLE: envField.boolean({ context: 'server', access: 'public', default: false }),
+      // Site no ar em aurionai.com.br: indexável por padrão. Para staging, defina SITE_INDEXABLE=false.
+      SITE_INDEXABLE: envField.boolean({ context: 'server', access: 'public', default: true }),
       MICROSOFT_TENANT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
       MICROSOFT_CLIENT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
       MICROSOFT_CLIENT_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),
