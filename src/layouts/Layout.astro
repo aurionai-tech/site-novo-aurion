@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
 import Dock from '../components/Dock.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { site } from '../data/site';
 import { SITE_INDEXABLE } from 'astro:env/server';
 
@@ -20,7 +21,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0a0a0a" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -51,6 +52,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
     </main>
     <Footer />
     <Dock />
+    <WhatsAppFloat />
 
     <script>
       const blocks = document.querySelectorAll<HTMLElement>('[data-build]');

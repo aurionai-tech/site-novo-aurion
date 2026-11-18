@@ -1,17 +1,17 @@
 <section data-encerramento data-fio="encerramento" class="relative overflow-hidden border-t border-line bg-bg">
-  <div class="relative container-site flex flex-col items-center pt-32 text-center md:pt-44">
+  <div class="encerramento-copy relative container-site flex flex-col items-center pt-20 text-center sm:pt-32 md:pt-44">
     <p data-reveal class="eyebrow">Próximo passo</p>
-    <h2 data-reveal class="mt-8 text-[clamp(2.4rem,6vw,5.5rem)] leading-[1.02] font-light tracking-tight">
+    <h2 data-reveal class="encerramento-title mt-6 text-[clamp(1.85rem,8vw,5.5rem)] leading-[1.05] font-light tracking-tight sm:mt-8">
       Vamos começar<br />pelo <span class="font-semibold text-gold">processo</span>?
     </h2>
-    <p data-reveal class="mt-8 max-w-xl text-lg leading-relaxed text-muted">
+    <p data-reveal class="encerramento-lead mt-6 max-w-xl text-base leading-relaxed text-muted sm:mt-8 sm:text-lg">
       Conte como a sua operação funciona hoje. A primeira conversa serve para entender o seu cenário antes de qualquer
       proposta.
     </p>
-    <a data-reveal data-fio-fim href="/contato" class="btn-primary mt-12">Agendar diagnóstico</a>
+    <a data-reveal data-fio-fim href="/contato" class="encerramento-cta btn-primary mt-10 sm:mt-12">Agendar diagnóstico</a>
   </div>
 
-  <div class="container-site pt-12 pb-16 md:pt-16 md:pb-24">
+  <div class="encerramento-video container-site pt-10 pb-16 sm:pt-12 md:pt-16 md:pb-24">
     <!-- O fundo preto do vídeo some sobre o fundo da seção graças ao mix-blend-mode. -->
     <video
       data-logo-animacao
@@ -35,6 +35,31 @@
     mix-blend-mode: screen;
     pointer-events: none;
     user-select: none;
+  }
+
+  @media (max-width: 63.99rem) and (max-height: 500px) and (orientation: landscape) {
+    .encerramento-copy {
+      padding-top: 2.25rem;
+    }
+
+    .encerramento-title {
+      margin-top: 0.75rem;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+    }
+
+    .encerramento-lead {
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .encerramento-cta {
+      margin-top: 1rem;
+    }
+
+    .encerramento-video {
+      padding-top: 1.25rem;
+      padding-bottom: 2rem;
+    }
   }
 </style>
 

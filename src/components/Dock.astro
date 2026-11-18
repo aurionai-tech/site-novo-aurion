@@ -16,7 +16,7 @@ const linkClass = (href: string) => [
 
 <nav
   aria-label="Principal"
-  class="dock fixed bottom-5 left-1/2 z-50 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 shadow-2xl shadow-black/60 backdrop-blur transition-[border-color,box-shadow,transform,opacity] duration-500 hover:border-gold/30 hover:shadow-gold/10"
+  class="dock fixed left-1/2 z-50 flex max-w-[calc(100vw-1.5rem-var(--safe-left)-var(--safe-right))] -translate-x-1/2 items-center gap-1 rounded-xl border border-line bg-surface/90 p-1.5 shadow-2xl shadow-black/60 backdrop-blur transition-[border-color,box-shadow,transform,opacity] duration-500 hover:border-gold/30 hover:shadow-gold/10"
 >
   <a
     href="/"
@@ -83,7 +83,24 @@ const linkClass = (href: string) => [
 
 <style>
   .dock {
+    bottom: calc(1.25rem + var(--safe-bottom));
     animation: dock-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s backwards;
+  }
+
+  /* Deitado: dock mais baixo e estreito para caber com o WhatsApp ao lado. */
+  @media (max-width: 63.99rem) and (max-height: 500px) and (orientation: landscape) {
+    .dock {
+      bottom: calc(0.65rem + var(--safe-bottom));
+      max-width: calc(100vw - 5.5rem - var(--safe-left) - var(--safe-right));
+      gap: 0.15rem;
+      padding: 0.3rem;
+    }
+
+    .dock :global(.btn-primary) {
+      min-height: 2.25rem;
+      padding-block: 0.4rem;
+      padding-inline: 0.85rem;
+    }
   }
 
   @keyframes dock-in {

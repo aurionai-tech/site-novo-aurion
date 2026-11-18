@@ -11,7 +11,7 @@ interface Props {
 const { eyebrow, title, intro } = Astro.props;
 ---
 
-<section class="relative overflow-hidden border-b border-line">
+<section class="page-hero relative overflow-hidden border-b border-line">
   <Image
     src={simboloBrilho}
     alt=""
@@ -20,9 +20,35 @@ const { eyebrow, title, intro } = Astro.props;
     class="pointer-events-none absolute inset-0 h-full w-full object-cover object-right opacity-60"
   />
   <div class="absolute inset-0 bg-linear-to-r from-bg via-bg/90 to-bg/30"></div>
-  <div class="relative container-site py-20 md:py-28">
+  <div class="page-hero-copy relative container-site py-16 sm:py-20 md:py-28">
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <h1 class="mt-4 max-w-3xl text-4xl font-light tracking-tight md:text-5xl">{title}</h1>
-    {intro && <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted">{intro}</p>}
+    <h1 class="page-hero-title mt-4 max-w-3xl text-[clamp(1.75rem,7vw,3rem)] font-light tracking-tight md:text-5xl">{title}</h1>
+    {intro && <p class="page-hero-intro mt-5 max-w-2xl text-base leading-relaxed text-muted sm:mt-6 sm:text-lg">{intro}</p>}
   </div>
 </section>
+
+<style>
+  /* Celular deitado: hero interno mais baixo para não empurrar o conteúdo. */
+  @media (max-width: 63.99rem) and (max-height: 500px) and (orientation: landscape) {
+    .page-hero-copy {
+      padding-block: 1.75rem;
+    }
+
+    .page-hero-title {
+      margin-top: 0.5rem;
+      font-size: clamp(1.45rem, 4.5vw, 2rem);
+      max-width: 36rem;
+    }
+
+    .page-hero-intro {
+      margin-top: 0.65rem;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      max-width: 34rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+</style>

@@ -11,12 +11,12 @@ const grupos = [
 <section data-metodo data-fio="metodo" class="relative overflow-hidden border-t border-line bg-surface">
   <PalavraFundo texto="Método" modo="pin" fundo="surface" />
   <!-- No desktop a seção fica presa na tela, então tudo escala com a altura dela para não cortar conteúdo. -->
-  <div class="flex flex-col justify-center py-28 lg:min-h-svh lg:py-[clamp(1.25rem,6svh,5rem)]">
+  <div class="metodo-shell flex flex-col justify-center py-20 sm:py-28 lg:min-h-svh lg:py-[clamp(1.25rem,6svh,5rem)]">
     <div class="container-site flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
       <div class="max-w-4xl">
         <p class="eyebrow">Como trabalhamos</p>
         <h2
-          class="mt-5 text-4xl leading-tight font-light tracking-tight md:text-6xl lg:mt-[clamp(0.75rem,2.5svh,1.25rem)] lg:text-[clamp(2rem,7svh,3.75rem)]"
+          class="mt-4 text-[clamp(1.75rem,7vw,3.75rem)] leading-tight font-light tracking-tight sm:mt-5 md:text-6xl lg:mt-[clamp(0.75rem,2.5svh,1.25rem)] lg:text-[clamp(2rem,7svh,3.75rem)]"
         >
           Do diagnóstico à automação, <span class="font-semibold text-gold">nessa ordem</span>.
         </h2>
@@ -106,6 +106,16 @@ const grupos = [
   .etapa.is-active .etapa-numero {
     color: var(--color-gold);
     -webkit-text-stroke-color: var(--color-gold);
+  }
+
+  @media (max-width: 63.99rem) and (max-height: 500px) and (orientation: landscape) {
+    .metodo-shell {
+      padding-block: 2.25rem;
+    }
+
+    .metodo-shell :global([data-metodo-janela]) {
+      margin-top: 1.25rem;
+    }
   }
 </style>
 

@@ -15,18 +15,36 @@
   --font-sans: "Montserrat Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;}
 
 @layer base {
+  :root {
+    /* Espaço do dock + barra home do iPhone / gestos Android. */
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --dock-clearance: calc(5.75rem + var(--safe-bottom));
+  }
+
+  /* Celular deitado: dock e WhatsApp ficam na mesma faixa inferior. */
+  @media (max-width: 63.99rem) and (max-height: 500px) and (orientation: landscape) {
+    :root {
+      --dock-clearance: calc(4.25rem + var(--safe-bottom));
+    }
+  }
+
   html {
     scroll-behavior: smooth;
     interpolate-size: allow-keywords;
     /* Altura do dock fixo: foco, âncoras e scrollIntoView param acima dele. */
-    scroll-padding-bottom: 6rem;
+    scroll-padding-bottom: var(--dock-clearance);
     color-scheme: dark;
     overscroll-behavior-y: none;
+    overflow-x: clip;
   }
 
   body {
     @apply bg-bg font-sans text-fg antialiased;
     overscroll-behavior-y: none;
+    overflow-x: clip;
   }
 
   ::selection {
@@ -40,19 +58,19 @@
 
 @layer components {
   .container-site {
-    @apply mx-auto w-full max-w-6xl px-6;
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
   }
 
   .eyebrow {
-    @apply text-xs font-medium tracking-[0.3em] text-gold uppercase;
+    @apply text-[0.65rem] font-medium tracking-[0.22em] text-gold uppercase sm:text-xs sm:tracking-[0.3em];
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-md bg-gold px-6 py-3 text-xs font-semibold tracking-[0.15em] text-bg uppercase transition hover:bg-gold-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold;
+    @apply inline-flex min-h-11 items-center justify-center rounded-md bg-gold px-5 py-3 text-xs font-semibold tracking-[0.15em] text-bg uppercase transition hover:bg-gold-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold sm:px-6;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-md border border-line px-6 py-3 text-xs font-semibold tracking-[0.15em] text-fg uppercase transition hover:border-gold hover:text-gold;
+    @apply inline-flex min-h-11 items-center justify-center rounded-md border border-line px-5 py-3 text-xs font-semibold tracking-[0.15em] text-fg uppercase transition hover:border-gold hover:text-gold sm:px-6;
   }
 
   .card {

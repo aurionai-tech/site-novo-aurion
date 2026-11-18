@@ -26,25 +26,25 @@ const fases = [
     >
     </div>
 
-    <div class="relative container-site flex h-full flex-col justify-end pb-32 lg:justify-center lg:pb-0">
+    <div class="hero-copy relative container-site flex h-full flex-col justify-end lg:justify-center lg:pb-0">
       <p data-hero-texto class="eyebrow fade-up" style="--d:0.2s">{site.assinatura}</p>
-      <h1 class="mt-6 text-[clamp(2.25rem,4.2vw,4.2rem)] leading-[1.02] font-light tracking-tight">
+      <h1 class="hero-title mt-4 font-light tracking-tight sm:mt-6">
         <span class="line-reveal"><span style="--d:0.3s">Primeiro o processo.</span></span>
         <span class="line-reveal">
           <span style="--d:0.45s" class="font-semibold text-gold">Depois a tecnologia.</span>
         </span>
       </h1>
-      <p class="fade-up mt-8 max-w-md leading-relaxed text-muted md:text-lg" style="--d:0.8s">
+      <p class="hero-lead fade-up mt-5 max-w-md leading-relaxed text-muted sm:mt-8 md:text-lg" style="--d:0.8s">
         A Aurion começa entendendo como a sua operação funciona no dia a dia. Só depois partimos para software, dados e
         automação.
       </p>
-      <div class="fade-up mt-10 flex flex-wrap gap-4" style="--d:1s">
+      <div class="fade-up mt-7 flex flex-wrap gap-3 sm:mt-10 sm:gap-4" style="--d:1s">
         <a href="/contato" class="btn-primary">Agendar diagnóstico</a>
         <a href="/como-trabalhamos" class="btn-secondary hidden sm:inline-flex">Como trabalhamos</a>
       </div>
     </div>
 
-    <div class="fade-up pointer-events-none absolute inset-x-0 top-6 lg:top-10" style="--d:1.2s">
+    <div class="hero-fases fade-up pointer-events-none absolute inset-x-0" style="--d:1.2s">
       <div class="container-site">
         <div data-hero-fases class="lg:ml-auto lg:max-w-176">
           <div class="relative h-px bg-line">
@@ -81,6 +81,147 @@ const fases = [
     height: 100svh;
   }
 
+  .hero-caos > .sticky {
+    height: 100svh;
+    height: 100dvh;
+  }
+
+  .hero-copy {
+    /* Reserva dock + botão do WhatsApp no canto, para o CTA não ficar por baixo. */
+    padding-bottom: calc(var(--dock-clearance) + 4.25rem);
+  }
+
+  .hero-title {
+    font-size: clamp(1.85rem, 7.5vw, 4.2rem);
+    line-height: 1.05;
+  }
+
+  .hero-fases {
+    top: max(1.25rem, var(--safe-top));
+  }
+
+  @media (width >= 40rem) {
+    .hero-copy {
+      padding-bottom: var(--dock-clearance);
+    }
+  }
+
+  @media (width >= 64rem) {
+    .hero-copy {
+      padding-bottom: 0;
+    }
+
+    .hero-fases {
+      top: 2.5rem;
+    }
+  }
+
+  /* Telas baixas (SE, landscape): compacta tipografia e espaços para caber na viewport. */
+  @media (max-width: 63.99rem) and (max-height: 720px) {
+    .hero-title {
+      font-size: clamp(1.55rem, 6.2vw, 2.2rem);
+    }
+
+    .hero-lead {
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .hero-copy .mt-7 {
+      margin-top: 0.85rem;
+    }
+
+    .hero-fases .mt-4 {
+      margin-top: 0.5rem;
+    }
+  }
+
+  /*
+   * Celular deitado: composição em duas colunas para aproveitar a largura
+   * e liberar altura — copy à esquerda, fases compactas à direita.
+   */
+  @media (max-width: 63.99rem) and (max-height: 500px) and (orientation: landscape) {
+    .hero-lead {
+      display: none;
+    }
+
+    .hero-copy {
+      justify-content: center;
+      width: min(34rem, 54%);
+      max-width: min(34rem, 54%);
+      margin-left: 0;
+      margin-right: auto;
+      padding-top: max(0.75rem, var(--safe-top));
+      padding-bottom: calc(var(--dock-clearance) + 0.35rem);
+      padding-left: max(1rem, var(--safe-left));
+      padding-right: 0.75rem;
+    }
+
+    .hero-copy .eyebrow {
+      margin-bottom: 0;
+    }
+
+    .hero-title {
+      margin-top: 0.45rem;
+      font-size: clamp(1.3rem, 4.2vw, 1.85rem);
+    }
+
+    .hero-copy .mt-7 {
+      margin-top: 0.7rem;
+    }
+
+    .hero-copy .btn-primary {
+      min-height: 2.5rem;
+      padding-block: 0.55rem;
+      padding-inline: 1rem;
+    }
+
+    .hero-copy .btn-secondary {
+      display: none;
+    }
+
+    .hero-fases {
+      inset: auto;
+      top: 50%;
+      right: max(1rem, var(--safe-right));
+      width: min(15.5rem, 34%);
+      transform: translateY(calc(-50% - 1.5rem));
+      padding-inline: 0;
+    }
+
+    .hero-fases .container-site {
+      width: 100%;
+      max-width: none;
+      padding-inline: 0;
+    }
+
+    .hero-fases [data-hero-fases] {
+      margin-left: 0;
+      max-width: none;
+    }
+
+    .hero-fases .h-px {
+      display: none;
+    }
+
+    .hero-fases ol {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      margin-top: 0;
+    }
+
+    .fase p:first-child {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+    }
+
+    .fase p + p {
+      display: none;
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     :global(html.js) .hero-caos {
       height: 300vh;
@@ -90,6 +231,12 @@ const fases = [
     @media (max-width: 63.99rem) {
       :global(html.js) .hero-caos {
         height: 260vh;
+      }
+    }
+
+    @media (max-width: 63.99rem) and (max-height: 500px) and (orientation: landscape) {
+      :global(html.js) .hero-caos {
+        height: 220vh;
       }
     }
   }
@@ -110,6 +257,13 @@ const fases = [
   @media (width < 64rem) {
     .fase:not([data-active]) {
       display: none;
+    }
+  }
+
+  /* Em landscape as três fases voltam a aparecer, em coluna à direita. */
+  @media (max-width: 63.99rem) and (max-height: 500px) and (orientation: landscape) {
+    .fase:not([data-active]) {
+      display: block;
     }
   }
 
