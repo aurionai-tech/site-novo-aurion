@@ -26,7 +26,7 @@ Regras: o site não cita projetos nem clientes da Aurion, não expõe membros da
 
 Copie `.env.example` para `.env` e preencha. Na Vercel, cadastre as mesmas variáveis no painel do projeto.
 
-Enquanto `SITE_INDEXABLE` não for `true`, todas as páginas saem com `noindex` e os buscadores não indexam o site. No lançamento, cadastre `SITE_INDEXABLE=true` na Vercel e faça um novo deploy.
+Por padrão o site é indexável (`SITE_INDEXABLE=true`). Em preview/staging, defina `SITE_INDEXABLE=false` na Vercel. O domínio público é `https://aurionai.com.br` (`SITE_URL` ou o domínio de produção da Vercel).
 
 ## Formulário de diagnóstico
 
