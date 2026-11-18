@@ -5,22 +5,22 @@ const ano = new Date().getFullYear();
 ---
 
 <footer class="border-t border-line bg-bg">
-  <div class="container-site grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
-    <div>
+  <div class="container-site grid gap-12 py-16 text-center md:grid-cols-[1.4fr_1fr_1fr] md:text-left">
+    <div class="flex justify-center md:justify-start">
       <img src="/brand/logo-dourado-branco-recortado.svg" alt="Aurion" width="192" height="99" class="h-auto w-48" />
     </div>
 
-    <nav aria-label="Rodapé" class="grid content-start gap-3 text-sm">
+    <nav aria-label="Rodapé" class="grid content-start justify-items-center gap-3 text-sm md:justify-items-start">
       <p class="eyebrow mb-1">Navegação</p>
       {nav.map((item) => <a href={item.href} class="text-muted hover:text-gold">{item.label}</a>)}
       <a href="/seguranca" class="text-muted hover:text-gold">Segurança e LGPD</a>
       <a href="/privacidade" class="text-muted hover:text-gold">Política de privacidade</a>
-      <button type="button" data-cookie-open class="cursor-pointer text-left text-muted hover:text-gold">
+      <button type="button" data-cookie-open class="cursor-pointer text-muted hover:text-gold">
         Cookies
       </button>
     </nav>
 
-    <div class="grid content-start gap-3 text-sm">
+    <div class="grid content-start justify-items-center gap-3 text-sm md:justify-items-start">
       <p class="eyebrow mb-1">Contato</p>
       <a href={`mailto:${site.email}`} class="text-muted hover:text-gold">{site.email}</a>
       <a href={`https://wa.me/${site.whatsapp}`} class="text-muted hover:text-gold">WhatsApp</a>
@@ -30,7 +30,10 @@ const ano = new Date().getFullYear();
   </div>
 
   <div class="border-t border-line">
-    <div class="container-site flex flex-col gap-2 pt-6 text-xs text-muted md:flex-row md:justify-between" style="padding-bottom: calc(var(--dock-clearance) + 1rem)">
+    <div
+      class="container-site flex flex-col items-center gap-2 pt-6 text-center text-xs text-muted md:flex-row md:items-start md:justify-between md:text-left"
+      style="padding-bottom: calc(var(--dock-clearance) + 1rem)"
+    >
       <p>© {ano} {site.nome}. Todos os direitos reservados.</p>
       <p class="tracking-[0.3em] uppercase">{site.assinatura}</p>
     </div>
