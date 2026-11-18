@@ -1,4 +1,4 @@
-import { ScrollTrigger, getLenis, reduceMotion } from './motion';
+import { ScrollTrigger, getLenis, reduceMotion, touchUi } from './motion';
 
 // Fio condutor: uma linha dourada que atravessa as seções da home conforme a rolagem
 // e acende cada ponto marcado com data-fio-no por onde passa.
@@ -25,6 +25,8 @@ type Trecho = {
   nos: No[];
   total: number;
   altura: number;
+  // Topo da seção no documento; no toque evita getBoundingClientRect a cada frame.
+  origem: number;
   lens: Float32Array;
   xs: Float32Array;
   ys: Float32Array;
@@ -106,6 +108,7 @@ function criarTrecho(section: HTMLElement): Trecho {
     nos: [],
     total: 0,
     altura: 0,
+    origem: 0,
     lens: new Float32Array(0),
     xs: new Float32Array(0),
     ys: new Float32Array(0),
@@ -186,6 +189,7 @@ function layoutTrecho(t: Trecho, desktop: boolean) {
   const total = t.linha.getTotalLength();
   t.total = total;
   t.altura = t.section.offsetHeight;
+  t.origem = t.section.getBoundingClientRect().top + window.scrollY;
   t.linha.style.strokeDasharray = `${total} ${total + 10}`;
 
   const n = Math.max(2, Math.ceil(total / PASSO) + 1);
@@ -248,7 +252,7 @@ function pontoNaLinha(t: Trecho, len: number) {
 
 function aplicar(t: Trecho, desenhado: number, comPonta: boolean) {
   const d = clamp(desenhado, 0, t.total);
-  const dMudou = Math.abs(d - t.desenhado) >= 0.25;
+  const dMudou = Math.abs(d - t.desenhado) >= 0.15;
 
   if (dMudou) {
     t.desenhado = d;
@@ -287,8 +291,11 @@ export function initFio() {
     }
     const vh = window.innerHeight;
     const linhaCabeca = CABECA * vh;
-    // Todas as leituras antes das escritas, para não forçar um novo cálculo de layout a cada seção.
-    const topos = trechos.map((t) => t.section.getBoundingClientRect().top);
+    const scrollY = window.scrollY;
+    // No toque usamos origem cacheada (mais barato); no desktop o pin/transform exige medição ao vivo.
+    const topos = trechos.map((t) =>
+      touchUi ? t.origem - scrollY : t.section.getBoundingClientRect().top,
+    );
 
     trechos.forEach((t, indice) => {
       const top = topos[indice];
@@ -323,6 +330,8 @@ export function initFio() {
 
   let agendado = 0;
   let frameScroll = 0;
+  let rolando = false;
+  let parouTimer = 0;
   const layout = () => {
     agendado = 0;
     const desktop = desktopQuery.matches;
@@ -333,8 +342,29 @@ export function initFio() {
     if (!agendado) agendado = requestAnimationFrame(layout);
   };
 
-  // Um update por frame: evita trabalho duplicado no scroll nativo sem atrasar o fio.
+  /*
+   * No toque o iOS/Android nem sempre dispara "scroll" a cada frame na inércia,
+   * então o fio saltava. Enquanto a rolagem estiver ativa, lemos a posição
+   * todo frame — sem atraso artificial (que gerava bolinha duplicada).
+   */
+  const tickScroll = () => {
+    atualizar();
+    if (rolando) frameScroll = requestAnimationFrame(tickScroll);
+    else frameScroll = 0;
+  };
+
   const onScroll = () => {
+    if (touchUi) {
+      rolando = true;
+      window.clearTimeout(parouTimer);
+      parouTimer = window.setTimeout(() => {
+        rolando = false;
+        atualizar();
+      }, 180);
+      if (!frameScroll) frameScroll = requestAnimationFrame(tickScroll);
+      return;
+    }
+
     if (frameScroll) return;
     frameScroll = requestAnimationFrame(() => {
       frameScroll = 0;
