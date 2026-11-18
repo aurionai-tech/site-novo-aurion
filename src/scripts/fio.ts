@@ -248,23 +248,29 @@ function pontoNaLinha(t: Trecho, len: number) {
 
 function aplicar(t: Trecho, desenhado: number, comPonta: boolean) {
   const d = clamp(desenhado, 0, t.total);
-  if (Math.abs(d - t.desenhado) < 0.25) return;
-  t.desenhado = d;
-  t.linha.style.strokeDashoffset = String(t.total - d);
+  const dMudou = Math.abs(d - t.desenhado) >= 0.25;
 
-  const mostrarPonta = comPonta && d > 0.5 && d < t.total - 0.5;
+  if (dMudou) {
+    t.desenhado = d;
+    t.linha.style.strokeDashoffset = String(t.total - d);
+
+    for (const no of t.nos) {
+      const aceso = d >= no.len;
+      if (aceso === no.aceso) continue;
+      no.aceso = aceso;
+      no.circulo.classList.toggle('is-aceso', aceso);
+      no.el.classList.toggle('fio-aceso', aceso);
+    }
+  }
+
+  // A ponta precisa atualizar mesmo quando o comprimento não mudou (troca de seção ativa).
+  // Perto de um nó, some a ponta: o círculo do nó já marca o avanço (evita duas bolinhas).
+  const longeDoNo = !t.nos.some((no) => Math.abs(d - no.len) < 16);
+  const mostrarPonta = comPonta && longeDoNo && d > 0.5 && d < t.total - 0.5;
   t.ponta.style.opacity = mostrarPonta ? '1' : '0';
   if (mostrarPonta) {
     const p = pontoNaLinha(t, d);
     t.ponta.setAttribute('transform', `translate(${p.x} ${p.y})`);
-  }
-
-  for (const no of t.nos) {
-    const aceso = d >= no.len;
-    if (aceso === no.aceso) continue;
-    no.aceso = aceso;
-    no.circulo.classList.toggle('is-aceso', aceso);
-    no.el.classList.toggle('fio-aceso', aceso);
   }
 }
 
@@ -309,8 +315,9 @@ export function initFio() {
         }
       }
 
-      const naFaixa = bottom >= -80 && top <= vh + 80;
-      aplicar(t, d, naFaixa && d > 0 && d < t.total);
+      // Só uma bolinha: a da seção que contém a linha da cabeça do fio.
+      const contemCabeca = top <= linhaCabeca && bottom > linhaCabeca;
+      aplicar(t, d, contemCabeca && d > 0 && d < t.total);
     });
   };
 
