@@ -128,6 +128,7 @@ const grupos = [
       mm.add('(min-width: 64rem)', () => {
         janela.style.overflowX = 'visible';
         const distancia = () => trilho.scrollWidth - window.innerWidth;
+        trilho.style.willChange = 'transform';
         const tween = gsap.to(trilho, {
           x: () => -distancia(),
           ease: 'none',
@@ -136,7 +137,9 @@ const grupos = [
             start: 'top top',
             end: () => `+=${distancia()}`,
             pin: true,
-            scrub: 0.8,
+            // Antecipa o pin e usa scrub curto: com Lenis, 0.8 deixava a curva do fio e as etapas atrasadas.
+            anticipatePin: 1,
+            scrub: 0.35,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               section.dataset.fioPin = String(self.progress);
@@ -159,12 +162,13 @@ const grupos = [
             {
               xPercent: -2,
               ease: 'none',
-              scrollTrigger: { trigger: section, start: 'top top', end: () => `+=${distancia()}`, scrub: 0.8 },
+              scrollTrigger: { trigger: section, start: 'top top', end: () => `+=${distancia()}`, scrub: 0.35 },
             },
           );
         }
         return () => {
           janela.style.overflowX = '';
+          trilho.style.willChange = '';
           delete section.dataset.fioPin;
         };
       });

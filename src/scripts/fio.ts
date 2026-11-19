@@ -31,6 +31,8 @@ type Trecho = {
   // No método do desktop a seção fica presa: o trecho vertical, o horizontal e a saída seguem o progresso do pin.
   pin: { vertical: number; horizontal: number; barY: number } | null;
   desenhado: number;
+  // Evita refazer amostragem do caminho quando o ScrollTrigger dá refresh sem a seção ter mudado de tamanho.
+  layoutKey: string;
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
@@ -110,6 +112,7 @@ function criarTrecho(section: HTMLElement): Trecho {
     ss: new Float32Array(0),
     pin: null,
     desenhado: -1,
+    layoutKey: '',
   };
 }
 
@@ -149,16 +152,18 @@ function rota(t: Trecho, desktop: boolean) {
     const barra = section.querySelector<HTMLElement>('[data-fio-barra]');
     if (barra && barra.offsetParent) {
       const barY = posicao(barra, section).y;
+      // Curva mais aberta na troca de direção: com o pin, raio curto parecia uma quina seca.
+      const raioMetodo = 56;
       const medidor = document.createElementNS(NS, 'path');
-      medidor.setAttribute('d', arredondado([[L, 0], [L, barY], [R, barY]]));
+      medidor.setAttribute('d', arredondado([[L, 0], [L, barY], [R, barY]], raioMetodo));
       t.trilho.ownerSVGElement?.append(medidor);
       const ateHorizontal = medidor.getTotalLength();
       medidor.remove();
-      t.pin = { vertical: barY - RAIO, horizontal: ateHorizontal - RAIO, barY };
+      t.pin = { vertical: barY - raioMetodo, horizontal: ateHorizontal - raioMetodo, barY };
       // As etapas deslizam por baixo do trecho vertical; elas somem antes de cruzar a linha.
       section.style.setProperty('--fio-corte-de', `${L + 4}px`);
       section.style.setProperty('--fio-corte-ate', `${Math.max(L + 8, Math.min(esquerda, L + 56))}px`);
-      return arredondado([[L, 0], [L, barY], [R, barY], [R, h]]);
+      return arredondado([[L, 0], [L, barY], [R, barY], [R, h]], raioMetodo);
     }
   }
 
@@ -178,6 +183,18 @@ function rota(t: Trecho, desktop: boolean) {
 }
 
 function layoutTrecho(t: Trecho, desktop: boolean) {
+  const hero = document.querySelector<HTMLElement>('[data-hero-caos]');
+  const key = [
+    desktop ? 1 : 0,
+    t.section.clientWidth,
+    t.section.offsetHeight,
+    hero?.dataset.simboloPonta ?? '',
+    hero?.dataset.simboloFolga ?? '',
+  ].join(':');
+  // Refresh do ScrollTrigger (ex.: ao prender o Método) não precisa reamostrar o caminho se nada mudou.
+  if (key === t.layoutKey && t.total > 0) return;
+  t.layoutKey = key;
+
   const d = rota(t, desktop);
   t.trilho.setAttribute('d', d);
   t.linha.setAttribute('d', d);
@@ -237,7 +254,7 @@ function comprimentoAte(t: Trecho, yLimite: number) {
 
 function aplicar(t: Trecho, desenhado: number, comPonta: boolean) {
   const d = clamp(desenhado, 0, t.total);
-  if (Math.abs(d - t.desenhado) < 0.3) return;
+  if (Math.abs(d - t.desenhado) < 0.15) return;
   t.desenhado = d;
   t.linha.style.strokeDashoffset = String(t.total - d);
 
@@ -278,11 +295,12 @@ export function initFio() {
       if (t.pin) {
         const progresso = Number(t.section.dataset.fioPin ?? 0);
         const { vertical, horizontal, barY } = t.pin;
+        // Com a seção presa, a cabeça fica em linhaCabeca; daí o fio avança no caminho na mesma
+        // proporção do pin, sem saltar na curva (antes a troca de fórmula engasgava a ponta).
+        const naCabeca = Math.min(comprimentoAte(t, linhaCabeca), vertical);
         if (progresso <= 0) d = Math.min(comprimentoAte(t, yLimite), vertical);
-        else if (progresso < 1) {
-          d = lerp(Math.min(linhaCabeca, vertical), vertical, clamp(progresso / 0.12, 0, 1));
-          d += (horizontal - vertical) * clamp((progresso - 0.12) / 0.88, 0, 1);
-        } else d = horizontal + Math.max(0, yLimite - barY);
+        else if (progresso < 1) d = lerp(naCabeca, horizontal, progresso);
+        else d = horizontal + Math.max(0, yLimite - barY);
       } else {
         d = comprimentoAte(t, yLimite);
       }
